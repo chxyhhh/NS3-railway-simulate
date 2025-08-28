@@ -1,0 +1,201 @@
+access txt
+7
+0 500
+here
+1000 100
+here
+2000 500
+here
+3000 100
+here
+4000 500
+here
+5000 100
+here
+6000 500
+here
+0
+LTE devices installed successfully.
+eNB Position: 0:500:0
+eNB Position: 1000:100:0
+eNB Position: 2000:500:0
+eNB Position: 3000:100:0
+eNB Position: 4000:500:0
+eNB Position: 5000:100:0
+eNB Position: 6000:500:0
+7
+UE Position: 0:300:0
+1
+Static Routing Table for UE 0:
+Default Route: default out=1, next hop=7.0.0.1
+10001
+20001
+socket success
+start time:+1.04676e+08ns
+TCP protocol is initialized.
+Total nodes in flow monitor: 2
+Number of UE nodes: 1
+Number of eNB nodes: 7
+Number of remoteHost nodes: 1
+==========开始仿真，使用智能切换预测算法==========
+at 0.0202143s /NodeList/11/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 1: connected to CellId 1 with RNTI 1
+0.0202143s /NodeList/4/DeviceList/0/LteEnbRrc/ConnectionEstablished eNB CellId 1: successful connection of UE with IMSI 1 RNTI 1
+0.200001s  UE IMSI=1 服务小区RSRP: -80 dBm
+0.680001s  UE IMSI=1 服务小区RSRP: -81 dBm
+1.16s  UE IMSI=1 服务小区RSRP: -81 dBm
+1.64s  UE IMSI=1 服务小区RSRP: -82 dBm
+2.12s  UE IMSI=1 服务小区RSRP: -83 dBm
+2.6s  UE IMSI=1 服务小区RSRP: -84 dBm
+3.08s  UE IMSI=1 服务小区RSRP: -85 dBm
+3.56s  UE IMSI=1 服务小区RSRP: -85 dBm
+4.04s  UE IMSI=1 服务小区RSRP: -86 dBm
+4.52s  UE IMSI=1 服务小区RSRP: -87 dBm
+5s  UE IMSI=1 服务小区RSRP: -88 dBm
+5.48s  UE IMSI=1 服务小区RSRP: -88 dBm
+5.96s  UE IMSI=1 服务小区RSRP: -89 dBm
+6.44s  UE IMSI=1 服务小区RSRP: -89 dBm
+6.92s  UE IMSI=1 服务小区RSRP: -90 dBm
+7.4s  UE IMSI=1 服务小区RSRP: -91 dBm
+7.856s  UE IMSI=1 服务小区RSRP: -91 dBm
+7.856s /NodeList/4/DeviceList/0/LteEnbRrc/HandoverStart eNB CellId 1: start handover of UE with IMSI 1 RNTI 1 to CellId 2
+7.856s /NodeList/11/DeviceList/0/LteUeRrc/HandoverStart UE IMSI 1: previously connected to CellId 1 with RNTI 1, doing handover to CellId 2
+7.86021s /NodeList/11/DeviceList/0/LteUeRrc/HandoverEndOk UE IMSI 1: successful handover to CellId 2 with RNTI 1
+7.86021s /NodeList/5/DeviceList/0/LteEnbRrc/HandoverEndOk eNB CellId 2: completed handover of UE with IMSI 1 RNTI 1
+8s  UE IMSI=1 服务小区RSRP: -87 dBm
+8.48s  UE IMSI=1 服务小区RSRP: -87 dBm
+8.96s  UE IMSI=1 服务小区RSRP: -86 dBm
+9.44s  UE IMSI=1 服务小区RSRP: -85 dBm
+9.92s  UE IMSI=1 服务小区RSRP: -84 dBm
+10.4s  UE IMSI=1 服务小区RSRP: -83 dBm
+10.88s  UE IMSI=1 服务小区RSRP: -83 dBm
+11.36s  UE IMSI=1 服务小区RSRP: -82 dBm
+11.84s  UE IMSI=1 服务小区RSRP: -81 dBm
+12.32s  UE IMSI=1 服务小区RSRP: -81 dBm
+12.8s  UE IMSI=1 服务小区RSRP: -81 dBm
+13.28s  UE IMSI=1 服务小区RSRP: -81 dBm
+13.76s  UE IMSI=1 服务小区RSRP: -82 dBm
+14.24s  UE IMSI=1 服务小区RSRP: -83 dBm
+14.72s  UE IMSI=1 服务小区RSRP: -84 dBm
+15.2s  UE IMSI=1 服务小区RSRP: -85 dBm
+15.68s  UE IMSI=1 服务小区RSRP: -86 dBm
+16.16s  UE IMSI=1 服务小区RSRP: -86 dBm
+16.64s  UE IMSI=1 服务小区RSRP: -87 dBm
+17.12s  UE IMSI=1 服务小区RSRP: -88 dBm
+17.6s  UE IMSI=1 服务小区RSRP: -89 dBm
+18.08s  UE IMSI=1 服务小区RSRP: -89 dBm
+18.56s  UE IMSI=1 服务小区RSRP: -90 dBm
+19.04s  UE IMSI=1 服务小区RSRP: -90 dBm
+19.52s  UE IMSI=1 服务小区RSRP: -91 dBm
+19.656s  UE IMSI=1 服务小区RSRP: -91 dBm
+19.656s /NodeList/5/DeviceList/0/LteEnbRrc/HandoverStart eNB CellId 2: start handover of UE with IMSI 1 RNTI 1 to CellId 3
+19.656s /NodeList/11/DeviceList/0/LteUeRrc/HandoverStart UE IMSI 1: previously connected to CellId 2 with RNTI 1, doing handover to CellId 3
+19.6602s /NodeList/11/DeviceList/0/LteUeRrc/HandoverEndOk UE IMSI 1: successful handover to CellId 3 with RNTI 1
+19.6602s /NodeList/6/DeviceList/0/LteEnbRrc/HandoverEndOk eNB CellId 3: completed handover of UE with IMSI 1 RNTI 1
+19.8s  UE IMSI=1 服务小区RSRP: -87 dBm
+20.28s  UE IMSI=1 服务小区RSRP: -87 dBm
+20.76s  UE IMSI=1 服务小区RSRP: -86 dBm
+21.24s  UE IMSI=1 服务小区RSRP: -85 dBm
+21.72s  UE IMSI=1 服务小区RSRP: -85 dBm
+22.2s  UE IMSI=1 服务小区RSRP: -83 dBm
+22.68s  UE IMSI=1 服务小区RSRP: -83 dBm
+23.16s  UE IMSI=1 服务小区RSRP: -82 dBm
+23.64s  UE IMSI=1 服务小区RSRP: -81 dBm
+24.12s  UE IMSI=1 服务小区RSRP: -81 dBm
+24.6s  UE IMSI=1 服务小区RSRP: -81 dBm
+25.08s  UE IMSI=1 服务小区RSRP: -81 dBm
+25.56s  UE IMSI=1 服务小区RSRP: -82 dBm
+26.04s  UE IMSI=1 服务小区RSRP: -82 dBm
+26.52s  UE IMSI=1 服务小区RSRP: -83 dBm
+27s  UE IMSI=1 服务小区RSRP: -85 dBm
+27.48s  UE IMSI=1 服务小区RSRP: -85 dBm
+27.96s  UE IMSI=1 服务小区RSRP: -86 dBm
+28.44s  UE IMSI=1 服务小区RSRP: -87 dBm
+28.92s  UE IMSI=1 服务小区RSRP: -87 dBm
+29.4s  UE IMSI=1 服务小区RSRP: -88 dBm
+29.88s  UE IMSI=1 服务小区RSRP: -89 dBm
+30.36s  UE IMSI=1 服务小区RSRP: -89 dBm
+30.84s  UE IMSI=1 服务小区RSRP: -89 dBm
+31.32s  UE IMSI=1 服务小区RSRP: -90 dBm
+31.8s  UE IMSI=1 服务小区RSRP: -91 dBm
+31.856s  UE IMSI=1 服务小区RSRP: -91 dBm
+31.856s /NodeList/6/DeviceList/0/LteEnbRrc/HandoverStart eNB CellId 3: start handover of UE with IMSI 1 RNTI 1 to CellId 4
+31.856s /NodeList/11/DeviceList/0/LteUeRrc/HandoverStart UE IMSI 1: previously connected to CellId 3 with RNTI 1, doing handover to CellId 4
+31.8602s /NodeList/11/DeviceList/0/LteUeRrc/HandoverEndOk UE IMSI 1: successful handover to CellId 4 with RNTI 1
+31.8602s /NodeList/7/DeviceList/0/LteEnbRrc/HandoverEndOk eNB CellId 4: completed handover of UE with IMSI 1 RNTI 1
+32s  UE IMSI=1 服务小区RSRP: -87 dBm
+32.48s  UE IMSI=1 服务小区RSRP: -87 dBm
+32.96s  UE IMSI=1 服务小区RSRP: -86 dBm
+33.44s  UE IMSI=1 服务小区RSRP: -84 dBm
+33.92s  UE IMSI=1 服务小区RSRP: -84 dBm
+34.4s  UE IMSI=1 服务小区RSRP: -83 dBm
+34.88s  UE IMSI=1 服务小区RSRP: -82 dBm
+35.36s  UE IMSI=1 服务小区RSRP: -82 dBm
+35.84s  UE IMSI=1 服务小区RSRP: -81 dBm
+36.32s  UE IMSI=1 服务小区RSRP: -81 dBm
+36.8s  UE IMSI=1 服务小区RSRP: -81 dBm
+37.28s  UE IMSI=1 服务小区RSRP: -82 dBm
+37.76s  UE IMSI=1 服务小区RSRP: -82 dBm
+38.24s  UE IMSI=1 服务小区RSRP: -83 dBm
+38.72s  UE IMSI=1 服务小区RSRP: -83 dBm
+39.2s  UE IMSI=1 服务小区RSRP: -85 dBm
+39.68s  UE IMSI=1 服务小区RSRP: -85 dBm
+40.16s  UE IMSI=1 服务小区RSRP: -86 dBm
+40.64s  UE IMSI=1 服务小区RSRP: -87 dBm
+41.12s  UE IMSI=1 服务小区RSRP: -88 dBm
+41.6s  UE IMSI=1 服务小区RSRP: -88 dBm
+42.08s  UE IMSI=1 服务小区RSRP: -89 dBm
+42.56s  UE IMSI=1 服务小区RSRP: -90 dBm
+43.04s  UE IMSI=1 服务小区RSRP: -90 dBm
+43.52s  UE IMSI=1 服务小区RSRP: -91 dBm
+43.856s  UE IMSI=1 服务小区RSRP: -91 dBm
+43.856s /NodeList/7/DeviceList/0/LteEnbRrc/HandoverStart eNB CellId 4: start handover of UE with IMSI 1 RNTI 1 to CellId 5
+43.856s /NodeList/11/DeviceList/0/LteUeRrc/HandoverStart UE IMSI 1: previously connected to CellId 4 with RNTI 1, doing handover to CellId 5
+43.8602s /NodeList/11/DeviceList/0/LteUeRrc/HandoverEndOk UE IMSI 1: successful handover to CellId 5 with RNTI 1
+43.8602s /NodeList/8/DeviceList/0/LteEnbRrc/HandoverEndOk eNB CellId 5: completed handover of UE with IMSI 1 RNTI 1
+44s  UE IMSI=1 服务小区RSRP: -87 dBm
+44.48s  UE IMSI=1 服务小区RSRP: -87 dBm
+44.96s  UE IMSI=1 服务小区RSRP: -86 dBm
+45.44s  UE IMSI=1 服务小区RSRP: -85 dBm
+45.92s  UE IMSI=1 服务小区RSRP: -84 dBm
+46.4s  UE IMSI=1 服务小区RSRP: -83 dBm
+46.88s  UE IMSI=1 服务小区RSRP: -82 dBm
+47.36s  UE IMSI=1 服务小区RSRP: -82 dBm
+47.84s  UE IMSI=1 服务小区RSRP: -81 dBm
+48.32s  UE IMSI=1 服务小区RSRP: -81 dBm
+48.8s  UE IMSI=1 服务小区RSRP: -81 dBm
+49.28s  UE IMSI=1 服务小区RSRP: -82 dBm
+49.76s  UE IMSI=1 服务小区RSRP: -82 dBm
+50.24s  UE IMSI=1 服务小区RSRP: -83 dBm
+50.72s  UE IMSI=1 服务小区RSRP: -84 dBm
+51.2s  UE IMSI=1 服务小区RSRP: -85 dBm
+51.68s  UE IMSI=1 服务小区RSRP: -85 dBm
+52.16s  UE IMSI=1 服务小区RSRP: -86 dBm
+52.64s  UE IMSI=1 服务小区RSRP: -87 dBm
+53.12s  UE IMSI=1 服务小区RSRP: -88 dBm
+53.6s  UE IMSI=1 服务小区RSRP: -88 dBm
+54.08s  UE IMSI=1 服务小区RSRP: -89 dBm
+54.56s  UE IMSI=1 服务小区RSRP: -90 dBm
+55.04s  UE IMSI=1 服务小区RSRP: -90 dBm
+55.52s  UE IMSI=1 服务小区RSRP: -91 dBm
+55.856s  UE IMSI=1 服务小区RSRP: -91 dBm
+55.856s /NodeList/8/DeviceList/0/LteEnbRrc/HandoverStart eNB CellId 5: start handover of UE with IMSI 1 RNTI 1 to CellId 6
+55.856s /NodeList/11/DeviceList/0/LteUeRrc/HandoverStart UE IMSI 1: previously connected to CellId 5 with RNTI 1, doing handover to CellId 6
+55.8602s /NodeList/11/DeviceList/0/LteUeRrc/HandoverEndOk UE IMSI 1: successful handover to CellId 6 with RNTI 1
+55.8602s /NodeList/9/DeviceList/0/LteEnbRrc/HandoverEndOk eNB CellId 6: completed handover of UE with IMSI 1 RNTI 1
+56s  UE IMSI=1 服务小区RSRP: -87 dBm
+56.48s  UE IMSI=1 服务小区RSRP: -87 dBm
+56.96s  UE IMSI=1 服务小区RSRP: -86 dBm
+57.44s  UE IMSI=1 服务小区RSRP: -85 dBm
+57.92s  UE IMSI=1 服务小区RSRP: -84 dBm
+58.4s  UE IMSI=1 服务小区RSRP: -83 dBm
+58.88s  UE IMSI=1 服务小区RSRP: -83 dBm
+59.36s  UE IMSI=1 服务小区RSRP: -82 dBm
+59.84s  UE IMSI=1 服务小区RSRP: -81 dBm
+FlowId:1
+TxBytes:26732768		RxBytes:26559944		lostPackets:135		throughput:3.38306 
+
+FlowId:2
+TxBytes:1399512		RxBytes:1398628		lostPackets:3		throughput:0.178222 
+
+
+Command 'build/scratch/ns3.37-tcp_high_speed_train_with_predictor-default' died with <Signals.SIGSEGV: 11>.

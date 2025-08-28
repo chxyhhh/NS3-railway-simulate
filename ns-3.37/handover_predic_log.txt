@@ -1,0 +1,1150 @@
+AnimationInterface WARNING:Node:0 Does not have a mobility model. Use SetConstantPosition if it is stationary
+AnimationInterface WARNING:Node:1 Does not have a mobility model. Use SetConstantPosition if it is stationary
+AnimationInterface WARNING:Node:2 Does not have a mobility model. Use SetConstantPosition if it is stationary
+AnimationInterface WARNING:Node:0 Does not have a mobility model. Use SetConstantPosition if it is stationary
+AnimationInterface WARNING:Node:1 Does not have a mobility model. Use SetConstantPosition if it is stationary
+AnimationInterface WARNING:Node:2 Does not have a mobility model. Use SetConstantPosition if it is stationary
+Added measurement for IMSI 1 RSRP: -79.8365 Position: 16.6601:300:0
+Added measurement for IMSI 1 RSRP: -79.8365 Position: 26.6561:300:0
+Added measurement for IMSI 1 RSRP: -80.229 Position: 36.6521:300:0
+RSRP trend prediction for IMSI 1 trend: -0.196268 future RSRP: -80.6215 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.229 Position: 46.6481:300:0
+RSRP trend prediction for IMSI 1 trend: -0.157014 future RSRP: -80.543 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2077 Position: 56.6441:300:0
+RSRP trend prediction for IMSI 1 trend: -0.113498 future RSRP: -80.4347 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5422 Position: 66.6401:300:0
+RSRP trend prediction for IMSI 1 trend: -0.132642 future RSRP: -80.8075 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5422 Position: 76.6361:300:0
+RSRP trend prediction for IMSI 1 trend: -0.125267 future RSRP: -80.7928 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6685 Position: 86.6321:300:0
+RSRP trend prediction for IMSI 1 trend: -0.122281 future RSRP: -80.9131 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6685 Position: 96.6281:300:0
+RSRP trend prediction for IMSI 1 trend: -0.112735 future RSRP: -80.894 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.9616 Position: 106.624:300:0
+RSRP trend prediction for IMSI 1 trend: -0.117711 future RSRP: -81.197 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.5234 Position: 116.62:300:0
+RSRP trend prediction for IMSI 1 trend: -0.14061 future RSRP: -81.8046 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.5234 Position: 126.616:300:0
+RSRP trend prediction for IMSI 1 trend: -0.148413 future RSRP: -81.8202 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7065 Position: 136.612:300:0
+RSRP trend prediction for IMSI 1 trend: -0.154273 future RSRP: -82.015 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7065 Position: 146.608:300:0
+RSRP trend prediction for IMSI 1 trend: -0.153548 future RSRP: -82.0136 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8297 Position: 156.604:300:0
+RSRP trend prediction for IMSI 1 trend: -0.152319 future RSRP: -82.1343 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0968 Position: 166.6:300:0
+RSRP trend prediction for IMSI 1 trend: -0.15403 future RSRP: -82.4049 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0968 Position: 176.596:300:0
+RSRP trend prediction for IMSI 1 trend: -0.152184 future RSRP: -82.4012 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2924 Position: 186.592:300:0
+RSRP trend prediction for IMSI 1 trend: -0.151649 future RSRP: -82.5957 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2924 Position: 196.588:300:0
+RSRP trend prediction for IMSI 1 trend: -0.148872 future RSRP: -82.5901 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.887 Position: 206.584:300:0
+RSRP trend prediction for IMSI 1 trend: -0.153216 future RSRP: -83.1935 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.151 Position: 216.58:300:0
+RSRP trend prediction for IMSI 1 trend: -0.157871 future RSRP: -83.4668 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.151 Position: 226.576:300:0
+RSRP trend prediction for IMSI 1 trend: -0.159495 future RSRP: -83.47 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.5985 Position: 236.572:300:0
+RSRP trend prediction for IMSI 1 trend: -0.163861 future RSRP: -83.9263 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.5985 Position: 246.568:300:0
+RSRP trend prediction for IMSI 1 trend: -0.165585 future RSRP: -83.9297 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.1706 Position: 256.564:300:0
+RSRP trend prediction for IMSI 1 trend: -0.170678 future RSRP: -84.512 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4572 Position: 266.56:300:0
+RSRP trend prediction for IMSI 1 trend: -0.175675 future RSRP: -84.8086 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4572 Position: 276.556:300:0
+RSRP trend prediction for IMSI 1 trend: -0.178246 future RSRP: -84.8137 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.7696 Position: 286.552:300:0
+RSRP trend prediction for IMSI 1 trend: -0.181295 future RSRP: -85.1322 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.7696 Position: 296.548:300:0
+RSRP trend prediction for IMSI 1 trend: -0.182505 future RSRP: -85.1346 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9047 Position: 306.544:300:0
+RSRP trend prediction for IMSI 1 trend: -0.183182 future RSRP: -85.2711 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3541 Position: 316.54:300:0
+RSRP trend prediction for IMSI 1 trend: -0.185347 future RSRP: -85.7248 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3541 Position: 326.536:300:0
+RSRP trend prediction for IMSI 1 trend: -0.186078 future RSRP: -85.7262 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.4967 Position: 336.532:300:0
+RSRP trend prediction for IMSI 1 trend: -0.186451 future RSRP: -85.8696 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.4967 Position: 346.528:300:0
+RSRP trend prediction for IMSI 1 trend: -0.185822 future RSRP: -85.8684 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.7585 Position: 356.524:300:0
+RSRP trend prediction for IMSI 1 trend: -0.185657 future RSRP: -86.1298 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3147 Position: 366.52:300:0
+RSRP trend prediction for IMSI 1 trend: -0.187186 future RSRP: -86.689 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3147 Position: 376.516:300:0
+RSRP trend prediction for IMSI 1 trend: -0.187682 future RSRP: -86.69 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3104 Position: 386.512:300:0
+RSRP trend prediction for IMSI 1 trend: -0.187327 future RSRP: -86.6851 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3104 Position: 396.508:300:0
+RSRP trend prediction for IMSI 1 trend: -0.186303 future RSRP: -86.683 will handover: 0
+Added measurement for IMSI 1 RSRP: -87.0453 Position: 406.504:300:0
+RSRP方差: 0.0859046 标准差: 0.293095 方差置信度: 0.890948 趋势强度: 0.0937158 最终置信度: 0.572055
+RSRP trend prediction for IMSI 1 trend: -0.187432 future RSRP: -87.4201 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.468 Position: 416.5:300:0
+RSRP方差: 0.232108 标准差: 0.481776 方差置信度: 0.828744 趋势强度: 0.0946115 最终置信度: 0.535091
+RSRP trend prediction for IMSI 1 trend: -0.189223 future RSRP: -87.8465 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.468 Position: 426.496:300:0
+RSRP方差: 0.271896 标准差: 0.521437 方差置信度: 0.816398 趋势强度: 0.0950709 最终置信度: 0.527867
+RSRP trend prediction for IMSI 1 trend: -0.190142 future RSRP: -87.8483 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.4362 Position: 436.492:300:0
+RSRP方差: 0.199989 标准差: 0.447201 方差置信度: 0.839708 趋势强度: 0.0951173 最终置信度: 0.541871
+RSRP trend prediction for IMSI 1 trend: -0.190235 future RSRP: -87.8167 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.4362 Position: 446.488:300:0
+RSRP方差: 0.0266861 标准差: 0.163359 方差置信度: 0.937254 趋势强度: 0.0948693 最终置信度: 0.6003
+RSRP trend prediction for IMSI 1 trend: -0.189739 future RSRP: -87.8157 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.7846 Position: 456.484:300:0
+RSRP方差: 0.0178916 标准差: 0.133759 方差置信度: 0.948246 趋势强度: 0.0948829 最终置信度: 0.606901
+RSRP trend prediction for IMSI 1 trend: -0.189766 future RSRP: -88.1642 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.1099 Position: 466.48:300:0
+RSRP方差: 0.0708207 标准差: 0.266122 方差置信度: 0.90033 趋势强度: 0.0950829 最终置信度: 0.578231
+RSRP trend prediction for IMSI 1 trend: -0.190166 future RSRP: -88.4902 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.1099 Position: 476.476:300:0
+RSRP方差: 0.0907877 标准差: 0.30131 方差置信度: 0.888115 趋势强度: 0.0950055 最终置信度: 0.570871
+RSRP trend prediction for IMSI 1 trend: -0.190011 future RSRP: -88.4899 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.4878 Position: 486.472:300:0
+RSRP方差: 0.125071 标准差: 0.353654 方差置信度: 0.87034 趋势强度: 0.0951771 最终置信度: 0.560275
+RSRP trend prediction for IMSI 1 trend: -0.190354 future RSRP: -88.8686 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.4878 Position: 496.468:300:0
+RSRP方差: 0.0708822 标准差: 0.266237 方差置信度: 0.900289 趋势强度: 0.0950954 最终置信度: 0.578212
+RSRP trend prediction for IMSI 1 trend: -0.190191 future RSRP: -88.8682 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.7864 Position: 506.464:300:0
+RSRP方差: 0.0665989 标准差: 0.258068 方差置信度: 0.903155 趋势强度: 0.0951507 最终置信度: 0.579953
+RSRP trend prediction for IMSI 1 trend: -0.190301 future RSRP: -89.167 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.8601 Position: 516.46:300:0
+RSRP方差: 0.0706757 标准差: 0.265849 方差置信度: 0.900425 趋势强度: 0.0955764 最终置信度: 0.578486
+RSRP trend prediction for IMSI 1 trend: -0.191153 future RSRP: -89.2424 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.8601 Position: 526.456:300:0
+RSRP方差: 0.0297322 标准差: 0.17243 方差置信度: 0.933917 趋势强度: 0.0955689 最终置信度: 0.598578
+RSRP trend prediction for IMSI 1 trend: -0.191138 future RSRP: -89.2423 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9608 Position: 536.452:300:0
+RSRP方差: 0.026059 标准差: 0.161428 方差置信度: 0.937966 趋势强度: 0.0957272 最终置信度: 0.60107
+RSRP trend prediction for IMSI 1 trend: -0.191454 future RSRP: -89.3437 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9608 Position: 546.448:300:0
+RSRP方差: 0.004491 标准差: 0.067015 方差置信度: 0.973638 趋势强度: 0.0954662 最终置信度: 0.622369
+RSRP trend prediction for IMSI 1 trend: -0.190932 future RSRP: -89.3427 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.207 Position: 556.444:300:0
+RSRP方差: 0.0161044 标准差: 0.126903 方差置信度: 0.950816 趋势强度: 0.0950495 最终置信度: 0.608509
+RSRP trend prediction for IMSI 1 trend: -0.190099 future RSRP: -89.5872 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.3721 Position: 566.44:300:0
+RSRP方差: 0.0355826 标准差: 0.188633 方差置信度: 0.927996 趋势强度: 0.0948044 最终置信度: 0.594719
+RSRP trend prediction for IMSI 1 trend: -0.189609 future RSRP: -89.7513 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.3721 Position: 576.436:300:0
+RSRP方差: 0.0340899 标准差: 0.184635 方差置信度: 0.929453 趋势强度: 0.0941354 最终置信度: 0.595326
+RSRP trend prediction for IMSI 1 trend: -0.188271 future RSRP: -89.7486 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.3721 Position: 577.102:300:0
+RSRP方差: 0.025989 标准差: 0.161211 方差置信度: 0.938046 趋势强度: 0.093197 最终置信度: 0.600106
+RSRP trend prediction for IMSI 1 trend: -0.186394 future RSRP: -89.7448 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.9474 Position: 583.1:300:0
+RSRP方差: 0.310311 标准差: 0.557056 方差置信度: 0.805518 趋势强度: 0.0901645 最终置信度: 0.519376
+RSRP trend prediction for IMSI 1 trend: -0.180329 future RSRP: -88.308 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.9474 Position: 593.096:300:0
+RSRP方差: 0.487145 标准差: 0.697958 方差置信度: 0.764326 趋势强度: 0.0871414 最终置信度: 0.493452
+RSRP trend prediction for IMSI 1 trend: -0.174283 future RSRP: -88.2959 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8208 Position: 603.092:300:0
+RSRP方差: 0.518559 标准差: 0.720111 方差置信度: 0.75811 趋势强度: 0.0843218 最终置信度: 0.488595
+RSRP trend prediction for IMSI 1 trend: -0.168644 future RSRP: -88.1581 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8208 Position: 613.088:300:0
+RSRP方差: 0.357459 标准差: 0.597879 方差置信度: 0.793283 趋势强度: 0.0811998 最终置信度: 0.50845
+RSRP trend prediction for IMSI 1 trend: -0.1624 future RSRP: -88.1456 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.7799 Position: 623.084:300:0
+RSRP方差: 0.00494183 标准差: 0.0702982 方差置信度: 0.972369 趋势强度: 0.0779515 最终置信度: 0.614602
+RSRP trend prediction for IMSI 1 trend: -0.155903 future RSRP: -88.0917 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5021 Position: 633.08:300:0
+RSRP方差: 0.0216837 标准差: 0.147254 方差置信度: 0.943215 趋势强度: 0.0740847 最终置信度: 0.595563
+RSRP trend prediction for IMSI 1 trend: -0.148169 future RSRP: -87.7984 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5021 Position: 643.076:300:0
+RSRP方差: 0.0225621 标准差: 0.150207 方差置信度: 0.942118 趋势强度: 0.0700904 最终置信度: 0.593307
+RSRP trend prediction for IMSI 1 trend: -0.140181 future RSRP: -87.7824 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.0813 Position: 653.072:300:0
+RSRP方差: 0.0699205 标准差: 0.264425 方差置信度: 0.900924 趋势强度: 0.065656 最终置信度: 0.566817
+RSRP trend prediction for IMSI 1 trend: -0.131312 future RSRP: -87.3439 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.0813 Position: 663.068:300:0
+RSRP方差: 0.0735333 标准差: 0.27117 方差置信度: 0.898564 趋势强度: 0.0609822 最终置信度: 0.563531
+RSRP trend prediction for IMSI 1 trend: -0.121964 future RSRP: -87.3252 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.773 Position: 673.064:300:0
+RSRP trend prediction for IMSI 1 trend: -0.111892 future RSRP: -86.9968 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.7957 Position: 683.06:300:0
+RSRP trend prediction for IMSI 1 trend: -0.101442 future RSRP: -86.9986 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.7957 Position: 693.056:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0920156 future RSRP: -86.9797 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3172 Position: 703.052:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0817347 future RSRP: -86.4806 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3172 Position: 713.048:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0711498 future RSRP: -86.4595 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6043 Position: 723.044:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0596794 future RSRP: -85.7236 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2511 Position: 733.04:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0471855 future RSRP: -85.3455 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2511 Position: 743.036:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0359339 future RSRP: -85.323 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9431 Position: 753.032:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0245556 future RSRP: -84.9922 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9431 Position: 763.028:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0131307 future RSRP: -84.9694 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5237 Position: 773.024:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00143721 future RSRP: -84.5266 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.147 Position: 783.02:300:0
+RSRP trend prediction for IMSI 1 trend: 0.011119 future RSRP: -84.1248 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.147 Position: 793.016:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0232845 future RSRP: -84.1005 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.3961 Position: 803.012:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0360435 future RSRP: -83.324 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.3961 Position: 813.008:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0486145 future RSRP: -83.2989 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.0258 Position: 823.004:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0615196 future RSRP: -82.9027 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.98 Position: 833:300:0
+RSRP trend prediction for IMSI 1 trend: 0.074295 future RSRP: -82.8314 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.98 Position: 842.996:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0861876 future RSRP: -82.8076 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.5224 Position: 852.992:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0975281 future RSRP: -82.3273 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.5224 Position: 862.988:300:0
+RSRP trend prediction for IMSI 1 trend: 0.108504 future RSRP: -82.3054 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2986 Position: 872.984:300:0
+RSRP trend prediction for IMSI 1 trend: 0.119653 future RSRP: -82.0593 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.9521 Position: 882.98:300:0
+RSRP trend prediction for IMSI 1 trend: 0.131232 future RSRP: -81.6897 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.9521 Position: 892.976:300:0
+RSRP trend prediction for IMSI 1 trend: 0.140593 future RSRP: -81.6709 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0301 Position: 902.972:300:0
+RSRP trend prediction for IMSI 1 trend: 0.148246 future RSRP: -81.7336 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0301 Position: 912.968:300:0
+RSRP trend prediction for IMSI 1 trend: 0.155377 future RSRP: -81.7194 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7732 Position: 922.964:300:0
+RSRP trend prediction for IMSI 1 trend: 0.162667 future RSRP: -81.4479 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.3543 Position: 932.96:300:0
+RSRP trend prediction for IMSI 1 trend: 0.1704 future RSRP: -81.0135 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.3543 Position: 942.956:300:0
+RSRP trend prediction for IMSI 1 trend: 0.176695 future RSRP: -81.0009 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0223 Position: 952.952:300:0
+RSRP trend prediction for IMSI 1 trend: 0.182357 future RSRP: -80.6576 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0223 Position: 962.948:300:0
+RSRP trend prediction for IMSI 1 trend: 0.187339 future RSRP: -80.6476 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.7452 Position: 972.944:300:0
+RSRP trend prediction for IMSI 1 trend: 0.191366 future RSRP: -80.3624 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5046 Position: 982.94:300:0
+RSRP trend prediction for IMSI 1 trend: 0.195216 future RSRP: -80.1142 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5046 Position: 992.936:300:0
+RSRP trend prediction for IMSI 1 trend: 0.197568 future RSRP: -80.1095 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3071 Position: 1002.93:300:0
+RSRP trend prediction for IMSI 1 trend: 0.199409 future RSRP: -79.9083 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3071 Position: 1012.93:300:0
+RSRP trend prediction for IMSI 1 trend: 0.200428 future RSRP: -79.9063 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3059 Position: 1022.92:300:0
+RSRP trend prediction for IMSI 1 trend: 0.200382 future RSRP: -79.9051 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4239 Position: 1032.92:300:0
+RSRP trend prediction for IMSI 1 trend: 0.199228 future RSRP: -80.0254 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4239 Position: 1042.92:300:0
+RSRP trend prediction for IMSI 1 trend: 0.19665 future RSRP: -80.0305 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.682 Position: 1052.91:300:0
+RSRP trend prediction for IMSI 1 trend: 0.192218 future RSRP: -80.2976 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.682 Position: 1062.91:300:0
+RSRP trend prediction for IMSI 1 trend: 0.186951 future RSRP: -80.3081 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4339 Position: 1072.9:300:0
+RSRP trend prediction for IMSI 1 trend: 0.181433 future RSRP: -80.071 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5703 Position: 1082.9:300:0
+RSRP trend prediction for IMSI 1 trend: 0.178225 future RSRP: -80.2138 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5703 Position: 1092.9:300:0
+RSRP trend prediction for IMSI 1 trend: 0.174308 future RSRP: -80.2216 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8822 Position: 1102.89:300:0
+RSRP trend prediction for IMSI 1 trend: 0.169259 future RSRP: -80.5437 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8822 Position: 1112.89:300:0
+RSRP trend prediction for IMSI 1 trend: 0.163544 future RSRP: -80.5551 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.5932 Position: 1122.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.155589 future RSRP: -81.282 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8746 Position: 1132.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.147059 future RSRP: -81.5805 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8746 Position: 1142.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.137988 future RSRP: -81.5986 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1008 Position: 1152.87:300:0
+RSRP trend prediction for IMSI 1 trend: 0.128875 future RSRP: -81.843 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1008 Position: 1162.87:300:0
+RSRP trend prediction for IMSI 1 trend: 0.119283 future RSRP: -81.8622 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0919 Position: 1172.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.109989 future RSRP: -81.8719 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6096 Position: 1182.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0989722 future RSRP: -82.4116 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6096 Position: 1192.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0875531 future RSRP: -82.4345 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4141 Position: 1202.85:300:0
+RSRP trend prediction for IMSI 1 trend: 0.075011 future RSRP: -83.264 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4141 Position: 1212.85:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0621901 future RSRP: -83.2897 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4554 Position: 1222.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.050739 future RSRP: -83.3539 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.825 Position: 1232.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0390766 future RSRP: -83.7469 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.825 Position: 1242.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0272772 future RSRP: -83.7705 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.2332 Position: 1252.83:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0151348 future RSRP: -84.2029 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.2332 Position: 1262.83:300:0
+RSRP trend prediction for IMSI 1 trend: 0.00292426 future RSRP: -84.2273 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4911 Position: 1272.82:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00893422 future RSRP: -84.509 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.716 Position: 1282.82:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0204025 future RSRP: -84.7568 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.716 Position: 1292.82:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0318162 future RSRP: -84.7796 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.1009 Position: 1302.81:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0422419 future RSRP: -85.1854 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.1009 Position: 1312.81:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0525039 future RSRP: -85.2059 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.4087 Position: 1322.8:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0624195 future RSRP: -85.5336 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6432 Position: 1332.8:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0725458 future RSRP: -85.7883 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6432 Position: 1342.8:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0824163 future RSRP: -85.808 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.0198 Position: 1352.79:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0917965 future RSRP: -86.2033 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.0198 Position: 1362.79:300:0
+RSRP trend prediction for IMSI 1 trend: -0.100841 future RSRP: -86.2214 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2069 Position: 1372.78:300:0
+RSRP trend prediction for IMSI 1 trend: -0.109442 future RSRP: -86.4258 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2722 Position: 1382.78:300:0
+RSRP trend prediction for IMSI 1 trend: -0.116972 future RSRP: -86.5062 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2722 Position: 1392.78:300:0
+RSRP trend prediction for IMSI 1 trend: -0.124088 future RSRP: -86.5204 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.9828 Position: 1402.77:300:0
+RSRP方差: 0.108416 标准差: 0.329265 方差置信度: 0.878564 趋势强度: 0.0663257 最终置信度: 0.553669
+RSRP trend prediction for IMSI 1 trend: -0.132651 future RSRP: -87.2481 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9828 Position: 1412.77:300:0
+RSRP方差: 0.129292 标准差: 0.359571 方差置信度: 0.868359 趋势强度: 0.0703697 最终置信度: 0.549164
+RSRP trend prediction for IMSI 1 trend: -0.140739 future RSRP: -87.2643 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.1368 Position: 1422.76:300:0
+RSRP方差: 0.142491 标准差: 0.37748 方差置信度: 0.862402 趋势强度: 0.0740425 最终置信度: 0.547058
+RSRP trend prediction for IMSI 1 trend: -0.148085 future RSRP: -87.433 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6828 Position: 1432.76:300:0
+RSRP方差: 0.202904 标准差: 0.450449 方差置信度: 0.83867 趋势强度: 0.0775871 最终置信度: 0.534237
+RSRP trend prediction for IMSI 1 trend: -0.155174 future RSRP: -87.9931 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6828 Position: 1442.76:300:0
+RSRP方差: 0.10414 标准差: 0.322707 方差置信度: 0.880793 趋势强度: 0.0808279 最终置信度: 0.560807
+RSRP trend prediction for IMSI 1 trend: -0.161656 future RSRP: -88.0061 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6246 Position: 1452.75:300:0
+RSRP方差: 0.0902585 标准差: 0.30043 方差置信度: 0.888418 趋势强度: 0.0832897 最终置信度: 0.566367
+RSRP trend prediction for IMSI 1 trend: -0.166579 future RSRP: -87.9578 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6246 Position: 1462.75:300:0
+RSRP方差: 0.0434252 标准差: 0.208387 方差置信度: 0.920841 趋势强度: 0.0854346 最终置信度: 0.586678
+RSRP trend prediction for IMSI 1 trend: -0.170869 future RSRP: -87.9663 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.0439 Position: 1472.74:300:0
+RSRP方差: 0.0250389 标准差: 0.158237 方差置信度: 0.939144 趋势强度: 0.0874163 最终置信度: 0.598453
+RSRP trend prediction for IMSI 1 trend: -0.174833 future RSRP: -88.3936 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.457 Position: 1482.74:300:0
+RSRP方差: 0.105778 标准差: 0.325235 方差置信度: 0.879933 趋势强度: 0.0892389 最终置信度: 0.563655
+RSRP trend prediction for IMSI 1 trend: -0.178478 future RSRP: -88.8139 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.457 Position: 1492.74:300:0
+RSRP方差: 0.138568 标准差: 0.372247 方差置信度: 0.864137 趋势强度: 0.0906797 最终置信度: 0.554754
+RSRP trend prediction for IMSI 1 trend: -0.181359 future RSRP: -88.8197 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5101 Position: 1502.73:300:0
+RSRP方差: 0.116393 标准差: 0.341165 方差置信度: 0.874539 趋势强度: 0.0915593 最终置信度: 0.561347
+RSRP trend prediction for IMSI 1 trend: -0.183119 future RSRP: -88.8763 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5101 Position: 1512.73:300:0
+RSRP方差: 0.0314895 标准差: 0.177453 方差置信度: 0.932077 趋势强度: 0.092045 最终置信度: 0.596064
+RSRP trend prediction for IMSI 1 trend: -0.18409 future RSRP: -88.8783 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.0655 Position: 1522.72:300:0
+RSRP方差: 0.0547556 标准差: 0.233999 方差置信度: 0.911668 趋势强度: 0.0927887 最终置信度: 0.584117
+RSRP trend prediction for IMSI 1 trend: -0.185577 future RSRP: -89.4367 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.2242 Position: 1532.72:300:0
+RSRP方差: 0.105064 标准差: 0.324135 方差置信度: 0.880307 趋势强度: 0.0934429 最终置信度: 0.565561
+RSRP trend prediction for IMSI 1 trend: -0.186886 future RSRP: -89.598 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.2242 Position: 1542.72:300:0
+RSRP方差: 0.10828 标准差: 0.32906 方差置信度: 0.878634 趋势强度: 0.0936745 最终置信度: 0.56465
+RSRP trend prediction for IMSI 1 trend: -0.187349 future RSRP: -89.5989 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.4421 Position: 1552.71:300:0
+RSRP方差: 0.0993648 标准差: 0.315222 方差置信度: 0.883346 趋势强度: 0.0940561 最终置信度: 0.56763
+RSRP trend prediction for IMSI 1 trend: -0.188112 future RSRP: -89.8183 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.4421 Position: 1562.71:300:0
+RSRP方差: 0.0209586 标准差: 0.144771 方差置信度: 0.944138 趋势强度: 0.094017 最终置信度: 0.60409
+RSRP trend prediction for IMSI 1 trend: -0.188034 future RSRP: -89.8182 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.3691 Position: 1572.7:300:0
+RSRP方差: 0.00970417 标准差: 0.0985098 方差置信度: 0.961551 趋势强度: 0.0931675 最终置信度: 0.614197
+RSRP trend prediction for IMSI 1 trend: -0.186335 future RSRP: -89.7418 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.3691 Position: 1576.7:300:0
+RSRP方差: 0.00633156 标准差: 0.0795711 方差置信度: 0.968796 趋势强度: 0.0920559 最终置信度: 0.6181
+RSRP trend prediction for IMSI 1 trend: -0.184112 future RSRP: -89.7373 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.1035 Position: 1582.7:300:0
+RSRP方差: 0.27234 标准差: 0.521862 方差置信度: 0.816267 趋势强度: 0.0890329 最终置信度: 0.525374
+RSRP trend prediction for IMSI 1 trend: -0.178066 future RSRP: -88.4596 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.1035 Position: 1592.7:300:0
+RSRP方差: 0.400053 标准差: 0.632497 方差置信度: 0.783103 趋势强度: 0.0860302 最终置信度: 0.504274
+RSRP trend prediction for IMSI 1 trend: -0.17206 future RSRP: -88.4476 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6613 Position: 1602.69:300:0
+RSRP方差: 0.505244 标准差: 0.710805 方差置信度: 0.760713 趋势强度: 0.0821604 最终置信度: 0.489292
+RSRP trend prediction for IMSI 1 trend: -0.164321 future RSRP: -87.99 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6613 Position: 1612.69:300:0
+RSRP方差: 0.392748 标准差: 0.626696 方差置信度: 0.784796 趋势强度: 0.0788357 最终置信度: 0.502412
+RSRP trend prediction for IMSI 1 trend: -0.157671 future RSRP: -87.9767 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.4251 Position: 1622.68:300:0
+RSRP方差: 0.0725732 标准差: 0.269394 方差置信度: 0.899185 趋势强度: 0.0752862 最终置信度: 0.569625
+RSRP trend prediction for IMSI 1 trend: -0.150572 future RSRP: -87.7262 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9015 Position: 1632.68:300:0
+RSRP方差: 0.153472 标准差: 0.391755 方差置信度: 0.85769 趋势强度: 0.0708543 最终置信度: 0.542956
+RSRP trend prediction for IMSI 1 trend: -0.141709 future RSRP: -87.1849 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9015 Position: 1642.68:300:0
+RSRP方差: 0.118779 标准差: 0.344643 方差置信度: 0.873367 趋势强度: 0.0664578 最终置信度: 0.550603
+RSRP trend prediction for IMSI 1 trend: -0.132916 future RSRP: -87.1673 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.8831 Position: 1652.67:300:0
+RSRP方差: 0.106359 标准差: 0.326128 方差置信度: 0.87963 趋势强度: 0.0618093 最终置信度: 0.552501
+RSRP trend prediction for IMSI 1 trend: -0.123619 future RSRP: -87.1303 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.8831 Position: 1662.67:300:0
+RSRP方差: 0.0454869 标准差: 0.213276 方差置信度: 0.919081 趋势强度: 0.0569201 最终置信度: 0.574216
+RSRP trend prediction for IMSI 1 trend: -0.11384 future RSRP: -87.1108 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.6432 Position: 1672.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.104305 future RSRP: -86.8518 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2612 Position: 1682.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0934842 future RSRP: -86.4482 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2612 Position: 1692.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0842826 future RSRP: -86.4298 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.0605 Position: 1702.65:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0743352 future RSRP: -86.2092 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.0605 Position: 1712.65:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0642348 future RSRP: -86.189 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.8205 Position: 1722.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0542249 future RSRP: -85.929 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2059 Position: 1732.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0425772 future RSRP: -85.2911 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2059 Position: 1742.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0317964 future RSRP: -85.2695 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.0658 Position: 1752.63:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0205924 future RSRP: -85.107 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.0658 Position: 1762.63:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00994021 future RSRP: -85.0857 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9192 Position: 1772.62:300:0
+RSRP trend prediction for IMSI 1 trend: 0.000561272 future RSRP: -84.9181 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.3991 Position: 1782.62:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0123062 future RSRP: -84.3745 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.3991 Position: 1792.62:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0230781 future RSRP: -84.3529 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.2697 Position: 1802.61:300:0
+RSRP trend prediction for IMSI 1 trend: 0.034087 future RSRP: -84.2015 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.2697 Position: 1812.61:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0442622 future RSRP: -84.1812 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4587 Position: 1822.6:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0556621 future RSRP: -83.3473 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.2478 Position: 1832.6:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0673483 future RSRP: -83.1131 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.2478 Position: 1842.6:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0778823 future RSRP: -83.0921 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7513 Position: 1852.59:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0893184 future RSRP: -82.5726 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7513 Position: 1862.59:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0999823 future RSRP: -82.5513 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.3966 Position: 1872.58:300:0
+RSRP trend prediction for IMSI 1 trend: 0.110989 future RSRP: -82.1747 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4834 Position: 1882.58:300:0
+RSRP trend prediction for IMSI 1 trend: 0.121419 future RSRP: -82.2406 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4834 Position: 1892.58:300:0
+RSRP trend prediction for IMSI 1 trend: 0.129745 future RSRP: -82.2239 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0327 Position: 1902.57:300:0
+RSRP trend prediction for IMSI 1 trend: 0.138699 future RSRP: -81.7553 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0327 Position: 1912.57:300:0
+RSRP trend prediction for IMSI 1 trend: 0.146801 future RSRP: -81.7391 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.3845 Position: 1922.56:300:0
+RSRP trend prediction for IMSI 1 trend: 0.154601 future RSRP: -81.0753 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2004 Position: 1932.56:300:0
+RSRP trend prediction for IMSI 1 trend: 0.162229 future RSRP: -80.8759 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2004 Position: 1942.56:300:0
+RSRP trend prediction for IMSI 1 trend: 0.169377 future RSRP: -80.8616 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8412 Position: 1952.55:300:0
+RSRP trend prediction for IMSI 1 trend: 0.176753 future RSRP: -80.4877 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8412 Position: 1962.55:300:0
+RSRP trend prediction for IMSI 1 trend: 0.182451 future RSRP: -80.4763 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.779 Position: 1972.54:300:0
+RSRP trend prediction for IMSI 1 trend: 0.186592 future RSRP: -80.4058 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6876 Position: 1982.54:300:0
+RSRP trend prediction for IMSI 1 trend: 0.19021 future RSRP: -80.3072 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6876 Position: 1992.54:300:0
+RSRP trend prediction for IMSI 1 trend: 0.192952 future RSRP: -80.3017 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4824 Position: 2002.53:300:0
+RSRP trend prediction for IMSI 1 trend: 0.195426 future RSRP: -80.0916 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4824 Position: 2012.53:300:0
+RSRP trend prediction for IMSI 1 trend: 0.195769 future RSRP: -80.0909 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2699 Position: 2022.52:300:0
+RSRP trend prediction for IMSI 1 trend: 0.195398 future RSRP: -79.8791 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4318 Position: 2032.52:300:0
+RSRP trend prediction for IMSI 1 trend: 0.193787 future RSRP: -80.0442 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4318 Position: 2042.52:300:0
+RSRP trend prediction for IMSI 1 trend: 0.190798 future RSRP: -80.0502 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3234 Position: 2052.51:300:0
+RSRP trend prediction for IMSI 1 trend: 0.187199 future RSRP: -79.949 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3234 Position: 2062.51:300:0
+RSRP trend prediction for IMSI 1 trend: 0.182902 future RSRP: -79.9576 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4421 Position: 2072.5:300:0
+RSRP trend prediction for IMSI 1 trend: 0.177458 future RSRP: -80.0872 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6393 Position: 2082.5:300:0
+RSRP trend prediction for IMSI 1 trend: 0.173791 future RSRP: -80.2918 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6393 Position: 2092.5:300:0
+RSRP trend prediction for IMSI 1 trend: 0.169408 future RSRP: -80.3005 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.9533 Position: 2102.49:300:0
+RSRP trend prediction for IMSI 1 trend: 0.164652 future RSRP: -80.624 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.9533 Position: 2112.49:300:0
+RSRP trend prediction for IMSI 1 trend: 0.159251 future RSRP: -80.6348 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.1675 Position: 2122.48:300:0
+RSRP trend prediction for IMSI 1 trend: 0.153282 future RSRP: -80.861 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2156 Position: 2132.48:300:0
+RSRP trend prediction for IMSI 1 trend: 0.14788 future RSRP: -80.9198 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2156 Position: 2142.48:300:0
+RSRP trend prediction for IMSI 1 trend: 0.141932 future RSRP: -80.9317 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7302 Position: 2152.47:300:0
+RSRP trend prediction for IMSI 1 trend: 0.134272 future RSRP: -81.4617 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7302 Position: 2162.47:300:0
+RSRP trend prediction for IMSI 1 trend: 0.126118 future RSRP: -81.478 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.9072 Position: 2172.46:300:0
+RSRP trend prediction for IMSI 1 trend: 0.117639 future RSRP: -81.6719 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4405 Position: 2182.46:300:0
+RSRP trend prediction for IMSI 1 trend: 0.108387 future RSRP: -82.2237 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4405 Position: 2192.46:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0987672 future RSRP: -82.243 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6165 Position: 2202.45:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0888582 future RSRP: -82.4388 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6165 Position: 2212.45:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0786185 future RSRP: -82.4592 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.3499 Position: 2222.44:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0669099 future RSRP: -83.2161 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8214 Position: 2232.44:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0553599 future RSRP: -83.7107 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8214 Position: 2242.44:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0436769 future RSRP: -83.7341 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.121 Position: 2252.43:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0314992 future RSRP: -84.058 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.121 Position: 2262.43:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0192307 future RSRP: -84.0825 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.1988 Position: 2272.42:300:0
+RSRP trend prediction for IMSI 1 trend: 0.00704742 future RSRP: -84.1847 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4734 Position: 2282.42:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00457738 future RSRP: -84.4826 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4734 Position: 2292.42:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0161951 future RSRP: -84.5058 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.0267 Position: 2302.41:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0287907 future RSRP: -85.0843 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.0267 Position: 2312.41:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0413136 future RSRP: -85.1094 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3247 Position: 2322.4:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0524786 future RSRP: -85.4296 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6398 Position: 2332.4:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0636895 future RSRP: -85.7671 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6398 Position: 2342.4:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0746706 future RSRP: -85.7891 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9431 Position: 2352.39:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0849198 future RSRP: -86.113 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9431 Position: 2362.39:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0948625 future RSRP: -86.1329 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.4008 Position: 2372.38:300:0
+RSRP trend prediction for IMSI 1 trend: -0.104707 future RSRP: -86.6103 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.6041 Position: 2382.38:300:0
+RSRP trend prediction for IMSI 1 trend: -0.114858 future RSRP: -86.8338 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.6041 Position: 2392.38:300:0
+RSRP trend prediction for IMSI 1 trend: -0.124613 future RSRP: -86.8533 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.7208 Position: 2402.37:300:0
+RSRP trend prediction for IMSI 1 trend: -0.133143 future RSRP: -86.987 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.7208 Position: 2412.37:300:0
+RSRP方差: 0.0136704 标准差: 0.116921 方差置信度: 0.954573 趋势强度: 0.0706112 最终置信度: 0.600988
+RSRP trend prediction for IMSI 1 trend: -0.141222 future RSRP: -87.0032 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9597 Position: 2422.36:300:0
+RSRP方差: 0.0168617 标准差: 0.129853 方差置信度: 0.949709 趋势强度: 0.0739134 最终置信度: 0.599391
+RSRP trend prediction for IMSI 1 trend: -0.147827 future RSRP: -87.2553 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.1589 Position: 2432.36:300:0
+RSRP方差: 0.0399765 标准差: 0.199941 方差置信度: 0.923891 趋势强度: 0.0769568 最终置信度: 0.585117
+RSRP trend prediction for IMSI 1 trend: -0.153914 future RSRP: -87.4668 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.1589 Position: 2442.36:300:0
+RSRP方差: 0.038461 标准差: 0.196115 方差置信度: 0.925277 趋势强度: 0.079714 最终置信度: 0.587052
+RSRP trend prediction for IMSI 1 trend: -0.159428 future RSRP: -87.4778 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5071 Position: 2452.35:300:0
+RSRP方差: 0.0672417 标准差: 0.25931 方差置信度: 0.902719 趋势强度: 0.082155 最终置信度: 0.574493
+RSRP trend prediction for IMSI 1 trend: -0.16431 future RSRP: -87.8358 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5071 Position: 2462.35:300:0
+RSRP方差: 0.0465523 标准差: 0.21576 方差置信度: 0.918188 趋势强度: 0.084276 最终置信度: 0.584623
+RSRP trend prediction for IMSI 1 trend: -0.168552 future RSRP: -87.8442 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.0141 Position: 2472.34:300:0
+RSRP方差: 0.0984623 标准差: 0.313787 方差置信度: 0.883836 趋势强度: 0.086597 最终置信度: 0.56494
+RSRP trend prediction for IMSI 1 trend: -0.173194 future RSRP: -88.3605 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.2531 Position: 2482.34:300:0
+RSRP方差: 0.154196 标准差: 0.392678 方差置信度: 0.857387 趋势强度: 0.0887399 最终置信度: 0.549928
+RSRP trend prediction for IMSI 1 trend: -0.17748 future RSRP: -88.608 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.2531 Position: 2492.34:300:0
+RSRP方差: 0.114158 标准差: 0.337873 方差置信度: 0.87565 趋势强度: 0.0905196 最终置信度: 0.561598
+RSRP trend prediction for IMSI 1 trend: -0.181039 future RSRP: -88.6152 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5769 Position: 2502.33:300:0
+RSRP方差: 0.126198 标准差: 0.355243 方差置信度: 0.869807 趋势强度: 0.0920656 最终置信度: 0.558711
+RSRP trend prediction for IMSI 1 trend: -0.184131 future RSRP: -88.9452 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5769 Position: 2512.33:300:0
+RSRP方差: 0.0466865 标准差: 0.216071 方差置信度: 0.918077 趋势强度: 0.0932229 最终置信度: 0.588135
+RSRP trend prediction for IMSI 1 trend: -0.186446 future RSRP: -88.9498 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.802 Position: 2522.32:300:0
+RSRP方差: 0.0449317 标准差: 0.211971 方差置信度: 0.91955 趋势强度: 0.0939961 最终置信度: 0.589329
+RSRP trend prediction for IMSI 1 trend: -0.187992 future RSRP: -89.1779 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9924 Position: 2532.32:300:0
+RSRP方差: 0.0616158 标准差: 0.248225 方差置信度: 0.906624 趋势强度: 0.0947819 最终置信度: 0.581887
+RSRP trend prediction for IMSI 1 trend: -0.189564 future RSRP: -89.3715 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9924 Position: 2542.32:300:0
+RSRP方差: 0.0345742 标准差: 0.185941 方差置信度: 0.928976 趋势强度: 0.0951566 最终置信度: 0.595448
+RSRP trend prediction for IMSI 1 trend: -0.190313 future RSRP: -89.373 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.137 Position: 2552.31:300:0
+RSRP方差: 0.0374449 标准差: 0.193507 方差置信度: 0.926224 趋势强度: 0.0951575 最终置信度: 0.593797
+RSRP trend prediction for IMSI 1 trend: -0.190315 future RSRP: -89.5176 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.137 Position: 2562.31:300:0
+RSRP方差: 0.0152223 标准差: 0.123379 方差置信度: 0.95214 趋势强度: 0.0947353 最终置信度: 0.609178
+RSRP trend prediction for IMSI 1 trend: -0.189471 future RSRP: -89.5159 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9884 Position: 2572.3:300:0
+RSRP方差: 0.00511002 标准差: 0.0714844 方差置信度: 0.971911 趋势强度: 0.0938604 最终置信度: 0.620691
+RSRP trend prediction for IMSI 1 trend: -0.187721 future RSRP: -89.3639 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.5555 Position: 2582.3:300:0
+RSRP方差: 0.0429967 标准差: 0.207356 方差置信度: 0.921212 趋势强度: 0.0934838 最终置信度: 0.590121
+RSRP trend prediction for IMSI 1 trend: -0.186968 future RSRP: -89.9294 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.5555 Position: 2592.3:300:0
+RSRP方差: 0.0555163 标准差: 0.235619 方差置信度: 0.911092 趋势强度: 0.092679 最终置信度: 0.583727
+RSRP trend prediction for IMSI 1 trend: -0.185358 future RSRP: -89.9262 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.5555 Position: 2592.96:300:0
+RSRP方差: 0.0604892 标准差: 0.245945 方差置信度: 0.90743 趋势强度: 0.0918306 最终置信度: 0.58119
+RSRP trend prediction for IMSI 1 trend: -0.183661 future RSRP: -89.9228 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.9349 Position: 2598.96:300:0
+RSRP方差: 0.398117 标准差: 0.630965 方差置信度: 0.783549 趋势强度: 0.0886626 最终置信度: 0.505595
+RSRP trend prediction for IMSI 1 trend: -0.177325 future RSRP: -88.2896 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.9349 Position: 2608.96:300:0
+RSRP方差: 0.630275 标准差: 0.793899 方差置信度: 0.737894 趋势强度: 0.0854216 最终置信度: 0.476905
+RSRP trend prediction for IMSI 1 trend: -0.170843 future RSRP: -88.2766 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5877 Position: 2618.95:300:0
+RSRP方差: 0.739595 标准差: 0.859997 方差置信度: 0.720408 趋势强度: 0.0815061 最终置信度: 0.464847
+RSRP trend prediction for IMSI 1 trend: -0.163012 future RSRP: -87.9137 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5877 Position: 2628.95:300:0
+RSRP方差: 0.539148 标准差: 0.734267 方差置信度: 0.754174 趋势强度: 0.0772845 最终置信度: 0.483418
+RSRP trend prediction for IMSI 1 trend: -0.154569 future RSRP: -87.8969 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.2175 Position: 2638.94:300:0
+RSRP方差: 0.0714278 标准差: 0.26726 方差置信度: 0.899931 趋势强度: 0.0729516 最终置信度: 0.569139
+RSRP trend prediction for IMSI 1 trend: -0.145903 future RSRP: -87.5093 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.0024 Position: 2648.94:300:0
+RSRP方差: 0.105244 标准差: 0.324414 方差置信度: 0.880212 趋势强度: 0.0681021 最终置信度: 0.555368
+RSRP trend prediction for IMSI 1 trend: -0.136204 future RSRP: -87.2748 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.0024 Position: 2658.94:300:0
+RSRP方差: 0.069487 标准差: 0.263604 方差置信度: 0.901212 趋势强度: 0.0632161 最终置信度: 0.566013
+RSRP trend prediction for IMSI 1 trend: -0.126432 future RSRP: -87.2552 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.6865 Position: 2668.93:300:0
+RSRP trend prediction for IMSI 1 trend: -0.116734 future RSRP: -86.92 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.6865 Position: 2678.93:300:0
+RSRP trend prediction for IMSI 1 trend: -0.106627 future RSRP: -86.8997 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.6388 Position: 2688.92:300:0
+RSRP trend prediction for IMSI 1 trend: -0.096432 future RSRP: -86.8317 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.027 Position: 2698.92:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0844108 future RSRP: -86.1958 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.027 Position: 2708.92:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0738582 future RSRP: -86.1747 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9454 Position: 2718.91:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0640112 future RSRP: -86.0734 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9454 Position: 2728.91:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0539602 future RSRP: -86.0533 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3626 Position: 2738.9:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0430678 future RSRP: -85.4488 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9382 Position: 2748.9:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0310573 future RSRP: -85.0003 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9382 Position: 2758.9:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0191588 future RSRP: -84.9765 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4836 Position: 2768.89:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00679241 future RSRP: -84.4972 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4836 Position: 2778.89:300:0
+RSRP trend prediction for IMSI 1 trend: 0.00557498 future RSRP: -84.4725 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.9611 Position: 2788.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0178176 future RSRP: -83.9255 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8428 Position: 2798.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0302364 future RSRP: -83.7823 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8428 Position: 2808.88:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0418118 future RSRP: -83.7591 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8056 Position: 2818.87:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0525607 future RSRP: -83.7005 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8056 Position: 2828.87:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0631334 future RSRP: -83.6794 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.2213 Position: 2838.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.074162 future RSRP: -83.0729 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7825 Position: 2848.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0859615 future RSRP: -82.6106 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7825 Position: 2858.86:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0963365 future RSRP: -82.5899 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.3662 Position: 2868.85:300:0
+RSRP trend prediction for IMSI 1 trend: 0.106846 future RSRP: -82.1525 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.3662 Position: 2878.85:300:0
+RSRP trend prediction for IMSI 1 trend: 0.116948 future RSRP: -82.1323 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7455 Position: 2888.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.127819 future RSRP: -81.4898 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.6442 Position: 2898.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.138449 future RSRP: -81.3673 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.6442 Position: 2908.84:300:0
+RSRP trend prediction for IMSI 1 trend: 0.148007 future RSRP: -81.3482 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2845 Position: 2918.83:300:0
+RSRP trend prediction for IMSI 1 trend: 0.157413 future RSRP: -80.9697 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2845 Position: 2928.83:300:0
+RSRP trend prediction for IMSI 1 trend: 0.166255 future RSRP: -80.952 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.3018 Position: 2938.82:300:0
+RSRP trend prediction for IMSI 1 trend: 0.173639 future RSRP: -80.9545 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0117 Position: 2948.82:300:0
+RSRP trend prediction for IMSI 1 trend: 0.18111 future RSRP: -80.6495 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0117 Position: 2958.82:300:0
+RSRP trend prediction for IMSI 1 trend: 0.186715 future RSRP: -80.6383 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6179 Position: 2968.81:300:0
+RSRP trend prediction for IMSI 1 trend: 0.191989 future RSRP: -80.234 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6179 Position: 2978.81:300:0
+RSRP trend prediction for IMSI 1 trend: 0.19653 future RSRP: -80.2249 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.7102 Position: 2988.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.199328 future RSRP: -80.3116 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5402 Position: 2998.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.20177 future RSRP: -80.1366 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5402 Position: 3008.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.202889 future RSRP: -80.1344 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2173 Position: 3018.79:300:0
+RSRP trend prediction for IMSI 1 trend: 0.203508 future RSRP: -79.8103 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2173 Position: 3028.79:300:0
+RSRP trend prediction for IMSI 1 trend: 0.203284 future RSRP: -79.8108 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2991 Position: 3038.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.201671 future RSRP: -79.8957 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3471 Position: 3048.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.199096 future RSRP: -79.949 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3471 Position: 3058.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.196041 future RSRP: -79.9551 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2646 Position: 3068.77:300:0
+RSRP trend prediction for IMSI 1 trend: 0.190962 future RSRP: -79.8826 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.2646 Position: 3078.77:300:0
+RSRP trend prediction for IMSI 1 trend: 0.18499 future RSRP: -79.8946 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.7598 Position: 3088.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.176961 future RSRP: -80.4059 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0498 Position: 3098.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.171373 future RSRP: -80.707 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0498 Position: 3108.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.165124 future RSRP: -80.7195 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8533 Position: 3118.75:300:0
+RSRP trend prediction for IMSI 1 trend: 0.157173 future RSRP: -81.5389 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8533 Position: 3128.75:300:0
+RSRP trend prediction for IMSI 1 trend: 0.148672 future RSRP: -81.5559 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.5901 Position: 3138.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.141146 future RSRP: -81.3078 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7936 Position: 3148.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.133128 future RSRP: -81.5274 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.7936 Position: 3158.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.124609 future RSRP: -81.5444 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1667 Position: 3168.73:300:0
+RSRP trend prediction for IMSI 1 trend: 0.115486 future RSRP: -81.9357 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1667 Position: 3178.73:300:0
+RSRP trend prediction for IMSI 1 trend: 0.105929 future RSRP: -81.9548 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.486 Position: 3188.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0953028 future RSRP: -82.2954 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7332 Position: 3198.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0851948 future RSRP: -82.5628 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.7332 Position: 3208.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0747705 future RSRP: -82.5837 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8974 Position: 3218.71:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0638434 future RSRP: -82.7697 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8974 Position: 3228.71:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0526235 future RSRP: -82.7922 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.235 Position: 3238.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0417437 future RSRP: -83.1515 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4438 Position: 3248.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0312077 future RSRP: -83.3814 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4438 Position: 3258.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0205282 future RSRP: -83.4028 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.1258 Position: 3268.69:300:0
+RSRP trend prediction for IMSI 1 trend: 0.00921385 future RSRP: -84.1073 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.1258 Position: 3278.69:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00213488 future RSRP: -84.13 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.3555 Position: 3288.68:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0127791 future RSRP: -84.3811 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.8646 Position: 3298.68:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0242933 future RSRP: -84.9132 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.8646 Position: 3308.68:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0357094 future RSRP: -84.936 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2786 Position: 3318.67:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0479105 future RSRP: -85.3744 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2786 Position: 3328.67:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0599702 future RSRP: -85.3985 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.7493 Position: 3338.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.071565 future RSRP: -85.8925 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2143 Position: 3348.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0829365 future RSRP: -86.3802 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2143 Position: 3358.66:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0939785 future RSRP: -86.4023 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.442 Position: 3368.65:300:0
+RSRP trend prediction for IMSI 1 trend: -0.104207 future RSRP: -86.6504 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.442 Position: 3378.65:300:0
+RSRP trend prediction for IMSI 1 trend: -0.114044 future RSRP: -86.6701 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.4215 Position: 3388.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.121922 future RSRP: -86.6653 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.4308 Position: 3398.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.129124 future RSRP: -86.689 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.4308 Position: 3408.64:300:0
+RSRP trend prediction for IMSI 1 trend: -0.135866 future RSRP: -86.7025 will handover: 0
+Added measurement for IMSI 1 RSRP: -87.259 Position: 3418.63:300:0
+RSRP方差: 0.109657 标准差: 0.331146 方差置信度: 0.877927 趋势强度: 0.0716083 最终置信度: 0.555399
+RSRP trend prediction for IMSI 1 trend: -0.143217 future RSRP: -87.5454 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.259 Position: 3428.63:300:0
+RSRP方差: 0.165859 标准差: 0.407258 方差置信度: 0.852612 趋势强度: 0.0749967 最终置信度: 0.541566
+RSRP trend prediction for IMSI 1 trend: -0.149993 future RSRP: -87.559 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6207 Position: 3438.62:300:0
+RSRP方差: 0.23348 标准差: 0.483198 方差置信度: 0.828297 趋势强度: 0.0785449 最终置信度: 0.528396
+RSRP trend prediction for IMSI 1 trend: -0.15709 future RSRP: -87.9349 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5718 Position: 3448.62:300:0
+RSRP方差: 0.181979 标准差: 0.42659 方差置信度: 0.846334 趋势强度: 0.081377 最终置信度: 0.540351
+RSRP trend prediction for IMSI 1 trend: -0.162754 future RSRP: -87.8973 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5718 Position: 3458.62:300:0
+RSRP方差: 0.0263196 标准差: 0.162233 方差置信度: 0.937669 趋势强度: 0.0838941 最终置信度: 0.596159
+RSRP trend prediction for IMSI 1 trend: -0.167788 future RSRP: -87.9074 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8663 Position: 3468.61:300:0
+RSRP方差: 0.0373567 标准差: 0.193279 方差置信度: 0.926307 趋势强度: 0.0859604 最终置信度: 0.590168
+RSRP trend prediction for IMSI 1 trend: -0.171921 future RSRP: -88.2101 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8663 Position: 3478.61:300:0
+RSRP方差: 0.018888 标准差: 0.137434 方差置信度: 0.946873 趋势强度: 0.0876786 最终置信度: 0.603195
+RSRP trend prediction for IMSI 1 trend: -0.175357 future RSRP: -88.217 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.6732 Position: 3488.6:300:0
+RSRP方差: 0.163006 标准差: 0.403739 方差置信度: 0.853761 趋势强度: 0.0901111 最终置信度: 0.548301
+RSRP trend prediction for IMSI 1 trend: -0.180222 future RSRP: -89.0337 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9103 Position: 3498.6:300:0
+RSRP方差: 0.268643 标准差: 0.518308 方差置信度: 0.817363 趋势强度: 0.0922319 最终置信度: 0.527311
+RSRP trend prediction for IMSI 1 trend: -0.184464 future RSRP: -89.2792 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9103 Position: 3508.6:300:0
+RSRP方差: 0.230969 标准差: 0.480593 方差置信度: 0.829116 趋势强度: 0.0939508 最终置信度: 0.53505
+RSRP trend prediction for IMSI 1 trend: -0.187902 future RSRP: -89.2861 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.1266 Position: 3518.59:300:0
+RSRP方差: 0.193233 标准差: 0.439583 方差置信度: 0.842149 趋势强度: 0.0951269 最终置信度: 0.54334
+RSRP trend prediction for IMSI 1 trend: -0.190254 future RSRP: -89.5071 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.1266 Position: 3528.59:300:0
+RSRP方差: 0.0284271 标准差: 0.168603 方差置信度: 0.935323 趋势强度: 0.0958752 最终置信度: 0.599544
+RSRP trend prediction for IMSI 1 trend: -0.19175 future RSRP: -89.5101 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.0151 Position: 3538.58:300:0
+RSRP方差: 0.00936127 标准差: 0.0967537 方差置信度: 0.96222 趋势强度: 0.0961646 最终置信度: 0.615798
+RSRP trend prediction for IMSI 1 trend: -0.192329 future RSRP: -89.3997 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.1762 Position: 3548.58:300:0
+RSRP方差: 0.0092423 标准差: 0.0961369 方差置信度: 0.962455 趋势强度: 0.0962839 最终置信度: 0.615986
+RSRP trend prediction for IMSI 1 trend: -0.192568 future RSRP: -89.5613 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.1762 Position: 3558.58:300:0
+RSRP方差: 0.0034653 标准差: 0.0588668 方差置信度: 0.976796 趋势强度: 0.0959792 最终置信度: 0.62447
+RSRP trend prediction for IMSI 1 trend: -0.191958 future RSRP: -89.5601 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.547 Position: 3568.57:300:0
+RSRP方差: 0.0321601 标准差: 0.179332 方差置信度: 0.931389 趋势强度: 0.0955857 最终置信度: 0.597068
+RSRP trend prediction for IMSI 1 trend: -0.191171 future RSRP: -89.9294 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.547 Position: 3575.9:300:0
+RSRP方差: 0.046714 标准差: 0.216134 方差置信度: 0.918054 趋势强度: 0.0947465 最终置信度: 0.588731
+RSRP trend prediction for IMSI 1 trend: -0.189493 future RSRP: -89.926 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8709 Position: 3581.9:300:0
+RSRP方差: 0.383062 标准差: 0.61892 方差置信度: 0.787075 趋势强度: 0.0920959 最终置信度: 0.509083
+RSRP trend prediction for IMSI 1 trend: -0.184192 future RSRP: -88.2393 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.8709 Position: 3591.9:300:0
+RSRP方差: 0.596814 标准差: 0.772538 方差置信度: 0.74367 趋势强度: 0.0894591 最终置信度: 0.481986
+RSRP trend prediction for IMSI 1 trend: -0.178918 future RSRP: -88.2287 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6966 Position: 3601.89:300:0
+RSRP方差: 0.725877 标准差: 0.851984 方差置信度: 0.722497 趋势强度: 0.0862895 最终置信度: 0.468014
+RSRP trend prediction for IMSI 1 trend: -0.172579 future RSRP: -88.0417 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6966 Position: 3611.89:300:0
+RSRP方差: 0.503556 标准差: 0.709616 方差置信度: 0.761046 趋势强度: 0.0837847 最终置信度: 0.490142
+RSRP trend prediction for IMSI 1 trend: -0.167569 future RSRP: -88.0317 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.5688 Position: 3621.88:300:0
+RSRP方差: 0.0134725 标准差: 0.116071 方差置信度: 0.954893 趋势强度: 0.0808489 最终置信度: 0.605275
+RSRP trend prediction for IMSI 1 trend: -0.161698 future RSRP: -87.8922 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.3733 Position: 3631.88:300:0
+RSRP方差: 0.0271777 标准差: 0.164857 方差置信度: 0.936702 趋势强度: 0.0770865 最终置信度: 0.592856
+RSRP trend prediction for IMSI 1 trend: -0.154173 future RSRP: -87.6817 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.3733 Position: 3641.88:300:0
+RSRP方差: 0.0210774 标准差: 0.145181 方差置信度: 0.943985 趋势强度: 0.0732956 最终置信度: 0.595709
+RSRP trend prediction for IMSI 1 trend: -0.146591 future RSRP: -87.6665 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9177 Position: 3651.87:300:0
+RSRP方差: 0.0698972 标准差: 0.264381 方差置信度: 0.900939 趋势强度: 0.0687007 最终置信度: 0.568044
+RSRP trend prediction for IMSI 1 trend: -0.137401 future RSRP: -87.1925 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9177 Position: 3661.87:300:0
+RSRP方差: 0.0701858 标准差: 0.264926 方差置信度: 0.900748 趋势强度: 0.0643166 最终置信度: 0.566176
+RSRP trend prediction for IMSI 1 trend: -0.128633 future RSRP: -87.1749 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.6822 Position: 3671.86:300:0
+RSRP trend prediction for IMSI 1 trend: -0.118855 future RSRP: -86.9199 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2845 Position: 3681.86:300:0
+RSRP trend prediction for IMSI 1 trend: -0.108489 future RSRP: -86.5015 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2845 Position: 3691.86:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0983632 future RSRP: -86.4812 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.1063 Position: 3701.85:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0874774 future RSRP: -86.2812 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.1063 Position: 3711.85:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0766698 future RSRP: -86.2596 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6674 Position: 3721.84:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0645212 future RSRP: -85.7964 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.1951 Position: 3731.84:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0518221 future RSRP: -85.2987 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.1951 Position: 3741.84:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0394462 future RSRP: -85.274 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.8504 Position: 3751.83:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0260911 future RSRP: -84.9025 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.8504 Position: 3761.83:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0142708 future RSRP: -84.8789 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5251 Position: 3771.82:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00161574 future RSRP: -84.5284 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.108 Position: 3781.82:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0114965 future RSRP: -84.085 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.108 Position: 3791.82:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0233385 future RSRP: -84.0613 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8913 Position: 3801.81:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0356175 future RSRP: -83.8201 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.8913 Position: 3811.81:300:0
+RSRP trend prediction for IMSI 1 trend: 0.046789 future RSRP: -83.7977 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4927 Position: 3821.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0587653 future RSRP: -83.3752 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8538 Position: 3831.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0709206 future RSRP: -82.7119 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8538 Position: 3841.8:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0816591 future RSRP: -82.6905 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4694 Position: 3851.79:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0929793 future RSRP: -82.2835 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.4694 Position: 3861.79:300:0
+RSRP trend prediction for IMSI 1 trend: 0.103382 future RSRP: -82.2626 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2237 Position: 3871.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.113982 future RSRP: -81.9957 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.036 Position: 3881.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.124668 future RSRP: -81.7867 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.036 Position: 3891.78:300:0
+RSRP trend prediction for IMSI 1 trend: 0.13491 future RSRP: -81.7662 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.6781 Position: 3901.77:300:0
+RSRP trend prediction for IMSI 1 trend: 0.145572 future RSRP: -81.387 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.6781 Position: 3911.77:300:0
+RSRP trend prediction for IMSI 1 trend: 0.15375 future RSRP: -81.3706 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.709 Position: 3921.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.161319 future RSRP: -81.3864 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.483 Position: 3931.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.168001 future RSRP: -81.147 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.483 Position: 3941.76:300:0
+RSRP trend prediction for IMSI 1 trend: 0.174213 future RSRP: -81.1346 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8577 Position: 3951.75:300:0
+RSRP trend prediction for IMSI 1 trend: 0.181312 future RSRP: -80.4951 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8577 Position: 3961.75:300:0
+RSRP trend prediction for IMSI 1 trend: 0.187045 future RSRP: -80.4836 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4778 Position: 3971.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.192998 future RSRP: -80.0918 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3004 Position: 3981.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.196683 future RSRP: -79.907 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.3004 Position: 3991.74:300:0
+RSRP trend prediction for IMSI 1 trend: 0.198984 future RSRP: -79.9024 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4204 Position: 4001.73:300:0
+RSRP trend prediction for IMSI 1 trend: 0.200176 future RSRP: -80.02 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.4204 Position: 4011.73:300:0
+RSRP trend prediction for IMSI 1 trend: 0.200022 future RSRP: -80.0203 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.6073 Position: 4021.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.198592 future RSRP: -80.2101 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5871 Position: 4031.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.196665 future RSRP: -80.1938 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5871 Position: 4041.72:300:0
+RSRP trend prediction for IMSI 1 trend: 0.193533 future RSRP: -80.2001 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.584 Position: 4051.71:300:0
+RSRP trend prediction for IMSI 1 trend: 0.189585 future RSRP: -80.2048 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.584 Position: 4061.71:300:0
+RSRP trend prediction for IMSI 1 trend: 0.183903 future RSRP: -80.2162 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.969 Position: 4071.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.176454 future RSRP: -80.6161 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0535 Position: 4081.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.172087 future RSRP: -80.7094 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.0535 Position: 4091.7:300:0
+RSRP trend prediction for IMSI 1 trend: 0.167066 future RSRP: -80.7194 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.1408 Position: 4101.69:300:0
+RSRP trend prediction for IMSI 1 trend: 0.161611 future RSRP: -80.8176 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.1408 Position: 4111.69:300:0
+RSRP trend prediction for IMSI 1 trend: 0.155527 future RSRP: -80.8297 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.5024 Position: 4121.68:300:0
+RSRP trend prediction for IMSI 1 trend: 0.148275 future RSRP: -81.2059 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.4802 Position: 4131.68:300:0
+RSRP trend prediction for IMSI 1 trend: 0.140972 future RSRP: -81.1983 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.4802 Position: 4141.68:300:0
+RSRP trend prediction for IMSI 1 trend: 0.133102 future RSRP: -81.214 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8498 Position: 4151.67:300:0
+RSRP trend prediction for IMSI 1 trend: 0.124913 future RSRP: -81.6 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.8498 Position: 4161.67:300:0
+RSRP trend prediction for IMSI 1 trend: 0.116237 future RSRP: -81.6174 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.0007 Position: 4171.66:300:0
+RSRP trend prediction for IMSI 1 trend: 0.107296 future RSRP: -81.7861 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.083 Position: 4181.66:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0986859 future RSRP: -81.8857 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.083 Position: 4191.66:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0896721 future RSRP: -81.9037 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6418 Position: 4201.65:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0793765 future RSRP: -82.4831 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.6418 Position: 4211.65:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0687481 future RSRP: -82.5043 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.1542 Position: 4221.64:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0576563 future RSRP: -83.0389 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.6094 Position: 4231.64:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0464087 future RSRP: -83.5166 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.6094 Position: 4241.64:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0350088 future RSRP: -83.5394 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.762 Position: 4251.63:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0239419 future RSRP: -83.7141 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.762 Position: 4261.63:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0127705 future RSRP: -83.7364 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4988 Position: 4271.62:300:0
+RSRP trend prediction for IMSI 1 trend: 0.000557348 future RSRP: -84.4977 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4825 Position: 4281.62:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0105984 future RSRP: -84.5037 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.4825 Position: 4291.62:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0217181 future RSRP: -84.5259 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5525 Position: 4301.61:300:0
+RSRP trend prediction for IMSI 1 trend: -0.032436 future RSRP: -84.6173 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5525 Position: 4311.61:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0430904 future RSRP: -84.6387 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.8812 Position: 4321.6:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0534787 future RSRP: -84.9882 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3887 Position: 4331.6:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0633628 future RSRP: -85.5154 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.3887 Position: 4341.6:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0730035 future RSRP: -85.5347 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9724 Position: 4351.59:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0828329 future RSRP: -86.1381 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.9724 Position: 4361.59:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0923259 future RSRP: -86.1571 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.5391 Position: 4371.58:300:0
+RSRP trend prediction for IMSI 1 trend: -0.102214 future RSRP: -86.7435 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.5368 Position: 4381.58:300:0
+RSRP trend prediction for IMSI 1 trend: -0.111223 future RSRP: -86.7592 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.5368 Position: 4391.58:300:0
+RSRP trend prediction for IMSI 1 trend: -0.119799 future RSRP: -86.7764 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.9272 Position: 4401.57:300:0
+RSRP方差: 0.0930197 标准差: 0.304991 方差置信度: 0.88685 趋势强度: 0.0639928 最终置信度: 0.557707
+RSRP trend prediction for IMSI 1 trend: -0.127986 future RSRP: -87.1832 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9272 Position: 4411.57:300:0
+RSRP方差: 0.0364513 标准差: 0.190922 方差置信度: 0.927163 趋势强度: 0.0678341 最终置信度: 0.583431
+RSRP trend prediction for IMSI 1 trend: -0.135668 future RSRP: -87.1986 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.2209 Position: 4421.56:300:0
+RSRP方差: 0.068734 标准差: 0.262172 方差置信度: 0.901714 趋势强度: 0.0718064 最终置信度: 0.569751
+RSRP trend prediction for IMSI 1 trend: -0.143613 future RSRP: -87.5081 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6966 Position: 4431.56:300:0
+RSRP方差: 0.148031 标准差: 0.384748 方差置信度: 0.859999 趋势强度: 0.0757971 最终置信度: 0.546318
+RSRP trend prediction for IMSI 1 trend: -0.151594 future RSRP: -87.9998 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.6966 Position: 4441.56:300:0
+RSRP方差: 0.119709 标准差: 0.34599 方差置信度: 0.872914 趋势强度: 0.0794893 最终置信度: 0.555544
+RSRP trend prediction for IMSI 1 trend: -0.158979 future RSRP: -88.0146 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.7449 Position: 4451.55:300:0
+RSRP方差: 0.106822 标准差: 0.326837 方差置信度: 0.879389 趋势强度: 0.0821744 最终置信度: 0.560503
+RSRP trend prediction for IMSI 1 trend: -0.164349 future RSRP: -88.0736 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.7449 Position: 4461.55:300:0
+RSRP方差: 0.0404493 标准差: 0.20112 方差置信度: 0.923465 趋势强度: 0.0845288 最终置信度: 0.58789
+RSRP trend prediction for IMSI 1 trend: -0.169058 future RSRP: -88.083 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.9654 Position: 4471.54:300:0
+RSRP方差: 0.010046 标准差: 0.10023 方差置信度: 0.960896 趋势强度: 0.0863467 最终置信度: 0.611076
+RSRP trend prediction for IMSI 1 trend: -0.172693 future RSRP: -88.3108 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.341 Position: 4481.54:300:0
+RSRP方差: 0.0576491 标准差: 0.240102 方差置信度: 0.9095 趋势强度: 0.0880296 最终置信度: 0.580912
+RSRP trend prediction for IMSI 1 trend: -0.176059 future RSRP: -88.6931 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.341 Position: 4491.54:300:0
+RSRP方差: 0.0720303 标准差: 0.268385 方差置信度: 0.899537 趋势强度: 0.0893265 最终置信度: 0.575453
+RSRP trend prediction for IMSI 1 trend: -0.178653 future RSRP: -88.6983 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5563 Position: 4501.53:300:0
+RSRP方差: 0.0856679 标准差: 0.292691 方差置信度: 0.891087 趋势强度: 0.0906374 最终置信度: 0.570907
+RSRP trend prediction for IMSI 1 trend: -0.181275 future RSRP: -88.9189 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.5563 Position: 4511.53:300:0
+RSRP方差: 0.0466338 标准差: 0.215949 方差置信度: 0.91812 趋势强度: 0.0915577 最终置信度: 0.587495
+RSRP trend prediction for IMSI 1 trend: -0.183115 future RSRP: -88.9226 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.9752 Position: 4521.52:300:0
+RSRP方差: 0.0536359 标准差: 0.231594 方差置信度: 0.912525 趋势强度: 0.0928091 最终置信度: 0.584638
+RSRP trend prediction for IMSI 1 trend: -0.185618 future RSRP: -89.3465 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.0445 Position: 4531.52:300:0
+RSRP方差: 0.0728892 标准差: 0.26998 方差置信度: 0.89898 趋势强度: 0.0937154 最终置信度: 0.576874
+RSRP trend prediction for IMSI 1 trend: -0.187431 future RSRP: -89.4194 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.0445 Position: 4541.52:300:0
+RSRP方差: 0.0525521 标准差: 0.229242 方差置信度: 0.913363 趋势强度: 0.0942156 最终置信度: 0.585704
+RSRP trend prediction for IMSI 1 trend: -0.188431 future RSRP: -89.4214 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.7175 Position: 4551.51:300:0
+RSRP方差: 0.138672 标准差: 0.372387 方差置信度: 0.86409 趋势强度: 0.0950975 最终置信度: 0.556493
+RSRP trend prediction for IMSI 1 trend: -0.190195 future RSRP: -90.0979 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.7175 Position: 4561.51:300:0
+RSRP方差: 0.116927 标准差: 0.341946 方差置信度: 0.874275 趋势强度: 0.0955409 最终置信度: 0.562782
+RSRP trend prediction for IMSI 1 trend: -0.191082 future RSRP: -90.0997 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.4933 Position: 4571.5:300:0
+RSRP方差: 0.0926039 标准差: 0.304309 方差置信度: 0.887084 趋势强度: 0.0957534 最终置信度: 0.570552
+RSRP trend prediction for IMSI 1 trend: -0.191507 future RSRP: -89.8763 will handover: 1
+Added measurement for IMSI 1 RSRP: -89.4933 Position: 4575.5:300:0
+RSRP方差: 0.0603905 标准差: 0.245745 方差置信度: 0.907501 趋势强度: 0.0956601 最终置信度: 0.582765
+RSRP trend prediction for IMSI 1 trend: -0.19132 future RSRP: -89.8759 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.2952 Position: 4581.5:300:0
+RSRP方差: 0.284722 标准差: 0.533594 方差置信度: 0.812663 趋势强度: 0.0937519 最终置信度: 0.525098
+RSRP trend prediction for IMSI 1 trend: -0.187504 future RSRP: -88.6702 will handover: 1
+Added measurement for IMSI 1 RSRP: -88.2952 Position: 4591.5:300:0
+RSRP方差: 0.395543 标准差: 0.628922 方差置信度: 0.784146 趋势强度: 0.0916029 最终置信度: 0.507129
+RSRP trend prediction for IMSI 1 trend: -0.183206 future RSRP: -88.6616 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.909 Position: 4601.49:300:0
+RSRP方差: 0.442422 标准差: 0.665148 方差置信度: 0.77366 趋势强度: 0.0886559 最终置信度: 0.499659
+RSRP trend prediction for IMSI 1 trend: -0.177312 future RSRP: -88.2636 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.909 Position: 4611.49:300:0
+RSRP方差: 0.339513 标准差: 0.582677 方差置信度: 0.79781 趋势强度: 0.0858268 最终置信度: 0.513017
+RSRP trend prediction for IMSI 1 trend: -0.171654 future RSRP: -88.2523 will handover: 1
+Added measurement for IMSI 1 RSRP: -87.7875 Position: 4621.48:300:0
+RSRP方差: 0.0456601 标准差: 0.213682 方差置信度: 0.918935 趋势强度: 0.08252 最终置信度: 0.584369
+RSRP trend prediction for IMSI 1 trend: -0.16504 future RSRP: -88.1176 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9891 Position: 4631.48:300:0
+RSRP方差: 0.184861 标准差: 0.429954 方差置信度: 0.845248 趋势强度: 0.077971 最终置信度: 0.538337
+RSRP trend prediction for IMSI 1 trend: -0.155942 future RSRP: -87.3009 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.9891 Position: 4641.48:300:0
+RSRP方差: 0.187586 标准差: 0.433112 方差置信度: 0.84423 趋势强度: 0.0736099 最终置信度: 0.535982
+RSRP trend prediction for IMSI 1 trend: -0.14722 future RSRP: -87.2835 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.7742 Position: 4651.47:300:0
+RSRP方差: 0.215577 标准差: 0.464302 方差置信度: 0.834261 趋势强度: 0.0687493 最终置信度: 0.528056
+RSRP trend prediction for IMSI 1 trend: -0.137499 future RSRP: -87.0492 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.7742 Position: 4661.47:300:0
+RSRP方差: 0.140545 标准差: 0.374893 方差置信度: 0.863259 趋势强度: 0.063837 最终置信度: 0.54349
+RSRP trend prediction for IMSI 1 trend: -0.127674 future RSRP: -87.0295 will handover: 1
+Added measurement for IMSI 1 RSRP: -86.647 Position: 4671.46:300:0
+RSRP trend prediction for IMSI 1 trend: -0.117293 future RSRP: -86.8816 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3776 Position: 4681.46:300:0
+RSRP trend prediction for IMSI 1 trend: -0.105841 future RSRP: -86.5893 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.3776 Position: 4691.46:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0953437 future RSRP: -86.5683 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2238 Position: 4701.45:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0841261 future RSRP: -86.392 will handover: 0
+Added measurement for IMSI 1 RSRP: -86.2238 Position: 4711.45:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0738193 future RSRP: -86.3714 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.6988 Position: 4721.44:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0630973 future RSRP: -85.825 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.0444 Position: 4731.44:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0506349 future RSRP: -85.1457 will handover: 0
+Max Packets per trace file exceeded
+Added measurement for IMSI 1 RSRP: -85.0444 Position: 4741.44:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0384083 future RSRP: -85.1213 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2082 Position: 4751.43:300:0
+RSRP trend prediction for IMSI 1 trend: -0.026444 future RSRP: -85.2611 will handover: 0
+Added measurement for IMSI 1 RSRP: -85.2082 Position: 4761.43:300:0
+RSRP trend prediction for IMSI 1 trend: -0.0161451 future RSRP: -85.2405 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.9142 Position: 4771.42:300:0
+RSRP trend prediction for IMSI 1 trend: -0.00504654 future RSRP: -84.9243 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.6564 Position: 4781.42:300:0
+RSRP trend prediction for IMSI 1 trend: 0.00670017 future RSRP: -84.643 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.6564 Position: 4791.42:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0182922 future RSRP: -84.6198 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5461 Position: 4801.41:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0301538 future RSRP: -84.4858 will handover: 0
+Added measurement for IMSI 1 RSRP: -84.5461 Position: 4811.41:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0412096 future RSRP: -84.4637 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.9336 Position: 4821.4:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0524317 future RSRP: -83.8288 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4956 Position: 4831.4:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0645446 future RSRP: -83.3665 will handover: 0
+Added measurement for IMSI 1 RSRP: -83.4956 Position: 4841.4:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0750463 future RSRP: -83.3455 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8568 Position: 4851.39:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0868132 future RSRP: -82.6831 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.8568 Position: 4861.39:300:0
+RSRP trend prediction for IMSI 1 trend: 0.0968931 future RSRP: -82.663 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.5975 Position: 4871.38:300:0
+RSRP trend prediction for IMSI 1 trend: 0.107235 future RSRP: -82.383 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2637 Position: 4881.38:300:0
+RSRP trend prediction for IMSI 1 trend: 0.117984 future RSRP: -82.0278 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.2637 Position: 4891.38:300:0
+RSRP trend prediction for IMSI 1 trend: 0.127366 future RSRP: -82.009 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1931 Position: 4901.37:300:0
+RSRP trend prediction for IMSI 1 trend: 0.136467 future RSRP: -81.9202 will handover: 0
+Added measurement for IMSI 1 RSRP: -82.1931 Position: 4911.37:300:0
+RSRP trend prediction for IMSI 1 trend: 0.144394 future RSRP: -81.9043 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.649 Position: 4921.36:300:0
+RSRP trend prediction for IMSI 1 trend: 0.151953 future RSRP: -81.345 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.4639 Position: 4931.36:300:0
+RSRP trend prediction for IMSI 1 trend: 0.159367 future RSRP: -81.1452 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.4639 Position: 4941.36:300:0
+RSRP trend prediction for IMSI 1 trend: 0.166064 future RSRP: -81.1318 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2243 Position: 4951.35:300:0
+RSRP trend prediction for IMSI 1 trend: 0.172722 future RSRP: -80.8788 will handover: 0
+Added measurement for IMSI 1 RSRP: -81.2243 Position: 4961.35:300:0
+RSRP trend prediction for IMSI 1 trend: 0.178213 future RSRP: -80.8678 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.8933 Position: 4971.34:300:0
+RSRP trend prediction for IMSI 1 trend: 0.182916 future RSRP: -80.5274 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5536 Position: 4981.34:300:0
+RSRP trend prediction for IMSI 1 trend: 0.187703 future RSRP: -80.1782 will handover: 0
+Added measurement for IMSI 1 RSRP: -80.5536 Position: 4991.34:300:0
+RSRP trend prediction for IMSI 1 trend: 0.191215 future RSRP: -80.1711 will handover: 0
