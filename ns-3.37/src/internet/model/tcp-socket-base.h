@@ -1053,7 +1053,7 @@ class TcpSocketBase : public TcpSocket
     /**
      * \splitack
      */
-    //virtual void SendSplitAck(uint8_t flags);
+    // virtual void SendSplitAck(uint8_t flags);
 
     /**
      * \brief Take into account the packet for RTT estimation
@@ -1280,9 +1280,9 @@ class TcpSocketBase : public TcpSocket
      */
     SequenceNumber32 GetHighRxAck() const;
 
-    //void SendSplitAck();
+    // void SendSplitAck();
 
-    //void SendEmptyPacket(uint8_t flags, SequenceNumber32 ack = SequenceNumber32(0));
+    // void SendEmptyPacket(uint8_t flags, SequenceNumber32 ack = SequenceNumber32(0));
 
   protected:
     // Counters and events
@@ -1375,10 +1375,24 @@ class TcpSocketBase : public TcpSocket
     uint32_t m_retxThresh{3};    //!< Fast Retransmit threshold
     bool m_limitedTx{true};      //!< perform limited transmit
 
+    // Handover and Dynamic ACK Splitting
+    bool m_isHandoverInProgress{false}; //!< Flag to indicate if handover is in progress
+    bool m_forceSmallWindow{false};     //!< Flag to force small window
+    double m_splittingFactor{0.5};      //!< Splitting factor k
+    uint32_t m_splitCountGood{2};       //!< Split count when network is good (a)
+    uint32_t m_splitCountBad{5};        //!< Split count when network is bad (b)
+
+    /**
+     * \brief Send split ACKs based on the dynamic splitting algorithm
+     * \param currentReceivedBytes M: Current cumulative received bytes (NextRxSequence)
+     * \param currentAckedBytes N: Current acknowledged bytes (Last sent ACK)
+     */
+    void SendSplitAck(SequenceNumber32 currentReceivedBytes, SequenceNumber32 currentAckedBytes);
+
     // ack split
-    //SequenceNumber32 m_nextPlannedAck; // 当前计划的下一个阶段的 ACK 序列号
-    //EventId m_splitAckEvent;          // 定时器事件，用于分阶段发送 ACK
-    //std::vector<SequenceNumber32> m_plannedAcks; // 计划的多个分阶段 ACK
+    // SequenceNumber32 m_nextPlannedAck; // 当前计划的下一个阶段的 ACK 序列号
+    // EventId m_splitAckEvent;          // 定时器事件，用于分阶段发送 ACK
+    // std::vector<SequenceNumber32> m_plannedAcks; // 计划的多个分阶段 ACK
 
     // Transmission Control Block
     Ptr<TcpSocketState> m_tcb;                 //!< Congestion control information
