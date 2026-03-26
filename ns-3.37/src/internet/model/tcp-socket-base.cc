@@ -85,6 +85,9 @@ namespace ns3
     uint32_t TcpSocketBase::s_ackSplitCount       = 3;
     double   TcpSocketBase::s_ackSplitK           = 0.5;
     uint32_t TcpSocketBase::s_ueNodeId            = 0;
+    uint64_t TcpSocketBase::s_totalAckSent        = 0;
+    uint64_t TcpSocketBase::s_splitAckSent        = 0;
+    double   TcpSocketBase::s_lastAlpha           = 1.0;
 
     NS_OBJECT_ENSURE_REGISTERED(TcpSocketBase);
 
@@ -2850,6 +2853,7 @@ namespace ns3
                 NS_LOG_DEBUG("[ACK-Split] i=" << i << "/" << a
                              << " splitAck=" << splitAck);
             }
+            s_splitAckSent += a;
             s_ackSplitActive = false;
             return;
         }
@@ -2953,6 +2957,7 @@ namespace ns3
                 AddOptionSack(header);
             }
             NS_LOG_INFO("Sending a pure ACK, acking seq " << m_tcb->m_rxBuffer->NextRxSequence());
+            s_totalAckSent++;
         }
 
         m_txTrace(p, header, this);
@@ -3628,6 +3633,7 @@ namespace ns3
             if (w_new < mss && w >= mss) {
                 w_new = mss;   // 至少保留 1 MSS，防止窗口为 0 死锁
             }
+            s_lastAlpha = alpha;
             w = w_new;
         }
 

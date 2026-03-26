@@ -90,6 +90,46 @@ bool g_enableAckSplit = true;
 std::vector<double> g_triggerPosList;
 std::vector<bool>   g_triggeredFlags;
 
+// ── 优化机制追踪：每 0.1s 记录 alpha / ACK 计数 / 有效窗口 ──
+struct OptimRecord {
+    double time;
+    double alpha;
+    uint64_t totalAck;
+    uint64_t splitAck;
+    bool   rwndActive;
+    bool   ackSplitActive;
+};
+std::vector<OptimRecord> g_optimRecords;
+
+void
+LogOptimTrace()
+{
+    OptimRecord r;
+    r.time          = Simulator::Now().GetSeconds();
+    r.alpha         = TcpSocketBase::s_lastAlpha;
+    r.totalAck      = TcpSocketBase::s_totalAckSent;
+    r.splitAck      = TcpSocketBase::s_splitAckSent;
+    r.rwndActive    = TcpSocketBase::s_rwndActive;
+    r.ackSplitActive = TcpSocketBase::s_ackSplitActive;
+    g_optimRecords.push_back(r);
+    Simulator::Schedule(Seconds(0.1), &LogOptimTrace);
+}
+
+void
+OutputOptimTrace()
+{
+    std::ofstream f(trFileDir + "optim_trace.csv");
+    f << "time,alpha,totalAck,splitAck,rwndActive,ackSplitActive" << std::endl;
+    f << std::fixed << std::setprecision(4);
+    for (auto& r : g_optimRecords)
+    {
+        f << r.time << "," << r.alpha << "," << r.totalAck << ","
+          << r.splitAck << "," << r.rwndActive << "," << r.ackSplitActive << std::endl;
+    }
+    f.close();
+    std::cout << "[OUTPUT] traces/optim_trace.csv  (" << g_optimRecords.size() << " rows)" << std::endl;
+}
+
 // 解析逗号分隔的 double 列表
 std::vector<double>
 ParseDoubleList(const std::string& s)
@@ -206,6 +246,29 @@ MyCheckSocketFunction(Ptr<PacketSink> packetSink)
     Simulator::Schedule(Seconds(0.001), &MyCheckSocketFunction, packetSink);
 }
 
+// ── 切换事件日志 ──
+struct HandoverEvent {
+    double time;
+    std::string type;   // "HO_START" or "HO_END"
+    uint16_t fromCell;
+    uint16_t toCell;
+};
+std::vector<HandoverEvent> g_hoEvents;
+
+void
+OutputHandoverEvents()
+{
+    std::ofstream f(trFileDir + "handover_events.csv");
+    f << "time,type,fromCell,toCell" << std::endl;
+    for (auto& e : g_hoEvents)
+    {
+        f << std::fixed << std::setprecision(4)
+          << e.time << "," << e.type << "," << e.fromCell << "," << e.toCell << std::endl;
+    }
+    f.close();
+    std::cout << "[OUTPUT] traces/handover_events.csv  (" << g_hoEvents.size() << " events)" << std::endl;
+}
+
 void
 NotifyConnectionEstablishedUe(std::string context, uint64_t imsi, uint16_t cellid, uint16_t rnti)
 {
@@ -220,20 +283,19 @@ NotifyHandoverStartUe(std::string context,
                       uint16_t rnti,
                       uint16_t targetCellId)
 {
-    // isHandoverStart = true;
-    std::cout << Simulator::Now().GetSeconds() << "s " << context << " UE IMSI " << imsi
-              << ": previously connected to CellId " << cellid << " with RNTI " << rnti
-              << ", doing handover to CellId " << targetCellId << std::endl;
-    std::cout << BooleanValue(isHandoverStart) << std::endl;
+    double t = Simulator::Now().GetSeconds();
+    std::cout << t << "s UE IMSI " << imsi
+              << ": HO_START CellId " << cellid << " → " << targetCellId << std::endl;
+    g_hoEvents.push_back({t, "HO_START", cellid, targetCellId});
 }
 
 void
 NotifyHandoverEndOkUe(std::string context, uint64_t imsi, uint16_t cellid, uint16_t rnti)
 {
-    // isHandoverStart = false;
-    std::cout << Simulator::Now().GetSeconds() << "s " << context << " UE IMSI " << imsi
-              << ": successful handover to CellId " << cellid << " with RNTI " << rnti << std::endl;
-    std::cout << BooleanValue(isHandoverStart) << std::endl;
+    double t = Simulator::Now().GetSeconds();
+    std::cout << t << "s UE IMSI " << imsi
+              << ": HO_END   CellId " << cellid << std::endl;
+    g_hoEvents.push_back({t, "HO_END", cellid, cellid});
 }
 
 void
@@ -318,100 +380,82 @@ HandoverInitiatedCallback(Ptr<const MobilityModel> mobility)
               << std::endl;
 }
 
-// 声明全局变量用于存储吞吐量、RTT 和丢包数据
-std::vector<double> txThroughputData;
-std::vector<double> rxThroughputData;
-std::vector<double> rttData;        // RTT 数据
-std::vector<double> packetLossData; // 丢包率数据
+// ── 时序统计数据（带时间戳）──
+struct TimeSeriesRecord {
+    double time;
+    double txThrMbps;
+    double rxThrMbps;
+    uint64_t cumLostPkts;
+    double   instLossRate;   // 本周期丢包率 %
+    double   avgDelayMs;
+};
+std::vector<TimeSeriesRecord> g_tsRecords;
 
-double prevTxBytes = 0; // 上次统计的发送字节数
+double prevTxBytes = 0;
 double prevRxBytes = 0;
+uint64_t prevLostPkts = 0;
+uint64_t prevTxPkts   = 0;
 
-// 定义每个数据包接收时更新 RTT 的回调函数
-void
-UpdateRTT(Ptr<const Packet> packet, const Address& from, const Address& to)
-{
-    // 获取当前时间
-    Time currentTime = Simulator::Now();
-
-    // 计算 RTT（这里只是示意，实际可以根据你发送的包的时间戳进行计算）
-    // 如果你能够获得包的时间戳信息，应该通过当前时间减去包的发送时间
-    double rtt = currentTime.GetSeconds() * 1000; // 转换为毫秒
-
-    // 存储 RTT 值
-    rttData.push_back(rtt);
-}
-
-// 定义更新吞吐量和丢包率的回调函数
+// 每 0.1s 采样一次关键指标
 void
 UpdateStats(Ptr<FlowMonitor> monitor)
 {
     FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats();
 
-    double currentTxBytes = 0;
-    double currentRxBytes = 0;
-    double totalPacketsSent = 0;
-    double totalPacketsReceived = 0;
-    double totalPacketsLost = 0;
+    double   currentTxBytes = 0, currentRxBytes = 0;
+    uint64_t totalTxPkts = 0, totalLostPkts = 0;
+    double   delaySum = 0;
+    uint64_t rxPkts = 0;
 
-    // 遍历所有流量统计信息
     for (auto it = stats.begin(); it != stats.end(); ++it)
     {
         currentTxBytes += it->second.txBytes;
         currentRxBytes += it->second.rxBytes;
-        totalPacketsSent += it->second.txPackets;
-        totalPacketsReceived += it->second.rxPackets;
-        totalPacketsLost += it->second.lostPackets;
+        totalTxPkts    += it->second.txPackets;
+        totalLostPkts  += it->second.lostPackets;
+        delaySum       += it->second.delaySum.GetSeconds();
+        rxPkts         += it->second.rxPackets;
     }
 
-    // 计算吞吐量（以 Mbps 为单位）
-    double txThroughputBytes = currentTxBytes - prevTxBytes;         // 当前时间窗口的发送字节增量
-    double txThroughputMbps = (txThroughputBytes * 8) / (0.1 * 1e6); // 转换为 Mbps
+    double dt = 0.1; // 采样周期
+    TimeSeriesRecord rec;
+    rec.time       = Simulator::Now().GetSeconds();
+    rec.txThrMbps  = ((currentTxBytes - prevTxBytes) * 8.0) / (dt * 1e6);
+    rec.rxThrMbps  = ((currentRxBytes - prevRxBytes) * 8.0) / (dt * 1e6);
+    rec.cumLostPkts = totalLostPkts;
 
-    double rxThroughputBytes = currentRxBytes - prevRxBytes;         // 当前时间窗口的发送字节增量
-    double rxThroughputMbps = (rxThroughputBytes * 8) / (0.1 * 1e6); // 转换为 Mbps
+    // 本周期瞬时丢包率
+    uint64_t periodTxPkts  = totalTxPkts - prevTxPkts;
+    uint64_t periodLostPkts = totalLostPkts - prevLostPkts;
+    rec.instLossRate = (periodTxPkts > 0)
+                       ? (static_cast<double>(periodLostPkts) / periodTxPkts * 100.0)
+                       : 0.0;
+    rec.avgDelayMs = (rxPkts > 0) ? (delaySum / rxPkts * 1000.0) : 0.0;
 
-    txThroughputData.push_back(txThroughputMbps); // 保存吞吐量数据
-    rxThroughputData.push_back(rxThroughputMbps); // 保存吞吐量数据
-    prevTxBytes = currentTxBytes;
-    prevRxBytes = currentRxBytes;
+    g_tsRecords.push_back(rec);
 
-    // 计算丢包率
-    double packetLossRate = 0;
-    if (totalPacketsSent > 0)
-    {
-        packetLossRate = (totalPacketsLost / totalPacketsSent) * 100; // 丢包率百分比
-    }
-    packetLossData.push_back(packetLossRate);
+    prevTxBytes  = currentTxBytes;
+    prevRxBytes  = currentRxBytes;
+    prevLostPkts = totalLostPkts;
+    prevTxPkts   = totalTxPkts;
 
-    // 每 0.1 秒更新一次
-    Simulator::Schedule(Seconds(0.1), &UpdateStats, monitor);
+    Simulator::Schedule(Seconds(dt), &UpdateStats, monitor);
 }
 
-// 输出吞吐量、RTT 和丢包率到文件
+// 仿真结束后写入 CSV
 void
 OutputStats()
 {
-    std::ofstream txThroughputFile("txThroughput_data.txt");
-    for (double throughput : txThroughputData)
+    std::ofstream f(trFileDir + "timeseries.csv");
+    f << "time,txThr_Mbps,rxThr_Mbps,cumLostPkts,instLossRate_pct,avgDelay_ms" << std::endl;
+    f << std::fixed << std::setprecision(4);
+    for (auto& r : g_tsRecords)
     {
-        txThroughputFile << throughput << std::endl; // 每行输出一个吞吐量值
+        f << r.time << "," << r.txThrMbps << "," << r.rxThrMbps << ","
+          << r.cumLostPkts << "," << r.instLossRate << "," << r.avgDelayMs << std::endl;
     }
-    txThroughputFile.close();
-
-    std::ofstream rxThroughputFile("rxThroughput_data.txt");
-    for (double throughput : rxThroughputData)
-    {
-        rxThroughputFile << throughput << std::endl; // 每行输出一个吞吐量值
-    }
-    rxThroughputFile.close();
-
-    std::ofstream packetLossFile("packet_loss_data.txt");
-    for (double lossRate : packetLossData)
-    {
-        packetLossFile << lossRate << std::endl; // 每行输出一个丢包率值
-    }
-    packetLossFile.close();
+    f.close();
+    std::cout << "[OUTPUT] traces/timeseries.csv  (" << g_tsRecords.size() << " rows)" << std::endl;
 }
 
 ///////////////////////////////////////////////Tracers////////////////////////////////////////////////////////
@@ -523,7 +567,7 @@ static void
 TraceRtt(std::string rtt_tr_file_name)
 {
     AsciiTraceHelper ascii;
-    rttStream = ascii.CreateFileStream(rtt_tr_file_name.c_str());
+    rttStream = ascii.CreateFileStream((trFileDir + rtt_tr_file_name).c_str());
     Config::ConnectWithoutContext("/NodeList/3/$ns3::TcpL4Protocol/SocketList/0/RTT",
                                   MakeCallback(&RttTracer));
 }
@@ -1125,6 +1169,7 @@ main(int argc, char* argv[])
     Simulator::Schedule(Seconds(0.11001), &TraceRwnd, rwnd_tr_file_name);
     Simulator::Schedule(Seconds(0.11001), &TraceAdvWND, advWND_tr_file_name);
     Simulator::Schedule(Seconds(0.11001), &TraceHighestRxAck, hrack_tr_file_name);
+    Simulator::Schedule(Seconds(0.2), &LogOptimTrace);  // 优化机制追踪
     // Simulator::Schedule(Seconds(3), PrintProgress, thrputStream);
 
     // connect custom trace sinks for RRC connection establishment and handover notification
@@ -1217,7 +1262,8 @@ main(int argc, char* argv[])
     }
 
     OutputStats();
-    monitor->TraceConnectWithoutContext("RxPacket", MakeCallback(&UpdateRTT));
+    OutputOptimTrace();
+    OutputHandoverEvents();
 
     monitor->CheckForLostPackets();
 

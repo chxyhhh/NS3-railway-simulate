@@ -1299,6 +1299,11 @@ class TcpSocketBase : public TcpSocket
     static double   s_ackSplitK;           ///< ACK 拆分公比系数
     static uint32_t s_ueNodeId;            ///< UE 节点 ID（仅该节点执行 ACK 拆分）
 
+    // ── 统计计数器（供外部读取，画图用）──
+    static uint64_t s_totalAckSent;        ///< 普通 ACK 发送总数
+    static uint64_t s_splitAckSent;        ///< 拆分 ACK 发送总数
+    static double   s_lastAlpha;           ///< 最近一次 Window() 使用的 alpha 值
+
     /// 触发切换优化（由仿真主脚本在触发时刻直接调用，无状态机）
     static void TriggerHandoverOptim(Time advanceDuration, Time holdDuration,
                                       Time restoreDuration, bool doRwnd, bool doAckSplit,
