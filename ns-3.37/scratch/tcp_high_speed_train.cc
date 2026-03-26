@@ -73,6 +73,7 @@ uint32_t ssThreshValue;
 // ── 切换感知 TCP 优化：命令行参数 & 触发逻辑 ────────────────────
 std::string g_expCase = "joint";          // baseline / rwnd-only / ack-only / joint
 std::string g_triggerSource = "position"; // position / time / rsrp
+std::string g_paramMode = "fixed";        // fixed / adaptive
 std::string g_triggerTimesSec = "";       // 逗号分隔的绝对触发时刻（秒）
 std::string g_triggerPositionsM = "450,1450,2450,3450,4450,5450"; // 触发位置（米）
 double g_triggerAdvanceMs = 500;                                  // 提前量（毫秒）
@@ -90,6 +91,11 @@ bool g_enableAckSplit = true;
 std::vector<double> g_triggerPosList;
 std::vector<bool> g_triggeredFlags;
 
+// ── 自适应参数计算所需的 RSRP 状态跟踪 ──
+double g_lastRsrp = -80.0;     // 上次 RSRP 测量值
+double g_rsrpSlope = 0.0;      // RSRP 变化率 (dB/s)
+double g_lastRsrpTime = 0.0;   // 上次测量时间
+
 // ── 优化机制追踪：每 0.1s 记录 alpha / ACK 计数 / 有效窗口 ──
 struct OptimRecord
 {
@@ -99,6 +105,9 @@ struct OptimRecord
     uint64_t splitAck;
     bool rwndActive;
     bool ackSplitActive;
+    double rsrp;
+    double rsrpSlope;
+    double alphaFloor;
 };
 
 std::vector<OptimRecord> g_optimRecords;
@@ -113,6 +122,9 @@ LogOptimTrace()
     r.splitAck = TcpSocketBase::s_splitAckSent;
     r.rwndActive = TcpSocketBase::s_rwndActive;
     r.ackSplitActive = TcpSocketBase::s_ackSplitActive;
+    r.rsrp = g_lastRsrp;
+    r.rsrpSlope = g_rsrpSlope;
+    r.alphaFloor = TcpSocketBase::s_rwndAlphaFloor;
     g_optimRecords.push_back(r);
     Simulator::Schedule(Seconds(0.1), &LogOptimTrace);
 }
@@ -121,12 +133,13 @@ void
 OutputOptimTrace()
 {
     std::ofstream f(trFileDir + "optim_trace.csv");
-    f << "time,alpha,totalAck,splitAck,rwndActive,ackSplitActive" << std::endl;
+    f << "time,alpha,totalAck,splitAck,rwndActive,ackSplitActive,rsrp,rsrpSlope,alphaFloor" << std::endl;
     f << std::fixed << std::setprecision(4);
     for (auto& r : g_optimRecords)
     {
         f << r.time << "," << r.alpha << "," << r.totalAck << "," << r.splitAck << ","
-          << r.rwndActive << "," << r.ackSplitActive << std::endl;
+          << r.rwndActive << "," << r.ackSplitActive << ","
+          << r.rsrp << "," << r.rsrpSlope << "," << r.alphaFloor << std::endl;
     }
     f.close();
     std::cout << "[OUTPUT] traces/optim_trace.csv  (" << g_optimRecords.size() << " rows)"
@@ -148,16 +161,76 @@ ParseDoubleList(const std::string& s)
     return result;
 }
 
-// 执行一次触发
+// 执行一次触发（固定参数 或 自适应参数）
 void
 DoOptimTrigger()
 {
-    TcpSocketBase::TriggerHandoverOptim(MilliSeconds(g_triggerAdvanceMs),
-                                        MilliSeconds(g_holdDurationMs),
-                                        MilliSeconds(g_restoreDurationMs),
+    double alphaFloor = g_rwndAlphaFloor;
+    double beta       = g_rwndBeta;
+    double gamma      = g_rwndGamma;
+    uint32_t ackM     = g_ackSplitCount;
+    double advanceMs  = g_triggerAdvanceMs;
+    double holdMs     = g_holdDurationMs;
+    double restoreMs  = g_restoreDurationMs;
+
+    if (g_paramMode == "adaptive")
+    {
+        // ── 自适应 rwnd 参数：根据 RSRP 斜率确定保护强度 ──
+        // |slope| 越大 → 信号衰减越快 → 切换越紧急 → 需要更激进的保护
+        double absSlope = std::abs(g_rsrpSlope);  // 单位: dB/s
+
+        // α_f: RSRP 下降越快 → α 越小 → 窗口压得越低
+        //   absSlope ∈ [0, 2) → 轻度:  α=0.6
+        //   absSlope ∈ [2, 4) → 中度:  α=0.4
+        //   absSlope ≥ 4      → 重度:  α=0.2
+        if (absSlope < 2.0)      alphaFloor = 0.6;
+        else if (absSlope < 4.0) alphaFloor = 0.4;
+        else                     alphaFloor = 0.2;
+
+        // β: 衰减速率，斜率越大衰减越快
+        beta = 1.5 + absSlope * 0.5;  // [1.5, ~4.5]
+        beta = std::min(beta, 5.0);
+
+        // γ: 恢复速率，与保护强度反相关（保护越激进→恢复越快）
+        gamma = 1.0 + (1.0 - alphaFloor) * 3.0;  // α=0.6→γ=2.2, α=0.2→γ=3.4
+
+        // advance: 信号衰减快时需要更早触发
+        advanceMs = 300 + absSlope * 100;  // [300, ~700] ms
+        advanceMs = std::min(advanceMs, 800.0);
+
+        // hold: 信号越差持续越久
+        holdMs = 150 + absSlope * 30;  // [150, ~270] ms
+
+        // restore: 保护越激进恢复需要越长
+        restoreMs = 150 + (1.0 - alphaFloor) * 150;  // [150, ~270] ms
+
+        // ── 自适应 ACK 拆分数量：同样基于 RSRP 斜率 ──
+        //   轻度: m=2, 中度: m=3, 重度: m=4
+        if (absSlope < 2.0)      ackM = 2;
+        else if (absSlope < 4.0) ackM = 3;
+        else                     ackM = 4;
+
+        std::cout << Simulator::Now().GetSeconds()
+                  << "s [ADAPTIVE] slope=" << g_rsrpSlope
+                  << " |slope|=" << absSlope
+                  << " → α=" << alphaFloor << " β=" << beta << " γ=" << gamma
+                  << " m=" << ackM
+                  << " adv=" << advanceMs << "ms"
+                  << " hold=" << holdMs << "ms"
+                  << " restore=" << restoreMs << "ms" << std::endl;
+    }
+
+    // 写入全局静态参数（供 Window()/AdvertisedWindowSize 读取）
+    TcpSocketBase::s_rwndAlphaFloor = alphaFloor;
+    TcpSocketBase::s_rwndBeta       = beta;
+    TcpSocketBase::s_rwndGamma      = gamma;
+
+    TcpSocketBase::TriggerHandoverOptim(MilliSeconds(advanceMs),
+                                        MilliSeconds(holdMs),
+                                        MilliSeconds(restoreMs),
                                         g_enableRwnd,
                                         g_enableAckSplit,
-                                        g_ackSplitCount,
+                                        ackM,
                                         g_ackSplitK);
 }
 
@@ -350,8 +423,19 @@ NotifyUeMeasurement(std::string context,
     // 打印实时数据（调试用）
     double rsrpResults = (double)EutranMeasurementMapping::RsrpRange2Dbm(
         report.measResults.measResultPCell.rsrpResult);
-    std::cout << Simulator::Now().GetSeconds() << "s " << " UE IMSI=" << imsi
-              << " 服务小区RSRP: " << rsrpResults << " dBm" << std::endl;
+    double now = Simulator::Now().GetSeconds();
+
+    // 更新 RSRP 斜率（供自适应参数计算用）
+    if (g_lastRsrpTime > 0 && now > g_lastRsrpTime)
+    {
+        g_rsrpSlope = (rsrpResults - g_lastRsrp) / (now - g_lastRsrpTime);
+    }
+    g_lastRsrp     = rsrpResults;
+    g_lastRsrpTime = now;
+
+    std::cout << now << "s " << " UE IMSI=" << imsi
+              << " RSRP: " << rsrpResults << " dBm"
+              << " slope: " << g_rsrpSlope << " dB/s" << std::endl;
     // RSRP 触发模式：仅当 triggerSource == "rsrp" 时生效
     if (g_triggerSource == "rsrp" && rsrpResults < -90)
     {
@@ -739,6 +823,7 @@ main(int argc, char* argv[])
     // ── 切换感知 TCP 优化参数 ──
     cmd.AddValue("expCase", "baseline / rwnd-only / ack-only / joint", g_expCase);
     cmd.AddValue("triggerSource", "position / time / rsrp", g_triggerSource);
+    cmd.AddValue("paramMode", "fixed / adaptive", g_paramMode);
     cmd.AddValue("triggerTimesSec", "逗号分隔绝对触发时刻(s)", g_triggerTimesSec);
     cmd.AddValue("triggerPositionsM", "逗号分隔触发位置(m)", g_triggerPositionsM);
     cmd.AddValue("triggerAdvanceMs", "提前量(ms)", g_triggerAdvanceMs);
@@ -778,9 +863,11 @@ main(int argc, char* argv[])
     TcpSocketBase::s_rwndBeta = g_rwndBeta;
     TcpSocketBase::s_rwndGamma = g_rwndGamma;
 
-    std::cout << "=== Experiment: " << g_expCase << " | trigger: " << g_triggerSource
-              << " | rwnd=" << g_enableRwnd << " | ackSplit=" << g_enableAckSplit
-              << " ===" << std::endl;
+    std::cout << "=== Experiment: " << g_expCase
+              << " | trigger: " << g_triggerSource
+              << " | param: " << g_paramMode
+              << " | rwnd=" << g_enableRwnd
+              << " | ackSplit=" << g_enableAckSplit << " ===" << std::endl;
 
     // change some default attributes so that they are reasonable for
     // this scenario, but do this before processing command line
