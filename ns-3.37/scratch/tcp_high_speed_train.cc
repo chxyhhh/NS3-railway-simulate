@@ -20,10 +20,12 @@
 #include <ns3/point-to-point-helper.h>
 //================================-------------------------------------
 #include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <ios>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -67,6 +69,75 @@ bool isHandoverStart = false;
 
 uint32_t cWndValue;
 uint32_t ssThreshValue;
+
+// ── 切换感知 TCP 优化：命令行参数 & 触发逻辑 ────────────────────
+std::string g_expCase        = "joint";      // baseline / rwnd-only / ack-only / joint
+std::string g_triggerSource  = "position";   // position / time / rsrp
+std::string g_triggerTimesSec   = "";        // 逗号分隔的绝对触发时刻（秒）
+std::string g_triggerPositionsM = "450,1450,2450,3450,4450,5450"; // 触发位置（米）
+double      g_triggerAdvanceMs  = 500;       // 提前量（毫秒）
+uint32_t    g_ackSplitCount     = 3;
+double      g_ackSplitK         = 0.5;
+double      g_holdDurationMs    = 200;
+double      g_restoreDurationMs = 200;
+double      g_rwndAlphaFloor    = 0.3;
+double      g_rwndBeta          = 2.0;
+double      g_rwndGamma         = 2.0;
+
+bool g_enableRwnd     = true;
+bool g_enableAckSplit = true;
+
+std::vector<double> g_triggerPosList;
+std::vector<bool>   g_triggeredFlags;
+
+// 解析逗号分隔的 double 列表
+std::vector<double>
+ParseDoubleList(const std::string& s)
+{
+    std::vector<double> result;
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, ','))
+    {
+        if (!item.empty())
+            result.push_back(std::stod(item));
+    }
+    return result;
+}
+
+// 执行一次触发
+void
+DoOptimTrigger()
+{
+    TcpSocketBase::TriggerHandoverOptim(
+        MilliSeconds(g_triggerAdvanceMs),
+        MilliSeconds(g_holdDurationMs),
+        MilliSeconds(g_restoreDurationMs),
+        g_enableRwnd,
+        g_enableAckSplit,
+        g_ackSplitCount,
+        g_ackSplitK);
+}
+
+// 定期检查 UE 位置，到达指定坐标时触发
+void
+CheckPositionTrigger(Ptr<Node> ue)
+{
+    Ptr<MobilityModel> mob = ue->GetObject<MobilityModel>();
+    double x = mob->GetPosition().x;
+    for (size_t i = 0; i < g_triggerPosList.size(); i++)
+    {
+        if (!g_triggeredFlags[i] && x >= g_triggerPosList[i])
+        {
+            g_triggeredFlags[i] = true;
+            std::cout << Simulator::Now().GetSeconds()
+                      << "s [TRIGGER] position=" << g_triggerPosList[i]
+                      << "m  UE_x=" << x << std::endl;
+            DoOptimTrigger();
+        }
+    }
+    Simulator::Schedule(MilliSeconds(10), &CheckPositionTrigger, ue);
+}
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 ApplicationContainer sourceApps;
@@ -131,39 +202,7 @@ TraceTcpRetransmission(std::string context, uint32_t seqNo, uint32_t ackNo)
 void
 MyCheckSocketFunction(Ptr<PacketSink> packetSink)
 {
-    Ptr<Socket> socket = packetSink->GetListeningSocket();
-    if (socket)
-    {
-        // std::cout << "m_socket success" << std::endl;
-        Ptr<TcpSocket> tcpSocket = DynamicCast<TcpSocket>(socket);
-        if (tcpSocket)
-        {
-            Ptr<TcpSocketBase> tcpSocketBase = DynamicCast<TcpSocketBase>(tcpSocket);
-            if (tcpSocketBase)
-            {
-                if (isHandoverStart)
-                {
-                    // cout << "!!!handover start!!!" << endl;
-                    tcpSocketBase->SetHandoverStatus(isHandoverStart); // 设置为切换中
-                    // Simulator::Schedule(MilliSeconds(100), [=]() {
-                    //       isHandoverStart = false;
-                    //   });
-                    isHandoverStart = false;
-                }
-                // std::cout << "Successfully casted to TcpSocket" << std::endl;
-                // tcpSocket->SetAttribute("RcvBufSize", UintegerValue(32768*4));
-                // NS_LOG_INFO("Successfully set RcvBufSize to 32768.");
-            }
-        }
-        else
-        {
-            NS_LOG_ERROR("Socket is not a TCP socket.");
-        }
-    }
-    else
-    {
-        std::cout << "m_socket error" << std::endl;
-    }
+    // 保留轮询以便调试；切换优化触发已改为 TcpSocketBase 静态接口
     Simulator::Schedule(Seconds(0.001), &MyCheckSocketFunction, packetSink);
 }
 
@@ -246,13 +285,12 @@ NotifyUeMeasurement(std::string context,
         report.measResults.measResultPCell.rsrpResult);
     std::cout << Simulator::Now().GetSeconds() << "s " << " UE IMSI=" << imsi
               << " 服务小区RSRP: " << rsrpResults << " dBm" << std::endl;
-    if (rsrpResults < -90)
+    // RSRP 触发模式：仅当 triggerSource == "rsrp" 时生效
+    if (g_triggerSource == "rsrp" && rsrpResults < -90)
     {
-        // Simulator::Schedule(MicroSeconds(300), [=]() {
-        isHandoverStart = true;
         std::cout << Simulator::Now().GetSeconds() << "s "
-                  << "==========rsrp lower===========" << std::endl;
-        // });
+                  << "[TRIGGER] RSRP=" << rsrpResults << " < -90dBm" << std::endl;
+        DoOptimTrigger();
     }
     //}
 }
@@ -643,25 +681,41 @@ main(int argc, char* argv[])
     unsigned int dlinterval = 300, dlpacketsize = 1024, ulinterval = 300, ulpacketsize = 1024;
     CommandLine cmd;
     cmd.AddValue("simTime", "Total duration of the simulation (in seconds)", simTime);
-    // cmd.AddValue ("speed", "Speed of the UE (default = 20 m/s)", speed);
     cmd.AddValue("enbTxPowerDbm", "TX power [dBm] used by HeNBs (default = 46.0)", enbTxPowerDbm);
-    cmd.AddValue(
-        "dlpacketSize",
-        "Size (bytes) of packets generated (default = 1024 bytes). The minimum packet size is 12 "
-        "bytes which is the size of the header carrying the sequence number and the time stamp.",
-        dlpacketsize);
-    cmd.AddValue("dlpacketsInterval",
-                 "The time (ms) wait between packets (default = 500 ms)",
-                 dlinterval);
-    cmd.AddValue(
-        "ulpacketSize",
-        "Size (bytes) of packets generated (default = 1024 bytes). The minimum packet size is 12 "
-        "bytes which is the size of the header carrying the sequence number and the time stamp.",
-        ulpacketsize);
-    cmd.AddValue("ulpacketsInterval",
-                 "The time (ms) wait between packets (default = 500 ms)",
-                 ulinterval);
+    cmd.AddValue("dlpacketSize", "DL packet size (bytes)", dlpacketsize);
+    cmd.AddValue("dlpacketsInterval", "DL packet interval (ms)", dlinterval);
+    cmd.AddValue("ulpacketSize", "UL packet size (bytes)", ulpacketsize);
+    cmd.AddValue("ulpacketsInterval", "UL packet interval (ms)", ulinterval);
+    // ── 切换感知 TCP 优化参数 ──
+    cmd.AddValue("expCase",          "baseline / rwnd-only / ack-only / joint", g_expCase);
+    cmd.AddValue("triggerSource",    "position / time / rsrp", g_triggerSource);
+    cmd.AddValue("triggerTimesSec",  "逗号分隔绝对触发时刻(s)", g_triggerTimesSec);
+    cmd.AddValue("triggerPositionsM","逗号分隔触发位置(m)", g_triggerPositionsM);
+    cmd.AddValue("triggerAdvanceMs", "提前量(ms)", g_triggerAdvanceMs);
+    cmd.AddValue("ackSplitCount",    "ACK拆分数量", g_ackSplitCount);
+    cmd.AddValue("ackSplitK",        "ACK拆分公比系数", g_ackSplitK);
+    cmd.AddValue("holdDurationMs",   "Hold阶段时长(ms)", g_holdDurationMs);
+    cmd.AddValue("restoreDurationMs","恢复阶段时长(ms)", g_restoreDurationMs);
+    cmd.AddValue("rwndAlphaFloor",   "rwnd最小缩放因子", g_rwndAlphaFloor);
+    cmd.AddValue("rwndBeta",         "rwnd衰减速率β", g_rwndBeta);
+    cmd.AddValue("rwndGamma",        "rwnd恢复速率γ", g_rwndGamma);
     cmd.Parse(argc, argv);
+
+    // ── 根据 expCase 设置 rwnd/ackSplit 开关 ──
+    if (g_expCase == "baseline")       { g_enableRwnd = false; g_enableAckSplit = false; }
+    else if (g_expCase == "rwnd-only") { g_enableRwnd = true;  g_enableAckSplit = false; }
+    else if (g_expCase == "ack-only")  { g_enableRwnd = false; g_enableAckSplit = true;  }
+    else /* joint */                   { g_enableRwnd = true;  g_enableAckSplit = true;  }
+
+    // 写入静态参数到 TcpSocketBase
+    TcpSocketBase::s_rwndAlphaFloor = g_rwndAlphaFloor;
+    TcpSocketBase::s_rwndBeta       = g_rwndBeta;
+    TcpSocketBase::s_rwndGamma      = g_rwndGamma;
+
+    std::cout << "=== Experiment: " << g_expCase
+              << " | trigger: " << g_triggerSource
+              << " | rwnd=" << g_enableRwnd
+              << " | ackSplit=" << g_enableAckSplit << " ===" << std::endl;
 
     // change some default attributes so that they are reasonable for
     // this scenario, but do this before processing command line
@@ -1089,10 +1143,43 @@ main(int argc, char* argv[])
     Config::Connect("/NodeList/*/DeviceList/*/LteUeRrc/ReportUeMeasurement",
                     MakeCallback(&NotifyUeMeasurement));
 
-    // Config::ListPaths();
-    // logFile.close();
+    // ── 设置 UE 节点 ID 并初始化触发 ──
+    TcpSocketBase::s_ueNodeId = ueNodes.Get(0)->GetId();
+    std::cout << "UE NodeId = " << TcpSocketBase::s_ueNodeId << std::endl;
 
-    Simulator::Stop(Seconds(60.0));
+    if (g_expCase != "baseline")
+    {
+        if (g_triggerSource == "position")
+        {
+            g_triggerPosList  = ParseDoubleList(g_triggerPositionsM);
+            g_triggeredFlags.assign(g_triggerPosList.size(), false);
+            Simulator::Schedule(Seconds(0.2), &CheckPositionTrigger, ueNodes.Get(0));
+            std::cout << "[TRIGGER] position mode, points:";
+            for (double p : g_triggerPosList) std::cout << " " << p;
+            std::cout << std::endl;
+        }
+        else if (g_triggerSource == "time")
+        {
+            std::vector<double> times = ParseDoubleList(g_triggerTimesSec);
+            for (double t : times)
+            {
+                Simulator::Schedule(Seconds(t), []() {
+                    std::cout << Simulator::Now().GetSeconds()
+                              << "s [TRIGGER] time-based" << std::endl;
+                    DoOptimTrigger();
+                });
+            }
+            std::cout << "[TRIGGER] time mode, times:";
+            for (double t : times) std::cout << " " << t;
+            std::cout << std::endl;
+        }
+        else if (g_triggerSource == "rsrp")
+        {
+            std::cout << "[TRIGGER] rsrp mode, threshold=-90dBm" << std::endl;
+        }
+    }
+
+    Simulator::Stop(Seconds(simTime));
 
     AnimationInterface anim("lte-ananew.xml");
     anim.SetMaxPktsPerTraceFile(300000);

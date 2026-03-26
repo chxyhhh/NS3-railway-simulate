@@ -72,6 +72,20 @@ namespace ns3
 
     NS_LOG_COMPONENT_DEFINE("TcpSocketBase");
 
+    // ── 切换感知 TCP 优化：静态成员定义 ──────────────────────────
+    bool     TcpSocketBase::s_rwndActive          = false;
+    bool     TcpSocketBase::s_ackSplitActive      = false;
+    double   TcpSocketBase::s_rwndAlphaFloor      = 0.3;
+    double   TcpSocketBase::s_rwndBeta            = 2.0;
+    double   TcpSocketBase::s_rwndGamma           = 2.0;
+    Time     TcpSocketBase::s_rwndTriggerTime     = Seconds(0.0);
+    Time     TcpSocketBase::s_rwndPredHOTime      = Seconds(0.0);
+    Time     TcpSocketBase::s_rwndHoldEnd         = Seconds(0.0);
+    Time     TcpSocketBase::s_rwndRestoreDuration = Seconds(0.2);
+    uint32_t TcpSocketBase::s_ackSplitCount       = 3;
+    double   TcpSocketBase::s_ackSplitK           = 0.5;
+    uint32_t TcpSocketBase::s_ueNodeId            = 0;
+
     NS_OBJECT_ENSURE_REGISTERED(TcpSocketBase);
 
     TypeId
@@ -498,108 +512,43 @@ namespace ns3
         m_isHandoverInProgress = status;
     }
 
-    // ══════════════════════════════════════════════════════════════════
-    // 预测驱动参数注入：将 HATCN 输出映射到 rwnd 收缩 + ACK 拆分参数
-    // ══════════════════════════════════════════════════════════════════
-    void TcpSocketBase::OnHandoverPrediction(uint8_t label, double confidence, Time timeToHO)
+    // ── 切换感知 TCP 优化：静态触发接口 ──────────────────────────
+    void TcpSocketBase::TriggerHandoverOptim(
+        Time advanceDuration, Time holdDuration, Time restoreDuration,
+        bool doRwnd, bool doAckSplit,
+        uint32_t ackCount, double ackK)
     {
-        if (label == 0 || confidence < 0.7) return;   // 稳定或置信度不足，不处理
+        Time now = Simulator::Now();
+        s_rwndTriggerTime     = now;
+        s_rwndPredHOTime      = now + advanceDuration;
+        s_rwndHoldEnd         = s_rwndPredHOTime + holdDuration;
+        s_rwndRestoreDuration = restoreDuration;
+        s_ackSplitCount       = ackCount;
+        s_ackSplitK           = ackK;
 
-        NS_LOG_INFO("[PGO] Prediction received: label=" << (int)label
-                    << " conf=" << confidence
-                    << " timeToHO=" << timeToHO.GetMilliSeconds() << "ms");
-
-        // ── 步骤 1: 从 BDP 物理推导 α_floor ─────────────────────────────
-        // 目标约束：切换黑洞期内飞行数据量 ≤ X2 接口缓存容量
-        //   α_floor = (K_X2 · MSS) / W_max
-        // K_X2 为 X2 接口等效缓存包数（3GPP TS 36.423 §8.2 X2-AP PDU
-        // 最大 10 MB，实测等效 8-16 MSS 包），取保守值 10
-        const uint32_t K_X2 = 10;
-        uint32_t mss  = m_tcb->m_segmentSize;
-        uint32_t wmax = static_cast<uint32_t>(
-            m_tcb->m_rxBuffer->MaxRxSequence() - m_tcb->m_rxBuffer->NextRxSequence());
-        m_rwndAlphaFloor = (wmax > mss)
-                           ? std::min(0.8, static_cast<double>(K_X2 * mss) / wmax)
-                           : 0.3;
-
-        // ── 步骤 2: 根据切换类型映射 β/γ 及 ACK 拆分参数 ────────────────
-        // β  越大：预警期 rwnd 衰减越陡峭，越早达到 α_floor
-        // γ  越大：恢复期 rwnd 上升越快，链路恢复后吞吐量快速爬升
-        // k/a：ACK 拆分系数和数量，见 §4.2 参数映射表
-        Time triggerAdvance, holdDuration, restoreDuration;
-        switch (label) {
-        case 1:  // 正常切换：温和衰减（β=1.5），切换前 50ms 启动
-            m_rwndBeta       = 1.5;
-            m_rwndGamma      = 2.0;
-            m_splitK         = 0.6;
-            m_splitCount     = 2;
-            triggerAdvance   = MilliSeconds(50);
-            holdDuration     = MilliSeconds(200);
-            restoreDuration  = MilliSeconds(150);
-            break;
-        case 2:  // 乒乓切换：快速衰减（β=3.0），切换前 150ms 启动
-            m_rwndBeta       = 3.0;
-            m_rwndGamma      = 1.5;   // 恢复偏慢：防止乒乓段频繁大幅振荡
-            m_splitK         = 0.3;
-            m_splitCount     = 3;
-            triggerAdvance   = MilliSeconds(150);
-            holdDuration     = MilliSeconds(300);
-            restoreDuration  = MilliSeconds(200);
-            break;
-        case 3:  // 切换失败风险：最激进衰减（β=4.5），切换前 300ms 启动
-            m_rwndBeta       = 4.5;
-            m_rwndGamma      = 3.0;   // 恢复快：HO 成功后应立即释放带宽
-            m_splitK         = 0.5;
-            m_splitCount     = 4;
-            triggerAdvance   = MilliSeconds(300);
-            holdDuration     = MilliSeconds(400);
-            restoreDuration  = MilliSeconds(200);
-            break;
-        default:
-            return;
+        if (doRwnd) {
+            s_rwndActive = true;
+            NS_LOG_UNCOND(now.GetSeconds() << "s [rwnd-trigger] ON  alphaFloor="
+                          << s_rwndAlphaFloor << " beta=" << s_rwndBeta
+                          << " advance=" << advanceDuration.GetMilliSeconds() << "ms"
+                          << " hold=" << holdDuration.GetMilliSeconds() << "ms"
+                          << " restore=" << restoreDuration.GetMilliSeconds() << "ms");
         }
 
-        // ── 步骤 3: 记录绝对时刻（供 AdvertisedWindowSize 归一化）────────
-        Time t_trigger = timeToHO - triggerAdvance;
-        if (t_trigger.IsNegative()) t_trigger = Seconds(0.0);
-
-        m_rwndTriggerTime     = Simulator::Now() + t_trigger;
-        m_rwndPredHOTime      = Simulator::Now() + timeToHO;
-        m_rwndRestoreDuration = restoreDuration;
-
-        // ── 步骤 4: 状态机相位转换调度 ────────────────────────────────────
-        // RAMPDOWN：在 T_trigger 启动指数衰减
-        Simulator::Schedule(t_trigger, [this]() {
-            m_rwndPhase = RWND_RAMPDOWN;
-            NS_LOG_INFO("[rwnd] → RAMPDOWN  alpha_floor=" << m_rwndAlphaFloor
-                        << " beta=" << m_rwndBeta);
-        });
-        // HOLD：在 T_HO 进入保持，同步激活 ACK 拆分
-        Simulator::Schedule(timeToHO, [this]() {
-            m_rwndPhase = RWND_HOLD;
-            SetHandoverStatus(true);
-            NS_LOG_INFO("[rwnd] → HOLD  alpha=" << m_rwndAlphaFloor);
-        });
-        // RESTORE：在 T_HO + holdDuration 进入恢复，关闭 ACK 拆分
-        Simulator::Schedule(timeToHO + holdDuration, [this]() {
-            m_rwndRestoreStart = Simulator::Now();
-            m_rwndPhase        = RWND_RESTORE;
-            SetHandoverStatus(false);
-            NS_LOG_INFO("[rwnd] → RESTORE  gamma=" << m_rwndGamma);
-        });
-
-        NS_LOG_INFO("[PGO] Params: alpha_floor=" << m_rwndAlphaFloor
-                    << " beta=" << m_rwndBeta << " gamma=" << m_rwndGamma
-                    << " k=" << m_splitK << " a=" << m_splitCount
-                    << " trigger_in=" << t_trigger.GetMilliSeconds() << "ms");
-    }
-
-    void
-    TcpSocketBase::setSmallWindow(bool forceSmallWin)
-    {
-      NS_LOG_FUNCTION(this);
-      m_forceSmallWindow = forceSmallWin;
-      std::cout << "m_forceSmallWindow" << forceSmallWin << std:: endl;
+        if (doAckSplit) {
+            // 在预测切换时刻激活 ACK 拆分
+            Simulator::Schedule(advanceDuration, []() {
+                s_ackSplitActive = true;
+                NS_LOG_UNCOND(Simulator::Now().GetSeconds()
+                              << "s [ack-split] ON  count=" << s_ackSplitCount
+                              << " k=" << s_ackSplitK);
+            });
+            // hold 结束后关闭
+            Simulator::Schedule(advanceDuration + holdDuration, []() {
+                s_ackSplitActive = false;
+                NS_LOG_UNCOND(Simulator::Now().GetSeconds() << "s [ack-split] OFF");
+            });
+        }
     }
 
     /* Associate a node with this TCP socket */
@@ -2852,22 +2801,19 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this << static_cast<uint32_t>(flags));
 
-        // 获取当前节点，确认是否为 UE 节点（假设通过节点属性或 ID 判断）
-    // 并且确认当前是为了发送普通的 ACK（排除 SYN, FIN 等控制包）
-    bool isUE = (m_node->GetId() == 12); // 这里的 ID 需根据您的仿真设定修改
-    
-    if (isUE && (flags & TcpHeader::ACK) && !(flags & (TcpHeader::SYN | TcpHeader::FIN))
-        && m_isHandoverInProgress && m_splitCount > 0)
+    // ── 动态 ACK 拆分：在切换恢复期将单个 ACK 拆分为多个递进式 ACK ──
+    if ((flags & TcpHeader::ACK) && !(flags & (TcpHeader::SYN | TcpHeader::FIN))
+        && s_ackSplitActive && s_ackSplitCount > 0
+        && m_node && m_node->GetId() == s_ueNodeId)
     {
-        // --- 专利算法：预测驱动动态 ACK 拆分 ---
-        SequenceNumber32 M = m_tcb->m_rxBuffer->NextRxSequence();  // 已接收最大序列号
-        SequenceNumber32 N = m_highTxAck;                          // 上次确认序列号
+        SequenceNumber32 M = m_tcb->m_rxBuffer->NextRxSequence();
+        SequenceNumber32 N = m_highTxAck;
 
         if (M > N)
         {
             uint32_t diff = M - N;
-            uint32_t a    = m_splitCount;   // 拆分数量（由 OnHandoverPrediction 动态设置）
-            double   k    = m_splitK;       // 拆分系数（由 OnHandoverPrediction 动态设置）
+            uint32_t a    = s_ackSplitCount;
+            double   k    = s_ackSplitK;
 
             NS_LOG_INFO("[ACK-Split] M=" << M << " N=" << N
                         << " diff=" << diff << " k=" << k << " a=" << a);
@@ -2882,14 +2828,13 @@ namespace ns3
                 header.SetSequenceNumber(m_tcb->m_nextTxSequence);
                 header.SetWindowSize(windowSize);
 
-                // 专利公式：ACK_i = M - (M-N)·k^i，最后一个强制等于 M
                 SequenceNumber32 splitAck;
                 if (i < a) {
                     uint32_t reduction = static_cast<uint32_t>(
                         std::ceil(diff * std::pow(k, i)));
                     splitAck = M - reduction;
                 } else {
-                    splitAck = M;   // 最终 ACK 完全确认
+                    splitAck = M;
                 }
                 header.SetAckNumber(splitAck);
                 AddOptions(header);
@@ -2905,10 +2850,9 @@ namespace ns3
                 NS_LOG_DEBUG("[ACK-Split] i=" << i << "/" << a
                              << " splitAck=" << splitAck);
             }
-            SetHandoverStatus(false);
+            s_ackSplitActive = false;
             return;
         }
-        // --- 专利算法结束 ---
     }
 
         if (m_endPoint == nullptr && m_endPoint6 == nullptr)
@@ -3674,42 +3618,44 @@ namespace ns3
             w = static_cast<uint32_t>(m_tcb->m_rxBuffer->MaxRxSequence() -
                                       m_tcb->m_rxBuffer->NextRxSequence());
 
-            // ── 预测驱动主动 rwnd 收缩（BDP-Aware Exponential Decay）──────
-            // 三相状态机实现，公式参见 tcp-socket-base.h §4.3
-            if (m_rwndPhase != RWND_NORMAL) {
-                double alpha  = 1.0;
-                double now_s  = Simulator::Now().GetSeconds();
+            // ── 切换感知主动 rwnd 收缩（时间驱动，无状态机枚举）──────
+            if (s_rwndActive) {
+                double alpha = 1.0;
+                Time now = Simulator::Now();
 
-                if (m_rwndPhase == RWND_RAMPDOWN) {
-                    // α(t) = α_f + (1-α_f)·exp(-β·(t-T_trig)/(T_HO-T_trig))
-                    double elapsed = now_s - m_rwndTriggerTime.GetSeconds();
-                    double span    = (m_rwndPredHOTime - m_rwndTriggerTime).GetSeconds();
+                if (now < s_rwndPredHOTime) {
+                    // 衰减阶段：α(t) = α_f + (1-α_f)·exp(-β·τ)
+                    double elapsed = (now - s_rwndTriggerTime).GetSeconds();
+                    double span    = (s_rwndPredHOTime - s_rwndTriggerTime).GetSeconds();
                     double ratio   = (span > 1e-9) ? (elapsed / span) : 1.0;
-                    alpha = m_rwndAlphaFloor
-                            + (1.0 - m_rwndAlphaFloor) * std::exp(-m_rwndBeta * ratio);
-                    alpha = std::max(alpha, m_rwndAlphaFloor);
+                    alpha = s_rwndAlphaFloor
+                            + (1.0 - s_rwndAlphaFloor) * std::exp(-s_rwndBeta * ratio);
+                    alpha = std::max(alpha, s_rwndAlphaFloor);
                 }
-                else if (m_rwndPhase == RWND_HOLD) {
-                    // 切换黑洞期：维持最小安全窗口
-                    alpha = m_rwndAlphaFloor;
+                else if (now < s_rwndHoldEnd) {
+                    // 保持阶段：维持最小安全窗口
+                    alpha = s_rwndAlphaFloor;
                 }
-                else if (m_rwndPhase == RWND_RESTORE) {
-                    // α_r(t) = 1 - (1-α_f)·exp(-γ·(t-T_res)/T_res_dur)
-                    double elapsed = now_s - m_rwndRestoreStart.GetSeconds();
-                    double dur     = m_rwndRestoreDuration.GetSeconds();
+                else if (now < s_rwndHoldEnd + s_rwndRestoreDuration) {
+                    // 恢复阶段：α_r(t) = 1 - (1-α_f)·exp(-γ·τ)
+                    double elapsed = (now - s_rwndHoldEnd).GetSeconds();
+                    double dur     = s_rwndRestoreDuration.GetSeconds();
                     double ratio   = (dur > 1e-9) ? (elapsed / dur) : 1.0;
-                    alpha = 1.0 - (1.0 - m_rwndAlphaFloor) * std::exp(-m_rwndGamma * ratio);
+                    alpha = 1.0 - (1.0 - s_rwndAlphaFloor) * std::exp(-s_rwndGamma * ratio);
                     alpha = std::min(alpha, 1.0);
-                    // 恢复至 97% 以上视为完成，退出收缩模式
                     if (alpha >= 0.97) {
-                        const_cast<TcpSocketBase*>(this)->m_rwndPhase = RWND_NORMAL;
+                        s_rwndActive = false;
                         alpha = 1.0;
                     }
                 }
+                else {
+                    // 超过恢复时间，退出
+                    s_rwndActive = false;
+                    alpha = 1.0;
+                }
 
                 w = static_cast<uint32_t>(static_cast<double>(w) * alpha);
-                NS_LOG_INFO("[rwnd-shrink] phase=" << m_rwndPhase
-                            << " alpha=" << alpha << " adv_w=" << w);
+                NS_LOG_INFO("[rwnd-shrink] alpha=" << alpha << " adv_w=" << w);
             }
             // ─────────────────────────────────────────────────────────────
         }

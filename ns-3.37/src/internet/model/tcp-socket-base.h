@@ -620,7 +620,7 @@ class TcpSocketBase : public TcpSocket
                                           const Ptr<const TcpSocketBase> socket);
     
     // 外部控制窗口缩放
-    void setSmallWindow(bool forceSmallWin);
+    // void setSmallWindow(bool forceSmallWin); // 已移除，rwnd 控制改为静态接口
 
   protected:
     // Implementing ns3::TcpSocket -- Attribute get/set
@@ -1283,44 +1283,25 @@ class TcpSocketBase : public TcpSocket
      */
     SequenceNumber32 GetHighRxAck() const;
 
-    double   m_splitK{0.5};      // 专利中的参数k（动态映射，默认0.5）
-    uint32_t m_splitCount{3};    // 拆分数量a（动态映射，默认3）
+    // ── 切换感知 TCP 优化：静态全局控制变量 ─────────────────────────
+    // 使用 static 使所有 socket 实例共享（含 Fork 后的 accepted socket）
+    static bool     s_rwndActive;          ///< rwnd 收缩是否激活
+    static bool     s_ackSplitActive;      ///< ACK 拆分是否激活
+    static double   s_rwndAlphaFloor;      ///< 最小窗口缩放因子 α_f
+    static double   s_rwndBeta;            ///< 衰减速率参数 β
+    static double   s_rwndGamma;           ///< 恢复速率参数 γ
+    static Time     s_rwndTriggerTime;     ///< 衰减触发绝对时刻
+    static Time     s_rwndPredHOTime;      ///< 预测切换绝对时刻
+    static Time     s_rwndHoldEnd;         ///< Hold 阶段结束时刻
+    static Time     s_rwndRestoreDuration; ///< 恢复持续时间
+    static uint32_t s_ackSplitCount;       ///< ACK 拆分数量
+    static double   s_ackSplitK;           ///< ACK 拆分公比系数
+    static uint32_t s_ueNodeId;            ///< UE 节点 ID（仅该节点执行 ACK 拆分）
 
-    // ══════════════════════════════════════════════════════════════════
-    // 预测驱动主动 rwnd 收缩机制（BDP-Aware Exponential Decay）
-    // 论文 §4.3：三相状态机
-    //
-    // 预警衰减期（RAMPDOWN）公式：
-    //   w_adv(t) = W_max · [α_f + (1-α_f) · exp(-β · (t-T_trig)/(T_HO-T_trig))]
-    // 切换保持期（HOLD）：
-    //   w_adv(t) = W_max · α_f
-    // 恢复期（RESTORE）：
-    //   w_adv(t) = W_max · [1 - (1-α_f) · exp(-γ · (t-T_res)/T_res_dur)]
-    //
-    // 其中 α_f（物理下界）= min(0.8,  K_X2·MSS / W_max)
-    //   K_X2 = X2接口等效缓存包数（典型8-16），MSS = 最大段长度
-    // ══════════════════════════════════════════════════════════════════
-    enum RwndShrinkPhase {
-        RWND_NORMAL   = 0,  ///< 正常工作，不收缩
-        RWND_RAMPDOWN = 1,  ///< 指数衰减阶段（预警期）
-        RWND_HOLD     = 2,  ///< 维持最小窗口（切换黑洞期）
-        RWND_RESTORE  = 3   ///< 指数恢复阶段（切换后）
-    };
-
-    RwndShrinkPhase m_rwndPhase{RWND_NORMAL};    ///< 当前 rwnd 收缩相位
-    double m_rwndAlphaFloor{0.3};               ///< BDP导出的最小收缩系数 α_f
-    double m_rwndBeta{2.0};                     ///< 衰减速率参数 β（越大越激进）
-    double m_rwndGamma{2.0};                    ///< 恢复速率参数 γ
-    Time   m_rwndTriggerTime{Seconds(0.0)};     ///< 衰减触发绝对时刻 T_trig
-    Time   m_rwndPredHOTime{Seconds(0.0)};      ///< 预测切换绝对时刻 T_HO
-    Time   m_rwndRestoreStart{Seconds(0.0)};    ///< 恢复阶段起始时刻
-    Time   m_rwndRestoreDuration{Seconds(0.2)}; ///< 恢复持续时间 T_res_dur
-
-    /// 预测驱动参数注入接口（供 RRC/外部预测模块调用）
-    /// \param label      HATCN输出类别 {0:稳定,1:正常HO,2:乒乓,3:失败}
-    /// \param confidence 预测置信度（仅在>0.7时生效）
-    /// \param timeToHO   预测距切换剩余时间
-    void OnHandoverPrediction(uint8_t label, double confidence, Time timeToHO);
+    /// 触发切换优化（由仿真主脚本在触发时刻直接调用，无状态机）
+    static void TriggerHandoverOptim(Time advanceDuration, Time holdDuration,
+                                      Time restoreDuration, bool doRwnd, bool doAckSplit,
+                                      uint32_t ackCount, double ackK);
 
   protected:
     // Counters and events
