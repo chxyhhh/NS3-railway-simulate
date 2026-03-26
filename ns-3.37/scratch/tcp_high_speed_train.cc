@@ -1220,7 +1220,6 @@ main(int argc, char* argv[])
     monitor->TraceConnectWithoutContext("RxPacket", MakeCallback(&UpdateRTT));
 
     monitor->CheckForLostPackets();
-    double throughput = 0.0;
 
     // 获取分类器，用于从 FlowId 反查 IP 地址
     Ptr<Ipv4FlowClassifier> classifier =

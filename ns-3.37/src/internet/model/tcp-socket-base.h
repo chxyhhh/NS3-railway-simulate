@@ -1283,6 +1283,7 @@ class TcpSocketBase : public TcpSocket
      */
     SequenceNumber32 GetHighRxAck() const;
 
+  public:
     // ── 切换感知 TCP 优化：静态全局控制变量 ─────────────────────────
     // 使用 static 使所有 socket 实例共享（含 Fork 后的 accepted socket）
     static bool     s_rwndActive;          ///< rwnd 收缩是否激活

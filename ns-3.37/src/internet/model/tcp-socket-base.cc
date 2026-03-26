@@ -3587,7 +3587,51 @@ namespace ns3
     uint32_t
     TcpSocketBase::Window() const
     {
-        return std::min(m_rWnd.Get(), m_tcb->m_cWnd.Get());
+        uint32_t w = std::min(m_rWnd.Get(), m_tcb->m_cWnd.Get());
+
+        // ── rwnd 收缩：在发送端侧直接约束有效发送窗口 ──────────────
+        // AdvertisedWindowSize 受 uint16_t 截断，对大 RcvBufSize 无效
+        // 此处直接缩放 min(rWnd,cwnd)，确保飞行数据量真正被限制
+        if (s_rwndActive) {
+            double alpha = 1.0;
+            Time now = Simulator::Now();
+
+            if (now < s_rwndPredHOTime) {
+                double elapsed = (now - s_rwndTriggerTime).GetSeconds();
+                double span    = (s_rwndPredHOTime - s_rwndTriggerTime).GetSeconds();
+                double ratio   = (span > 1e-9) ? (elapsed / span) : 1.0;
+                alpha = s_rwndAlphaFloor
+                        + (1.0 - s_rwndAlphaFloor) * std::exp(-s_rwndBeta * ratio);
+                alpha = std::max(alpha, s_rwndAlphaFloor);
+            }
+            else if (now < s_rwndHoldEnd) {
+                alpha = s_rwndAlphaFloor;
+            }
+            else if (now < s_rwndHoldEnd + s_rwndRestoreDuration) {
+                double elapsed = (now - s_rwndHoldEnd).GetSeconds();
+                double dur     = s_rwndRestoreDuration.GetSeconds();
+                double ratio   = (dur > 1e-9) ? (elapsed / dur) : 1.0;
+                alpha = 1.0 - (1.0 - s_rwndAlphaFloor) * std::exp(-s_rwndGamma * ratio);
+                alpha = std::min(alpha, 1.0);
+                if (alpha >= 0.97) {
+                    s_rwndActive = false;
+                    alpha = 1.0;
+                }
+            }
+            else {
+                s_rwndActive = false;
+                alpha = 1.0;
+            }
+
+            uint32_t w_new = static_cast<uint32_t>(static_cast<double>(w) * alpha);
+            uint32_t mss = m_tcb->m_segmentSize;
+            if (w_new < mss && w >= mss) {
+                w_new = mss;   // 至少保留 1 MSS，防止窗口为 0 死锁
+            }
+            w = w_new;
+        }
+
+        return w;
     }
 
     uint32_t
@@ -3618,13 +3662,14 @@ namespace ns3
             w = static_cast<uint32_t>(m_tcb->m_rxBuffer->MaxRxSequence() -
                                       m_tcb->m_rxBuffer->NextRxSequence());
 
-            // ── 切换感知主动 rwnd 收缩（时间驱动，无状态机枚举）──────
-            if (s_rwndActive) {
+            // ── 切换感知主动 rwnd 收缩（仅在 UE 接收端执行）──────
+            // 注意：此处只做缩放，不控制 s_rwndActive 的生命周期
+            //       生命周期退出由 Window() 负责
+            if (s_rwndActive && m_node && m_node->GetId() == s_ueNodeId) {
                 double alpha = 1.0;
                 Time now = Simulator::Now();
 
                 if (now < s_rwndPredHOTime) {
-                    // 衰减阶段：α(t) = α_f + (1-α_f)·exp(-β·τ)
                     double elapsed = (now - s_rwndTriggerTime).GetSeconds();
                     double span    = (s_rwndPredHOTime - s_rwndTriggerTime).GetSeconds();
                     double ratio   = (span > 1e-9) ? (elapsed / span) : 1.0;
@@ -3633,29 +3678,18 @@ namespace ns3
                     alpha = std::max(alpha, s_rwndAlphaFloor);
                 }
                 else if (now < s_rwndHoldEnd) {
-                    // 保持阶段：维持最小安全窗口
                     alpha = s_rwndAlphaFloor;
                 }
                 else if (now < s_rwndHoldEnd + s_rwndRestoreDuration) {
-                    // 恢复阶段：α_r(t) = 1 - (1-α_f)·exp(-γ·τ)
                     double elapsed = (now - s_rwndHoldEnd).GetSeconds();
                     double dur     = s_rwndRestoreDuration.GetSeconds();
                     double ratio   = (dur > 1e-9) ? (elapsed / dur) : 1.0;
                     alpha = 1.0 - (1.0 - s_rwndAlphaFloor) * std::exp(-s_rwndGamma * ratio);
                     alpha = std::min(alpha, 1.0);
-                    if (alpha >= 0.97) {
-                        s_rwndActive = false;
-                        alpha = 1.0;
-                    }
-                }
-                else {
-                    // 超过恢复时间，退出
-                    s_rwndActive = false;
-                    alpha = 1.0;
                 }
 
                 w = static_cast<uint32_t>(static_cast<double>(w) * alpha);
-                NS_LOG_INFO("[rwnd-shrink] alpha=" << alpha << " adv_w=" << w);
+                NS_LOG_INFO("[rwnd-adv] alpha=" << alpha << " adv_w=" << w);
             }
             // ─────────────────────────────────────────────────────────────
         }
