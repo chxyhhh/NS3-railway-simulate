@@ -71,45 +71,47 @@ uint32_t cWndValue;
 uint32_t ssThreshValue;
 
 // ── 切换感知 TCP 优化：命令行参数 & 触发逻辑 ────────────────────
-std::string g_expCase        = "joint";      // baseline / rwnd-only / ack-only / joint
-std::string g_triggerSource  = "position";   // position / time / rsrp
-std::string g_triggerTimesSec   = "";        // 逗号分隔的绝对触发时刻（秒）
+std::string g_expCase = "joint";          // baseline / rwnd-only / ack-only / joint
+std::string g_triggerSource = "position"; // position / time / rsrp
+std::string g_triggerTimesSec = "";       // 逗号分隔的绝对触发时刻（秒）
 std::string g_triggerPositionsM = "450,1450,2450,3450,4450,5450"; // 触发位置（米）
-double      g_triggerAdvanceMs  = 500;       // 提前量（毫秒）
-uint32_t    g_ackSplitCount     = 3;
-double      g_ackSplitK         = 0.5;
-double      g_holdDurationMs    = 200;
-double      g_restoreDurationMs = 200;
-double      g_rwndAlphaFloor    = 0.3;
-double      g_rwndBeta          = 2.0;
-double      g_rwndGamma         = 2.0;
+double g_triggerAdvanceMs = 500;                                  // 提前量（毫秒）
+uint32_t g_ackSplitCount = 3;
+double g_ackSplitK = 0.5;
+double g_holdDurationMs = 200;
+double g_restoreDurationMs = 200;
+double g_rwndAlphaFloor = 0.3;
+double g_rwndBeta = 2.0;
+double g_rwndGamma = 2.0;
 
-bool g_enableRwnd     = true;
+bool g_enableRwnd = true;
 bool g_enableAckSplit = true;
 
 std::vector<double> g_triggerPosList;
-std::vector<bool>   g_triggeredFlags;
+std::vector<bool> g_triggeredFlags;
 
 // ── 优化机制追踪：每 0.1s 记录 alpha / ACK 计数 / 有效窗口 ──
-struct OptimRecord {
+struct OptimRecord
+{
     double time;
     double alpha;
     uint64_t totalAck;
     uint64_t splitAck;
-    bool   rwndActive;
-    bool   ackSplitActive;
+    bool rwndActive;
+    bool ackSplitActive;
 };
+
 std::vector<OptimRecord> g_optimRecords;
 
 void
 LogOptimTrace()
 {
     OptimRecord r;
-    r.time          = Simulator::Now().GetSeconds();
-    r.alpha         = TcpSocketBase::s_lastAlpha;
-    r.totalAck      = TcpSocketBase::s_totalAckSent;
-    r.splitAck      = TcpSocketBase::s_splitAckSent;
-    r.rwndActive    = TcpSocketBase::s_rwndActive;
+    r.time = Simulator::Now().GetSeconds();
+    r.alpha = TcpSocketBase::s_lastAlpha;
+    r.totalAck = TcpSocketBase::s_totalAckSent;
+    r.splitAck = TcpSocketBase::s_splitAckSent;
+    r.rwndActive = TcpSocketBase::s_rwndActive;
     r.ackSplitActive = TcpSocketBase::s_ackSplitActive;
     g_optimRecords.push_back(r);
     Simulator::Schedule(Seconds(0.1), &LogOptimTrace);
@@ -123,11 +125,12 @@ OutputOptimTrace()
     f << std::fixed << std::setprecision(4);
     for (auto& r : g_optimRecords)
     {
-        f << r.time << "," << r.alpha << "," << r.totalAck << ","
-          << r.splitAck << "," << r.rwndActive << "," << r.ackSplitActive << std::endl;
+        f << r.time << "," << r.alpha << "," << r.totalAck << "," << r.splitAck << ","
+          << r.rwndActive << "," << r.ackSplitActive << std::endl;
     }
     f.close();
-    std::cout << "[OUTPUT] traces/optim_trace.csv  (" << g_optimRecords.size() << " rows)" << std::endl;
+    std::cout << "[OUTPUT] traces/optim_trace.csv  (" << g_optimRecords.size() << " rows)"
+              << std::endl;
 }
 
 // 解析逗号分隔的 double 列表
@@ -149,14 +152,13 @@ ParseDoubleList(const std::string& s)
 void
 DoOptimTrigger()
 {
-    TcpSocketBase::TriggerHandoverOptim(
-        MilliSeconds(g_triggerAdvanceMs),
-        MilliSeconds(g_holdDurationMs),
-        MilliSeconds(g_restoreDurationMs),
-        g_enableRwnd,
-        g_enableAckSplit,
-        g_ackSplitCount,
-        g_ackSplitK);
+    TcpSocketBase::TriggerHandoverOptim(MilliSeconds(g_triggerAdvanceMs),
+                                        MilliSeconds(g_holdDurationMs),
+                                        MilliSeconds(g_restoreDurationMs),
+                                        g_enableRwnd,
+                                        g_enableAckSplit,
+                                        g_ackSplitCount,
+                                        g_ackSplitK);
 }
 
 // 定期检查 UE 位置，到达指定坐标时触发
@@ -171,13 +173,14 @@ CheckPositionTrigger(Ptr<Node> ue)
         {
             g_triggeredFlags[i] = true;
             std::cout << Simulator::Now().GetSeconds()
-                      << "s [TRIGGER] position=" << g_triggerPosList[i]
-                      << "m  UE_x=" << x << std::endl;
+                      << "s [TRIGGER] position=" << g_triggerPosList[i] << "m  UE_x=" << x
+                      << std::endl;
             DoOptimTrigger();
         }
     }
     Simulator::Schedule(MilliSeconds(10), &CheckPositionTrigger, ue);
 }
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 ApplicationContainer sourceApps;
@@ -247,12 +250,14 @@ MyCheckSocketFunction(Ptr<PacketSink> packetSink)
 }
 
 // ── 切换事件日志 ──
-struct HandoverEvent {
+struct HandoverEvent
+{
     double time;
-    std::string type;   // "HO_START" or "HO_END"
+    std::string type; // "HO_START" or "HO_END"
     uint16_t fromCell;
     uint16_t toCell;
 };
+
 std::vector<HandoverEvent> g_hoEvents;
 
 void
@@ -262,11 +267,12 @@ OutputHandoverEvents()
     f << "time,type,fromCell,toCell" << std::endl;
     for (auto& e : g_hoEvents)
     {
-        f << std::fixed << std::setprecision(4)
-          << e.time << "," << e.type << "," << e.fromCell << "," << e.toCell << std::endl;
+        f << std::fixed << std::setprecision(4) << e.time << "," << e.type << "," << e.fromCell
+          << "," << e.toCell << std::endl;
     }
     f.close();
-    std::cout << "[OUTPUT] traces/handover_events.csv  (" << g_hoEvents.size() << " events)" << std::endl;
+    std::cout << "[OUTPUT] traces/handover_events.csv  (" << g_hoEvents.size() << " events)"
+              << std::endl;
 }
 
 void
@@ -284,8 +290,8 @@ NotifyHandoverStartUe(std::string context,
                       uint16_t targetCellId)
 {
     double t = Simulator::Now().GetSeconds();
-    std::cout << t << "s UE IMSI " << imsi
-              << ": HO_START CellId " << cellid << " → " << targetCellId << std::endl;
+    std::cout << t << "s UE IMSI " << imsi << ": HO_START CellId " << cellid << " → "
+              << targetCellId << std::endl;
     g_hoEvents.push_back({t, "HO_START", cellid, targetCellId});
 }
 
@@ -293,8 +299,7 @@ void
 NotifyHandoverEndOkUe(std::string context, uint64_t imsi, uint16_t cellid, uint16_t rnti)
 {
     double t = Simulator::Now().GetSeconds();
-    std::cout << t << "s UE IMSI " << imsi
-              << ": HO_END   CellId " << cellid << std::endl;
+    std::cout << t << "s UE IMSI " << imsi << ": HO_END   CellId " << cellid << std::endl;
     g_hoEvents.push_back({t, "HO_END", cellid, cellid});
 }
 
@@ -381,20 +386,22 @@ HandoverInitiatedCallback(Ptr<const MobilityModel> mobility)
 }
 
 // ── 时序统计数据（带时间戳）──
-struct TimeSeriesRecord {
+struct TimeSeriesRecord
+{
     double time;
     double txThrMbps;
     double rxThrMbps;
     uint64_t cumLostPkts;
-    double   instLossRate;   // 本周期丢包率 %
-    double   avgDelayMs;
+    double instLossRate; // 本周期丢包率 %
+    double avgDelayMs;
 };
+
 std::vector<TimeSeriesRecord> g_tsRecords;
 
 double prevTxBytes = 0;
 double prevRxBytes = 0;
 uint64_t prevLostPkts = 0;
-uint64_t prevTxPkts   = 0;
+uint64_t prevTxPkts = 0;
 
 // 每 0.1s 采样一次关键指标
 void
@@ -402,42 +409,41 @@ UpdateStats(Ptr<FlowMonitor> monitor)
 {
     FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats();
 
-    double   currentTxBytes = 0, currentRxBytes = 0;
+    double currentTxBytes = 0, currentRxBytes = 0;
     uint64_t totalTxPkts = 0, totalLostPkts = 0;
-    double   delaySum = 0;
+    double delaySum = 0;
     uint64_t rxPkts = 0;
 
     for (auto it = stats.begin(); it != stats.end(); ++it)
     {
         currentTxBytes += it->second.txBytes;
         currentRxBytes += it->second.rxBytes;
-        totalTxPkts    += it->second.txPackets;
-        totalLostPkts  += it->second.lostPackets;
-        delaySum       += it->second.delaySum.GetSeconds();
-        rxPkts         += it->second.rxPackets;
+        totalTxPkts += it->second.txPackets;
+        totalLostPkts += it->second.lostPackets;
+        delaySum += it->second.delaySum.GetSeconds();
+        rxPkts += it->second.rxPackets;
     }
 
     double dt = 0.1; // 采样周期
     TimeSeriesRecord rec;
-    rec.time       = Simulator::Now().GetSeconds();
-    rec.txThrMbps  = ((currentTxBytes - prevTxBytes) * 8.0) / (dt * 1e6);
-    rec.rxThrMbps  = ((currentRxBytes - prevRxBytes) * 8.0) / (dt * 1e6);
+    rec.time = Simulator::Now().GetSeconds();
+    rec.txThrMbps = ((currentTxBytes - prevTxBytes) * 8.0) / (dt * 1e6);
+    rec.rxThrMbps = ((currentRxBytes - prevRxBytes) * 8.0) / (dt * 1e6);
     rec.cumLostPkts = totalLostPkts;
 
     // 本周期瞬时丢包率
-    uint64_t periodTxPkts  = totalTxPkts - prevTxPkts;
+    uint64_t periodTxPkts = totalTxPkts - prevTxPkts;
     uint64_t periodLostPkts = totalLostPkts - prevLostPkts;
-    rec.instLossRate = (periodTxPkts > 0)
-                       ? (static_cast<double>(periodLostPkts) / periodTxPkts * 100.0)
-                       : 0.0;
+    rec.instLossRate =
+        (periodTxPkts > 0) ? (static_cast<double>(periodLostPkts) / periodTxPkts * 100.0) : 0.0;
     rec.avgDelayMs = (rxPkts > 0) ? (delaySum / rxPkts * 1000.0) : 0.0;
 
     g_tsRecords.push_back(rec);
 
-    prevTxBytes  = currentTxBytes;
-    prevRxBytes  = currentRxBytes;
+    prevTxBytes = currentTxBytes;
+    prevRxBytes = currentRxBytes;
     prevLostPkts = totalLostPkts;
-    prevTxPkts   = totalTxPkts;
+    prevTxPkts = totalTxPkts;
 
     Simulator::Schedule(Seconds(dt), &UpdateStats, monitor);
 }
@@ -451,8 +457,8 @@ OutputStats()
     f << std::fixed << std::setprecision(4);
     for (auto& r : g_tsRecords)
     {
-        f << r.time << "," << r.txThrMbps << "," << r.rxThrMbps << ","
-          << r.cumLostPkts << "," << r.instLossRate << "," << r.avgDelayMs << std::endl;
+        f << r.time << "," << r.txThrMbps << "," << r.rxThrMbps << "," << r.cumLostPkts << ","
+          << r.instLossRate << "," << r.avgDelayMs << std::endl;
     }
     f.close();
     std::cout << "[OUTPUT] traces/timeseries.csv  (" << g_tsRecords.size() << " rows)" << std::endl;
@@ -586,7 +592,7 @@ TraceRwnd(std::string rwnd_tr_file_name)
 {
     AsciiTraceHelper ascii;
     rwndStream = ascii.CreateFileStream((trFileDir + rwnd_tr_file_name).c_str());
-    Config::ConnectWithoutContext("/NodeList/10/$ns3::TcpL4Protocol/SocketList/0/RWND",
+    Config::ConnectWithoutContext("/NodeList/11/$ns3::TcpL4Protocol/SocketList/0/RWND",
                                   MakeCallback(&RwndTracer));
 }
 
@@ -595,7 +601,7 @@ TraceAdvWND(std::string advWND_tr_file_name)
 {
     AsciiTraceHelper ascii;
     advWNDStream = ascii.CreateFileStream((trFileDir + advWND_tr_file_name).c_str());
-    Config::ConnectWithoutContext("/NodeList/10/$ns3::TcpL4Protocol/SocketList/0/AdvWND",
+    Config::ConnectWithoutContext("/NodeList/11/$ns3::TcpL4Protocol/SocketList/0/AdvWND",
                                   MakeCallback(&AdvWNDTracer));
 }
 
@@ -688,7 +694,7 @@ main(int argc, char* argv[])
                                        // to implement Westwood,Veno,Cubic and Bic respectively.
 
     //============================================================================================================
-    //for retrieve number of enbs
+    // for retrieve number of enbs
     ifstream EnbinFile("scratch/EnbLocations2.txt");
     int enblines; // counting number of lines in this file
     // string words ;               //store the word we are processing on
@@ -718,7 +724,7 @@ main(int argc, char* argv[])
     // double yForUe = 500.0;   // m
     // double speed = 40;       // m/s
     // double simTime = (double)(numberOfEnbs + 1) * distance / speed; // 1500 m / 20 m/s = 75 secs
-    double simTime = (double)30;
+    double simTime = (double)60;
     double enbTxPowerDbm = 46.0;
 
     // Command line arguments
@@ -731,35 +737,50 @@ main(int argc, char* argv[])
     cmd.AddValue("ulpacketSize", "UL packet size (bytes)", ulpacketsize);
     cmd.AddValue("ulpacketsInterval", "UL packet interval (ms)", ulinterval);
     // ── 切换感知 TCP 优化参数 ──
-    cmd.AddValue("expCase",          "baseline / rwnd-only / ack-only / joint", g_expCase);
-    cmd.AddValue("triggerSource",    "position / time / rsrp", g_triggerSource);
-    cmd.AddValue("triggerTimesSec",  "逗号分隔绝对触发时刻(s)", g_triggerTimesSec);
-    cmd.AddValue("triggerPositionsM","逗号分隔触发位置(m)", g_triggerPositionsM);
+    cmd.AddValue("expCase", "baseline / rwnd-only / ack-only / joint", g_expCase);
+    cmd.AddValue("triggerSource", "position / time / rsrp", g_triggerSource);
+    cmd.AddValue("triggerTimesSec", "逗号分隔绝对触发时刻(s)", g_triggerTimesSec);
+    cmd.AddValue("triggerPositionsM", "逗号分隔触发位置(m)", g_triggerPositionsM);
     cmd.AddValue("triggerAdvanceMs", "提前量(ms)", g_triggerAdvanceMs);
-    cmd.AddValue("ackSplitCount",    "ACK拆分数量", g_ackSplitCount);
-    cmd.AddValue("ackSplitK",        "ACK拆分公比系数", g_ackSplitK);
-    cmd.AddValue("holdDurationMs",   "Hold阶段时长(ms)", g_holdDurationMs);
-    cmd.AddValue("restoreDurationMs","恢复阶段时长(ms)", g_restoreDurationMs);
-    cmd.AddValue("rwndAlphaFloor",   "rwnd最小缩放因子", g_rwndAlphaFloor);
-    cmd.AddValue("rwndBeta",         "rwnd衰减速率β", g_rwndBeta);
-    cmd.AddValue("rwndGamma",        "rwnd恢复速率γ", g_rwndGamma);
+    cmd.AddValue("ackSplitCount", "ACK拆分数量", g_ackSplitCount);
+    cmd.AddValue("ackSplitK", "ACK拆分公比系数", g_ackSplitK);
+    cmd.AddValue("holdDurationMs", "Hold阶段时长(ms)", g_holdDurationMs);
+    cmd.AddValue("restoreDurationMs", "恢复阶段时长(ms)", g_restoreDurationMs);
+    cmd.AddValue("rwndAlphaFloor", "rwnd最小缩放因子", g_rwndAlphaFloor);
+    cmd.AddValue("rwndBeta", "rwnd衰减速率β", g_rwndBeta);
+    cmd.AddValue("rwndGamma", "rwnd恢复速率γ", g_rwndGamma);
     cmd.Parse(argc, argv);
 
     // ── 根据 expCase 设置 rwnd/ackSplit 开关 ──
-    if (g_expCase == "baseline")       { g_enableRwnd = false; g_enableAckSplit = false; }
-    else if (g_expCase == "rwnd-only") { g_enableRwnd = true;  g_enableAckSplit = false; }
-    else if (g_expCase == "ack-only")  { g_enableRwnd = false; g_enableAckSplit = true;  }
-    else /* joint */                   { g_enableRwnd = true;  g_enableAckSplit = true;  }
+    if (g_expCase == "baseline")
+    {
+        g_enableRwnd = false;
+        g_enableAckSplit = false;
+    }
+    else if (g_expCase == "rwnd-only")
+    {
+        g_enableRwnd = true;
+        g_enableAckSplit = false;
+    }
+    else if (g_expCase == "ack-only")
+    {
+        g_enableRwnd = false;
+        g_enableAckSplit = true;
+    }
+    else /* joint */
+    {
+        g_enableRwnd = true;
+        g_enableAckSplit = true;
+    }
 
     // 写入静态参数到 TcpSocketBase
     TcpSocketBase::s_rwndAlphaFloor = g_rwndAlphaFloor;
-    TcpSocketBase::s_rwndBeta       = g_rwndBeta;
-    TcpSocketBase::s_rwndGamma      = g_rwndGamma;
+    TcpSocketBase::s_rwndBeta = g_rwndBeta;
+    TcpSocketBase::s_rwndGamma = g_rwndGamma;
 
-    std::cout << "=== Experiment: " << g_expCase
-              << " | trigger: " << g_triggerSource
-              << " | rwnd=" << g_enableRwnd
-              << " | ackSplit=" << g_enableAckSplit << " ===" << std::endl;
+    std::cout << "=== Experiment: " << g_expCase << " | trigger: " << g_triggerSource
+              << " | rwnd=" << g_enableRwnd << " | ackSplit=" << g_enableAckSplit
+              << " ===" << std::endl;
 
     // change some default attributes so that they are reasonable for
     // this scenario, but do this before processing command line
@@ -769,28 +790,36 @@ main(int argc, char* argv[])
     // Config::SetDefault ("ns3::UdpClient::PacketSize", UintegerValue (packetsize));
     // Config::SetDefault ("ns3::UdpClient::Interval", TimeValue(MilliSeconds (interval)));
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
-    // Config::SetDefault("ns3::LteEnbPhy::TxPower", DoubleValue(enbTxPowerDbm));
+    Config::SetDefault("ns3::LteEnbPhy::TxPower", DoubleValue(enbTxPowerDbm));
     Config::SetDefault("ns3::TcpSocket::RcvBufSize", UintegerValue(1 << 20));
+    Config::SetDefault("ns3::TcpSocket::SndBufSize", UintegerValue(1 << 20));
+    Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(1400));
+
+    // ── LTE RLC 缓冲区：默认 10KB 严重限流，需要放大 ──
+    Config::SetDefault("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue(20 * 1024));
+    Config::SetDefault("ns3::LteRlcAm::MaxTxBufferSize", UintegerValue(20 * 1024));
+
+    // ── LTE 带宽：100 RBs = 20MHz，高铁 LTE-R 典型配置 ──
+    Config::SetDefault("ns3::LteEnbNetDevice::DlBandwidth", UintegerValue(100));
+    Config::SetDefault("ns3::LteEnbNetDevice::UlBandwidth", UintegerValue(100));
 
     //=========================================================================================================setting
-    //fading model
-    lteHelper->SetFadingModel("ns3::TraceFadingLossModel");
-    lteHelper->SetFadingModelAttribute(
-        "TraceFilename",
-        StringValue("src/lte/model/fading-traces/fading_trace_Highspeed_300kmph.fad"));
-    lteHelper->SetFadingModelAttribute("TraceLength", TimeValue(Seconds(10.0)));
-    lteHelper->SetFadingModelAttribute("SamplesNum", UintegerValue(10000));
-    lteHelper->SetFadingModelAttribute("WindowSize", TimeValue(Seconds(0.5)));
-    lteHelper->SetFadingModelAttribute("RbNum", UintegerValue(100));
+    // lteHelper->SetFadingModel("ns3::TraceFadingLossModel");
+    // lteHelper->SetFadingModelAttribute(
+    //     "TraceFilename",
+    //     StringValue("src/lte/model/fading-traces/fading_trace_Highspeed_300kmph.fad"));
+    // lteHelper->SetFadingModelAttribute("TraceLength", TimeValue(Seconds(10.0)));
+    // lteHelper->SetFadingModelAttribute("SamplesNum", UintegerValue(10000));
+    // lteHelper->SetFadingModelAttribute("WindowSize", TimeValue(Seconds(0.5)));
+    // lteHelper->SetFadingModelAttribute("RbNum", UintegerValue(100));
 
     // 设置信道干扰和噪声
     Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0));
 
     // 路径损耗模型：设置到 LTE channel（而不是创建悬空对象）
-    lteHelper->SetAttribute("PathlossModel",
-                            StringValue("ns3::LogDistancePropagationLossModel"));
-    lteHelper->SetPathlossModelAttribute("Exponent", DoubleValue(3.76));
-    lteHelper->SetPathlossModelAttribute("ReferenceLoss", DoubleValue(130.0));
+    lteHelper->SetAttribute("PathlossModel", StringValue("ns3::LogDistancePropagationLossModel"));
+    lteHelper->SetPathlossModelAttribute("Exponent", DoubleValue(3.0));
+    lteHelper->SetPathlossModelAttribute("ReferenceLoss", DoubleValue(35));
 
     // Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
     Ptr<PointToPointEpcHelper> epcHelper = CreateObject<PointToPointEpcHelper>();
@@ -1041,7 +1070,7 @@ main(int argc, char* argv[])
             BulkSendHelper dlClientHelper("ns3::TcpSocketFactory",
                                           InetSocketAddress(ueIpIfaces.GetAddress(u), dlPort));
             cout << "socket success" << endl;
-            dlClientHelper.SetAttribute("SendSize", UintegerValue(1024)); // in bytes
+            dlClientHelper.SetAttribute("SendSize", UintegerValue(1400)); // in bytes
             dlClientHelper.SetAttribute("MaxBytes", UintegerValue(4294967295));
             // OnOffHelper dlClientHelper ("ns3::TcpSocketFactory", InetSocketAddress
             // (ueIpIfaces.GetAddress (u), dlPort)); dlClientHelper.SetAttribute ("OffTime",
@@ -1169,7 +1198,7 @@ main(int argc, char* argv[])
     Simulator::Schedule(Seconds(0.11001), &TraceRwnd, rwnd_tr_file_name);
     Simulator::Schedule(Seconds(0.11001), &TraceAdvWND, advWND_tr_file_name);
     Simulator::Schedule(Seconds(0.11001), &TraceHighestRxAck, hrack_tr_file_name);
-    Simulator::Schedule(Seconds(0.2), &LogOptimTrace);  // 优化机制追踪
+    Simulator::Schedule(Seconds(0.2), &LogOptimTrace); // 优化机制追踪
     // Simulator::Schedule(Seconds(3), PrintProgress, thrputStream);
 
     // connect custom trace sinks for RRC connection establishment and handover notification
@@ -1196,11 +1225,12 @@ main(int argc, char* argv[])
     {
         if (g_triggerSource == "position")
         {
-            g_triggerPosList  = ParseDoubleList(g_triggerPositionsM);
+            g_triggerPosList = ParseDoubleList(g_triggerPositionsM);
             g_triggeredFlags.assign(g_triggerPosList.size(), false);
             Simulator::Schedule(Seconds(0.2), &CheckPositionTrigger, ueNodes.Get(0));
             std::cout << "[TRIGGER] position mode, points:";
-            for (double p : g_triggerPosList) std::cout << " " << p;
+            for (double p : g_triggerPosList)
+                std::cout << " " << p;
             std::cout << std::endl;
         }
         else if (g_triggerSource == "time")
@@ -1209,13 +1239,14 @@ main(int argc, char* argv[])
             for (double t : times)
             {
                 Simulator::Schedule(Seconds(t), []() {
-                    std::cout << Simulator::Now().GetSeconds()
-                              << "s [TRIGGER] time-based" << std::endl;
+                    std::cout << Simulator::Now().GetSeconds() << "s [TRIGGER] time-based"
+                              << std::endl;
                     DoOptimTrigger();
                 });
             }
             std::cout << "[TRIGGER] time mode, times:";
-            for (double t : times) std::cout << " " << t;
+            for (double t : times)
+                std::cout << " " << t;
             std::cout << std::endl;
         }
         else if (g_triggerSource == "rsrp")
