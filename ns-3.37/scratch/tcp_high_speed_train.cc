@@ -778,19 +778,19 @@ main(int argc, char* argv[])
     lteHelper->SetFadingModelAttribute(
         "TraceFilename",
         StringValue("src/lte/model/fading-traces/fading_trace_Highspeed_300kmph.fad"));
-    // lteHelper->SetFadingModelAttribute("TraceLength", TimeValue(Seconds(10.0)));
-    // lteHelper->SetFadingModelAttribute("SamplesNum", UintegerValue(1000));
-    // lteHelper->SetFadingModelAttribute("WindowSize", TimeValue(Seconds(1.0)));
-    // lteHelper->SetFadingModelAttribute("RbNum", UintegerValue(100));
+    lteHelper->SetFadingModelAttribute("TraceLength", TimeValue(Seconds(10.0)));
+    lteHelper->SetFadingModelAttribute("SamplesNum", UintegerValue(10000));
+    lteHelper->SetFadingModelAttribute("WindowSize", TimeValue(Seconds(0.5)));
+    lteHelper->SetFadingModelAttribute("RbNum", UintegerValue(100));
 
     // 设置信道干扰和噪声
-    Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0)); // 增加噪声
+    Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0));
 
-    // 增加路径损耗
-    Ptr<LogDistancePropagationLossModel> propagationLossModel =
-        CreateObject<LogDistancePropagationLossModel>();
-    propagationLossModel->SetReference(1.0, 46.0);
-    propagationLossModel->SetPathLossExponent(3.5); // 增加衰减指数
+    // 路径损耗模型：设置到 LTE channel（而不是创建悬空对象）
+    lteHelper->SetAttribute("PathlossModel",
+                            StringValue("ns3::LogDistancePropagationLossModel"));
+    lteHelper->SetPathlossModelAttribute("Exponent", DoubleValue(3.76));
+    lteHelper->SetPathlossModelAttribute("ReferenceLoss", DoubleValue(130.0));
 
     // Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
     Ptr<PointToPointEpcHelper> epcHelper = CreateObject<PointToPointEpcHelper>();
@@ -827,9 +827,9 @@ main(int argc, char* argv[])
     // Create the Internet
     PointToPointHelper p2ph;
 
-    p2ph.SetDeviceAttribute("DataRate", DataRateValue(DataRate("5Mb/s")));
+    p2ph.SetDeviceAttribute("DataRate", DataRateValue(DataRate("100Mb/s")));
     p2ph.SetDeviceAttribute("Mtu", UintegerValue(1500));
-    p2ph.SetChannelAttribute("Delay", TimeValue(Seconds(0.020)));
+    p2ph.SetChannelAttribute("Delay", TimeValue(Seconds(0.010)));
     NetDeviceContainer internetDevices = p2ph.Install(pgw, remoteHost);
 
     Ipv4AddressHelper ipv4h;
