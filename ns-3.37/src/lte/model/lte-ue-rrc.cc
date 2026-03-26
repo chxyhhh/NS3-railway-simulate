@@ -681,7 +681,7 @@ LteUeRrc::DoNotifyRandomAccessSuccessful()
     break;
 
     case CONNECTED_HANDOVER: {
-        //Simulator::Schedule(MilliSeconds(50), [=]() {
+        Simulator::Schedule(MilliSeconds(150), [=]() {
         LteRrcSap::RrcConnectionReconfigurationCompleted msg;
         msg.rrcTransactionIdentifier = m_lastRrcTransactionIdentifier;
         m_rrcSapUser->SendRrcConnectionReconfigurationCompleted(msg);
@@ -698,7 +698,7 @@ LteUeRrc::DoNotifyRandomAccessSuccessful()
         SwitchToState(CONNECTED_NORMALLY);
         m_cmacSapProvider.at(0)->NotifyConnectionSuccessful(); // RA successful during handover
         m_handoverEndOkTrace(m_imsi, m_cellId, m_rnti);
-        //});
+        });
 
     }
     break;

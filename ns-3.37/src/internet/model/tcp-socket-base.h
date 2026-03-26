@@ -223,9 +223,9 @@ class TcpSocketBase : public TcpSocket
      * \brief Get the type ID.
      * \return the object TypeId
      */
-
+   
     void SetHandoverStatus(bool inProgress);
-    void setSmallWindow(bool forceSmallWin);
+    //bool m_forceSmallWindow;
     static TypeId GetTypeId();
 
     /**
@@ -618,6 +618,9 @@ class TcpSocketBase : public TcpSocket
     typedef void (*TcpTxRxTracedCallback)(const Ptr<const Packet> packet,
                                           const TcpHeader& header,
                                           const Ptr<const TcpSocketBase> socket);
+    
+    // 外部控制窗口缩放
+    void setSmallWindow(bool forceSmallWin);
 
   protected:
     // Implementing ns3::TcpSocket -- Attribute get/set
@@ -1049,7 +1052,7 @@ class TcpSocketBase : public TcpSocket
      * \param tcpHeader the packet's TCP header
      */
     virtual void ReceivedData(Ptr<Packet> packet, const TcpHeader& tcpHeader);
-
+    
     /**
      * \splitack
      */
@@ -1280,9 +1283,44 @@ class TcpSocketBase : public TcpSocket
      */
     SequenceNumber32 GetHighRxAck() const;
 
-    //void SendSplitAck();
+    double   m_splitK{0.5};      // 专利中的参数k（动态映射，默认0.5）
+    uint32_t m_splitCount{3};    // 拆分数量a（动态映射，默认3）
 
-    //void SendEmptyPacket(uint8_t flags, SequenceNumber32 ack = SequenceNumber32(0));
+    // ══════════════════════════════════════════════════════════════════
+    // 预测驱动主动 rwnd 收缩机制（BDP-Aware Exponential Decay）
+    // 论文 §4.3：三相状态机
+    //
+    // 预警衰减期（RAMPDOWN）公式：
+    //   w_adv(t) = W_max · [α_f + (1-α_f) · exp(-β · (t-T_trig)/(T_HO-T_trig))]
+    // 切换保持期（HOLD）：
+    //   w_adv(t) = W_max · α_f
+    // 恢复期（RESTORE）：
+    //   w_adv(t) = W_max · [1 - (1-α_f) · exp(-γ · (t-T_res)/T_res_dur)]
+    //
+    // 其中 α_f（物理下界）= min(0.8,  K_X2·MSS / W_max)
+    //   K_X2 = X2接口等效缓存包数（典型8-16），MSS = 最大段长度
+    // ══════════════════════════════════════════════════════════════════
+    enum RwndShrinkPhase {
+        RWND_NORMAL   = 0,  ///< 正常工作，不收缩
+        RWND_RAMPDOWN = 1,  ///< 指数衰减阶段（预警期）
+        RWND_HOLD     = 2,  ///< 维持最小窗口（切换黑洞期）
+        RWND_RESTORE  = 3   ///< 指数恢复阶段（切换后）
+    };
+
+    RwndShrinkPhase m_rwndPhase{RWND_NORMAL};    ///< 当前 rwnd 收缩相位
+    double m_rwndAlphaFloor{0.3};               ///< BDP导出的最小收缩系数 α_f
+    double m_rwndBeta{2.0};                     ///< 衰减速率参数 β（越大越激进）
+    double m_rwndGamma{2.0};                    ///< 恢复速率参数 γ
+    Time   m_rwndTriggerTime{Seconds(0.0)};     ///< 衰减触发绝对时刻 T_trig
+    Time   m_rwndPredHOTime{Seconds(0.0)};      ///< 预测切换绝对时刻 T_HO
+    Time   m_rwndRestoreStart{Seconds(0.0)};    ///< 恢复阶段起始时刻
+    Time   m_rwndRestoreDuration{Seconds(0.2)}; ///< 恢复持续时间 T_res_dur
+
+    /// 预测驱动参数注入接口（供 RRC/外部预测模块调用）
+    /// \param label      HATCN输出类别 {0:稳定,1:正常HO,2:乒乓,3:失败}
+    /// \param confidence 预测置信度（仅在>0.7时生效）
+    /// \param timeToHO   预测距切换剩余时间
+    void OnHandoverPrediction(uint8_t label, double confidence, Time timeToHO);
 
   protected:
     // Counters and events
@@ -1374,7 +1412,7 @@ class TcpSocketBase : public TcpSocket
                                  //!< which was set for handling previous congestion event.
     uint32_t m_retxThresh{3};    //!< Fast Retransmit threshold
     bool m_limitedTx{true};      //!< perform limited transmit
-
+    
     // ack split
     //SequenceNumber32 m_nextPlannedAck; // 当前计划的下一个阶段的 ACK 序列号
     //EventId m_splitAckEvent;          // 定时器事件，用于分阶段发送 ACK
@@ -1409,6 +1447,7 @@ class TcpSocketBase : public TcpSocket
     TracedValue<SequenceNumber32> m_ecnCESeq{
         0}; //!< Sequence number of the last received Congestion Experienced
     TracedValue<SequenceNumber32> m_ecnCWRSeq{0}; //!< Sequence number of the last sent CWR
+    
 };
 
 /**

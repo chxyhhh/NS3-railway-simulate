@@ -157,10 +157,18 @@ A3RsrpHandoverAlgorithm::DoReportUeMeas(uint16_t rnti, LteRrcSap::MeasResults me
         {
             NS_LOG_LOGIC("Trigger Handover to cellId " << bestNeighbourCellId);
             NS_LOG_LOGIC("target cell RSRP " << (uint16_t)bestNeighbourRsrp);
+            // std::cout << "target cell RSRP " << (uint16_t)bestNeighbourRsrp << std::endl;
             NS_LOG_LOGIC("serving cell RSRP " << (uint16_t)measResults.measResultPCell.rsrpResult);
+            // std::cout << "serving cell RSRP " << (uint16_t)measResults.measResultPCell.rsrpResult
+            // << std::endl;
 
             // Inform eNodeB RRC about handover
+            std::cout << "bestNeighbourRsrp" << (uint16_t)bestNeighbourRsrp << "\n" << std::endl;
+            std::cout << "serving cell RSRP" << (uint16_t)measResults.measResultPCell.rsrpResult
+                      << "\n"
+                      << std::endl;
             m_handoverManagementSapUser->TriggerHandover(rnti, bestNeighbourCellId);
+            // std::cout << "bestNeighbourRsrp" << bestNeighbourRsrp << "\n" << std::endl;
         }
     }
     else
