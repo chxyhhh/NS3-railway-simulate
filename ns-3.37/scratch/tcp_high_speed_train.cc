@@ -17,7 +17,6 @@
 #include "ns3/tcp-rx-buffer.h"
 #include "ns3/flow-monitor-helper.h" // 引入 FlowMonitor 模块
 #include "ns3/netanim-module.h"
-#include "ns3/ipv4-flow-classifier.h"
 //================================-------------------------------------
 #include <iostream>
 #include <fstream>
@@ -26,7 +25,6 @@
 #include <iomanip>
 #include <ios>
 #include <vector>
-#include <sstream>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -67,21 +65,6 @@ Ptr<OutputStreamWrapper> advWNDStream;
 Ptr<OutputStreamWrapper> hrackStream;
 
 bool isHandoverStart = false;
-double gRsrpTriggerThreshold = -90.0;
-double gTriggerCooldownSec = 0.8;
-double gLastTriggerSec = -1e9;
-std::string gTriggerSource = "rsrp"; // rsrp|fixed|hybrid
-std::vector<double> gTriggerTimesSec;
-std::vector<double> gTriggerPositionsM;
-uint32_t gNextTimeTriggerIdx = 0;
-uint32_t gNextPosTriggerIdx = 0;
-double gTriggerAdvanceMs = 500.0;
-double gUeSpeedMps = 97.2;
-double gUeStartX = 0.0;
-bool gEnableRwnd = true;
-bool gEnableAck = true;
-uint32_t gAckSplitCount = 3;
-double gAckSplitK = 0.5;
 
 uint32_t cWndValue;
 uint32_t ssThreshValue;
@@ -93,7 +76,7 @@ Time *lastReportTime;
 std::vector <double> lastRxMbits;
 
 
-// Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
+Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
 
 void RxCallback(Ptr<const Packet> packet, const Address& from) {
     NS_LOG_INFO("Packet received with size: " << packet->GetSize()
@@ -112,17 +95,17 @@ void RxWithSeqTsSizeCallback(Ptr<const Packet> packet, const Address& from, cons
                  << " Timestamp: " << header.GetTs());
 }
 
-// void attachinfuture(NetDeviceContainer &ues, int ueid)
-// {
-//   lteHelper->Attach(ues.Get(ueid));
-//   // lteHelper->Attach (ues, enbs.Get (1));
-//   std::cout << "attach" << std::endl;
-// }
+void attachinfuture(NetDeviceContainer &ues, int ueid)
+{
+  lteHelper->Attach(ues.Get(ueid));
+  // lteHelper->Attach (ues, enbs.Get (1));
+  std::cout << "attach" << std::endl;
+}
 
-static void RxDrop (Ptr<const Packet> p)  //丢包 回调函数  
-{  
-  NS_LOG_UNCOND ("RxDrop at " << Simulator::Now ().GetSeconds ());  
-}  
+static void RxDrop (Ptr<const Packet> p)  //丢包 回调函数
+{
+  NS_LOG_UNCOND ("RxDrop at " << Simulator::Now ().GetSeconds ());
+}
 
 void TraceTcpDupAck (std::string context, uint32_t seqNo, uint32_t ackNo)
 {
@@ -136,82 +119,8 @@ void TraceTcpRetransmission (std::string context, uint32_t seqNo, uint32_t ackNo
               << " at time " << Simulator::Now ().GetSeconds () << "s" << std::endl;
 }
 
-static std::vector<double>
-ParseDoubleList(const std::string& csv)
-{
-    std::vector<double> values;
-    std::stringstream ss(csv);
-    std::string token;
-    while (std::getline(ss, token, ','))
-    {
-        if (token.empty())
-        {
-            continue;
-        }
-        try
-        {
-            values.push_back(std::stod(token));
-        }
-        catch (...)
-        {
-            std::cerr << "[WARN] invalid number: " << token << std::endl;
-        }
-    }
-    std::sort(values.begin(), values.end());
-    return values;
-}
-
-static bool
-ShouldTriggerByFixedSchedule(Ptr<PacketSink> packetSink)
-{
-    const double now = Simulator::Now().GetSeconds();
-    const double advanceSec = gTriggerAdvanceMs / 1000.0;
-
-    if (gNextTimeTriggerIdx < gTriggerTimesSec.size())
-    {
-        const double tTrig = std::max(0.0, gTriggerTimesSec[gNextTimeTriggerIdx] - advanceSec);
-        if (now >= tTrig)
-        {
-            std::cout << now << "s [fixed-trigger] time target=" << gTriggerTimesSec[gNextTimeTriggerIdx]
-                      << " trigger=" << tTrig << std::endl;
-            gNextTimeTriggerIdx++;
-            return true;
-        }
-    }
-
-    if (gNextPosTriggerIdx < gTriggerPositionsM.size())
-    {
-        Ptr<Node> ueNode = packetSink->GetNode();
-        Ptr<MobilityModel> mm = ueNode ? ueNode->GetObject<MobilityModel>() : nullptr;
-        if (mm)
-        {
-            const double traveled = std::max(0.0, mm->GetPosition().x - gUeStartX);
-            const double dTrig = std::max(0.0, gTriggerPositionsM[gNextPosTriggerIdx] - gUeSpeedMps * advanceSec);
-            if (traveled >= dTrig)
-            {
-                std::cout << now << "s [fixed-trigger] pos target=" << gTriggerPositionsM[gNextPosTriggerIdx]
-                          << " trigger=" << dTrig << " traveled=" << traveled << std::endl;
-                gNextPosTriggerIdx++;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 void MyCheckSocketFunction(Ptr<PacketSink> packetSink)
 {
-    if ((gTriggerSource == "fixed" || gTriggerSource == "hybrid") && ShouldTriggerByFixedSchedule(packetSink))
-    {
-        const double now = Simulator::Now().GetSeconds();
-        if (now - gLastTriggerSec >= gTriggerCooldownSec)
-        {
-            isHandoverStart = true;
-            gLastTriggerSec = now;
-        }
-    }
-
     Ptr<Socket> socket = packetSink->GetListeningSocket();
     if (socket)
     {
@@ -221,21 +130,19 @@ void MyCheckSocketFunction(Ptr<PacketSink> packetSink)
         {
             Ptr<TcpSocketBase> tcpSocketBase = DynamicCast<TcpSocketBase>(tcpSocket);
             if(tcpSocketBase){
-                tcpSocketBase->SetFeatureToggles(gEnableRwnd, gEnableAck);
-                tcpSocketBase->SetAckSplitParams(gAckSplitCount, gAckSplitK);
             	if(isHandoverStart){
                 //cout << "!!!handover start!!!" << endl;
             	tcpSocketBase->SetHandoverStatus(isHandoverStart); // 设置为切换中
-            	// Simulator::Schedule(MilliSeconds(100), [=]() {
-              //       isHandoverStart = false;
-              //   });
-            	isHandoverStart = false;
+            	Simulator::Schedule(MilliSeconds(100), [=]() {
+                    isHandoverStart = false;
+                });
+            	//isHandoverStart = false;
             }
             //std::cout << "Successfully casted to TcpSocket" << std::endl;
             //tcpSocket->SetAttribute("RcvBufSize", UintegerValue(32768*4));
             //NS_LOG_INFO("Successfully set RcvBufSize to 32768.");
             }
-            
+
         }
         else
         {
@@ -341,24 +248,19 @@ void NotifyUeMeasurement(std::string context, uint64_t imsi, uint16_t cellId, ui
     // 提取服务小区RSRP（单位：dBm）
     //if (!report.empty()) {
         //double rsrp_dBm = EutranMeasurementMapping::RsrpRange2Dbm(report.measResults.measResultPCell.rsrpResult);
-        
+
         // 添加到预测器
         //g_predictor.AddRsrpMeasurement(rsrp_dBm);
-        
+
         // 打印实时数据（调试用）
+//        std::cout << "11111111111" << std::endl;
         double rsrpResults = (double)EutranMeasurementMapping::RsrpRange2Dbm(report.measResults.measResultPCell.rsrpResult);
-        std::cout << Simulator::Now().GetSeconds () << "s " << " UE IMSI=" << imsi << " 服务小区RSRP: " << 
+        std::cout << Simulator::Now().GetSeconds () << "s " << " UE IMSI=" << imsi << " 服务小区RSRP: " <<
                                         rsrpResults << " dBm" << std::endl;
-        if ((gTriggerSource == "rsrp" || gTriggerSource == "hybrid") &&
-            rsrpResults < gRsrpTriggerThreshold)
-        {
-            const double now = Simulator::Now().GetSeconds();
-            if (now - gLastTriggerSec >= gTriggerCooldownSec)
-            {
-                isHandoverStart = true;
-                gLastTriggerSec = now;
-                std::cout << now << "s " << "==========rsrp lower===========" << std::endl;
-            }
+        if(rsrpResults < -90){
+            isHandoverStart = true;
+            //std::cout << "==========rsrp lower===========" << std::endl;
+
         }
     //}
 }
@@ -420,7 +322,7 @@ void UpdateStats(Ptr<FlowMonitor> monitor) {
     // 计算吞吐量（以 Mbps 为单位）
     double txThroughputBytes = currentTxBytes - prevTxBytes; // 当前时间窗口的发送字节增量
     double txThroughputMbps = (txThroughputBytes * 8) / (0.1 * 1e6); // 转换为 Mbps
-    
+
     double rxThroughputBytes = currentRxBytes - prevRxBytes; // 当前时间窗口的发送字节增量
     double rxThroughputMbps = (rxThroughputBytes * 8) / (0.1 * 1e6); // 转换为 Mbps
 
@@ -447,7 +349,7 @@ void OutputStats() {
         txThroughputFile << throughput << std::endl; // 每行输出一个吞吐量值
     }
     txThroughputFile.close();
-    
+
     std::ofstream rxThroughputFile("rxThroughput_data.txt");
     for (double throughput : rxThroughputData) {
         rxThroughputFile << throughput << std::endl; // 每行输出一个吞吐量值
@@ -584,7 +486,7 @@ TraceRwnd (std::string rwnd_tr_file_name)
 {
 	AsciiTraceHelper ascii;
 	rwndStream = ascii.CreateFileStream ((trFileDir + rwnd_tr_file_name).c_str ());
-	Config::ConnectWithoutContext ("/NodeList/10/$ns3::TcpL4Protocol/SocketList/0/RWND", MakeCallback (&RwndTracer));
+	Config::ConnectWithoutContext ("/NodeList/11/$ns3::TcpL4Protocol/SocketList/0/RWND", MakeCallback (&RwndTracer));
 }
 
 	static void
@@ -592,7 +494,7 @@ TraceAdvWND (std::string advWND_tr_file_name)
 {
 	AsciiTraceHelper ascii;
 	advWNDStream = ascii.CreateFileStream ((trFileDir + advWND_tr_file_name).c_str ());
-	Config::ConnectWithoutContext ("/NodeList/10/$ns3::TcpL4Protocol/SocketList/0/AdvWND", MakeCallback (&AdvWNDTracer));
+	Config::ConnectWithoutContext ("/NodeList/11/$ns3::TcpL4Protocol/SocketList/0/AdvWND", MakeCallback (&AdvWNDTracer));
 }
 
 // Highest ack received from peer
@@ -619,7 +521,7 @@ void PrintProgress(Ptr<OutputStreamWrapper> stream_throughput)
 		lastRxMbits.resize(sinkApps.GetN(), 0.0);
 		*(lastReportTime) = now_t;
 		return;
-	} 
+	}
 
 	*stream_throughput->GetStream() << now_t;
 	*stream_throughput->GetStream() << std::fixed << std::setprecision(6);
@@ -628,7 +530,7 @@ void PrintProgress(Ptr<OutputStreamWrapper> stream_throughput)
 		uint64_t rx_bytes;
 		double cur_rx_Mbits;
 
-		rx_bytes = DynamicCast<PacketSink>(sinkApps.Get(appIdx))->GetTotalRx ();//the total bytes received in this sink app 
+		rx_bytes = DynamicCast<PacketSink>(sinkApps.Get(appIdx))->GetTotalRx ();//the total bytes received in this sink app
 		cur_rx_Mbits = (rx_bytes * 8.0) / 1e6;
 
 		*stream_throughput->GetStream() << " " << (cur_rx_Mbits - lastRxMbits[appIdx]) / ((now_t - *(lastReportTime)).GetNanoSeconds() / 1e9) << " ";
@@ -646,21 +548,18 @@ void PrintProgress(Ptr<OutputStreamWrapper> stream_throughput)
 
 int main(int argc, char *argv[])
 {
-  
-  Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
-  Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
-  Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0));  // 增加噪声
 
     // 打开日志文件
-    std::ofstream logFile("socketbase__log.txt");
+    std::ofstream logFile("handover_predic_log.txt");
 
     // 保存原标准输出流
     std::clog.rdbuf(logFile.rdbuf());  // 重定向到文件
 
     // 启用日志
-    LogComponentEnable("TcpSocketBase", LogLevel(LOG_LEVEL_INFO));
+//    LogComponentEnable("TcpSocketBase", LogLevel(LOG_LEVEL_INFO));
+    LogComponentEnable("HandoverPredictor", LogLevel(LOG_LEVEL_INFO));
     //LogComponentEnable("A3RsrpHandoverAlgorithm", LogLevel(LOG_LEVEL_INFO));
-    
+
     // 打开日志文件
     //std::ofstream logFilecwnd("cwnd_log.txt");
 
@@ -673,7 +572,7 @@ int main(int argc, char *argv[])
     // 使用 LOG_INFO 级别来记录日志
     //LogComponentEnable("TcpSocketBase", LogLevel(LOG_LEVEL_INFO));
     Config::SetDefault ("ns3::TcpL4Protocol::SocketType", StringValue ("ns3::TcpCubic")); //change TcpNewReno to TcpWestwood/TcpVeno/TcpCubic/TcpBic to implement Westwood,Veno,Cubic and Bic respectively.
-    
+
   //============================================================================================================ for retrieve number of enbs
   ifstream EnbinFile("scratch/EnbLocations2.txt");
   int enblines; // counting number of lines in this file
@@ -700,18 +599,8 @@ int main(int argc, char *argv[])
   // double yForUe = 500.0;   // m
   // double speed = 40;       // m/s
   // double simTime = (double)(numberOfEnbs + 1) * distance / speed; // 1500 m / 20 m/s = 75 secs
-  double simTime = (double)60;
+  double simTime = (double)30;
   double enbTxPowerDbm = 46.0;
-  double ueSpeed = 97.2;
-  std::string expCase = "joint"; // baseline|rwnd|ack|joint
-  std::string triggerSource = "rsrp"; // rsrp|fixed|hybrid
-  std::string triggerTimesSecCsv = "";
-  std::string triggerPositionsMCsv = "";
-  double triggerAdvanceMs = 500.0;
-  double rsrpTriggerThreshold = -90.0;
-  double triggerCooldownSec = 0.8;
-  uint32_t ackSplitCount = 3;
-  double ackSplitK = 0.5;
 
   // Command line arguments
   unsigned int dlinterval = 300, dlpacketsize = 1024, ulinterval = 300, ulpacketsize = 1024;
@@ -723,53 +612,7 @@ int main(int argc, char *argv[])
   cmd.AddValue("dlpacketsInterval", "The time (ms) wait between packets (default = 500 ms)", dlinterval);
   cmd.AddValue("ulpacketSize", "Size (bytes) of packets generated (default = 1024 bytes). The minimum packet size is 12 bytes which is the size of the header carrying the sequence number and the time stamp.", ulpacketsize);
   cmd.AddValue("ulpacketsInterval", "The time (ms) wait between packets (default = 500 ms)", ulinterval);
-  cmd.AddValue("ueSpeed", "UE speed in m/s", ueSpeed);
-  cmd.AddValue("expCase", "Experiment case: baseline|rwnd|ack|joint", expCase);
-  cmd.AddValue("triggerSource", "Trigger source: rsrp|fixed|hybrid", triggerSource);
-  cmd.AddValue("triggerTimesSec", "Fixed trigger times in seconds, comma separated", triggerTimesSecCsv);
-  cmd.AddValue("triggerPositionsM", "Fixed trigger positions (traveled meters), comma separated", triggerPositionsMCsv);
-  cmd.AddValue("triggerAdvanceMs", "Trigger advance in ms (e.g. 500)", triggerAdvanceMs);
-  cmd.AddValue("rsrpTriggerThreshold", "RSRP threshold trigger", rsrpTriggerThreshold);
-  cmd.AddValue("triggerCooldownSec", "Minimum interval between triggers", triggerCooldownSec);
-  cmd.AddValue("ackSplitCount", "ACK split count", ackSplitCount);
-  cmd.AddValue("ackSplitK", "ACK split k", ackSplitK);
   cmd.Parse(argc, argv);
-
-  if (expCase == "baseline")
-  {
-      gEnableRwnd = false;
-      gEnableAck = false;
-  }
-  else if (expCase == "rwnd")
-  {
-      gEnableRwnd = true;
-      gEnableAck = false;
-  }
-  else if (expCase == "ack")
-  {
-      gEnableRwnd = false;
-      gEnableAck = true;
-  }
-  else
-  {
-      gEnableRwnd = true;
-      gEnableAck = true;
-  }
-
-  gTriggerSource = triggerSource;
-  gTriggerAdvanceMs = triggerAdvanceMs;
-  gRsrpTriggerThreshold = rsrpTriggerThreshold;
-  gTriggerCooldownSec = triggerCooldownSec;
-  gTriggerTimesSec = ParseDoubleList(triggerTimesSecCsv);
-  gTriggerPositionsM = ParseDoubleList(triggerPositionsMCsv);
-  gNextTimeTriggerIdx = 0;
-  gNextPosTriggerIdx = 0;
-  gUeSpeedMps = ueSpeed;
-  gAckSplitCount = ackSplitCount;
-  gAckSplitK = ackSplitK;
-
-  std::cout << "[EXP] expCase=" << expCase << " triggerSource=" << gTriggerSource
-            << " advanceMs=" << gTriggerAdvanceMs << std::endl;
 
   // change some default attributes so that they are reasonable for
   // this scenario, but do this before processing command line
@@ -789,10 +632,10 @@ int main(int argc, char *argv[])
   //lteHelper->SetFadingModelAttribute("SamplesNum", UintegerValue(1000));
   //lteHelper->SetFadingModelAttribute("WindowSize", TimeValue(Seconds(1.0)));
   //lteHelper->SetFadingModelAttribute("RbNum", UintegerValue(100));
-  
+
   // 设置信道干扰和噪声
   Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0));  // 增加噪声
-  
+
   // 增加路径损耗
   Ptr<LogDistancePropagationLossModel> propagationLossModel = CreateObject<LogDistancePropagationLossModel>();
   propagationLossModel->SetReference(1.0, 46.0);
@@ -805,14 +648,14 @@ int main(int argc, char *argv[])
   lteHelper->SetSchedulerType("ns3::RrFfMacScheduler");
 
   lteHelper->SetHandoverAlgorithmType("ns3::A3RsrpHandoverAlgorithm");
-  
+
   lteHelper->SetHandoverAlgorithmAttribute("Hysteresis", DoubleValue(3.0));
   lteHelper->SetHandoverAlgorithmAttribute("TimeToTrigger", TimeValue(MilliSeconds(256)));
 
   //lteHelper->SetHandoverAlgorithmType("ns3::A2A4RsrqHandoverAlgorithm");
   //lteHelper->SetHandoverAlgorithmAttribute ("ServingCellThreshold", UintegerValue (30));
   //lteHelper->SetHandoverAlgorithmAttribute ("NeighbourCellOffset", UintegerValue (1));
-  
+
   Ptr<Node> pgw = epcHelper->GetPgwNode();
 
 
@@ -822,7 +665,7 @@ int main(int argc, char *argv[])
   Ptr<Node> remoteHost = remoteHostContainer.Get(0);
   InternetStackHelper internet;
   internet.Install(remoteHostContainer);// 配置服务器位置（例如坐标 (2000, 0, 0)）
-  
+
     MobilityHelper remoteHostMobility;
     Ptr<ListPositionAllocator> remoteHostPositionAlloc = CreateObject<ListPositionAllocator>();
     remoteHostPositionAlloc->Add(Vector(0.0, 0.0, 0.0)); // 设置服务器坐标
@@ -838,21 +681,21 @@ int main(int argc, char *argv[])
   p2ph.SetDeviceAttribute("Mtu", UintegerValue(1500));
   p2ph.SetChannelAttribute("Delay", TimeValue(Seconds(0.020)));
   NetDeviceContainer internetDevices = p2ph.Install(pgw, remoteHost);
-  
+
   Ipv4AddressHelper ipv4h;
   ipv4h.SetBase("1.0.0.0", "255.0.0.0");
   Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign(internetDevices);
   Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress(1);
-  
+
   //drop packets rate
   // 获取设备对象并设置错误模型
-  
+
   //Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
     //em->SetAttribute("ErrorRate", DoubleValue(0.01));
     //em->SetAttribute("ErrorUnit", StringValue("ERROR_UNIT_PACKET"));
 
     //internetDevices.Get(0)->SetAttribute("ReceiveErrorModel", PointerValue (em));
-    //internetDevices.Get(0)->TraceConnectWithoutContext ("PhyRxDrop", MakeCallback (&RxDrop));  
+    //internetDevices.Get(0)->TraceConnectWithoutContext ("PhyRxDrop", MakeCallback (&RxDrop));
 
   // Routing of the Internet Host (towards the LTE network)
   Ipv4StaticRoutingHelper ipv4RoutingHelper;
@@ -879,9 +722,9 @@ int main(int argc, char *argv[])
   NodeContainer enbNodes;
   enbNodes.Create(numberOfEnbs);
   ueNodes.Create(numberOfUes);
-  
+
   //p2ph.EnablePcap("tcp-high-speed", nodes.Get(1)->GetId(), 0, true); // 接收端
-  string words ; 
+  string words ;
   // Install Mobility Model in eNB---------------------------------------------------------------------------------
   Ptr<ListPositionAllocator> enbPositionAlloc = CreateObject<ListPositionAllocator>();
   for (int i = 0; i < enblines; i++)
@@ -920,7 +763,7 @@ int main(int argc, char *argv[])
         locationy.append(enbtmp_ch);
       }
     }
-    
+
     xory = 0;
     locationx.erase();
     locationy.erase();
@@ -934,7 +777,7 @@ int main(int argc, char *argv[])
   MobilityHelper ueMobility;
   ueMobility.SetMobilityModel("ns3::ConstantVelocityMobilityModel");
   ueMobility.Install(ueNodes);
-  
+
   // 设置移动速度为100km/h (100000 mm/s)
   for (uint32_t i = 0; i < ueNodes.GetN(); i++)
   {
@@ -943,9 +786,8 @@ int main(int argc, char *argv[])
     {
       // 设置初始位置为 (0, 300, 0)
       mobilityModel->SetPosition(Vector(0.0, 300.0, 0.0));
-      gUeStartX = 0.0;
       // 设置速度，方向为沿 x轴正方向
-      mobilityModel->SetVelocity(Vector(ueSpeed, 0, 0)); // configurable speed
+      mobilityModel->SetVelocity(Vector(83.3, 0, 0)); // 100 km/h 转换成 m/s (100000/3600 ≈ 27.8)
     }
     cout << i << endl;
   }
@@ -953,7 +795,7 @@ int main(int argc, char *argv[])
   // Install LTE Devices in eNB and UEs
   NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice(enbNodes);
   NetDeviceContainer ueLteDevs = lteHelper->InstallUeDevice(ueNodes);
-  
+
   // 确认设备安装成功
   if (enbLteDevs.GetN() > 0 && ueLteDevs.GetN() > 0) {
       std::cout << "LTE devices installed successfully." << std::endl;
@@ -967,17 +809,17 @@ int main(int argc, char *argv[])
   internet.Install(ueNodes);
   Ipv4InterfaceContainer ueIpIfaces;
   ueIpIfaces = epcHelper->AssignUeIpv4Address(NetDeviceContainer(ueLteDevs));
-  
+
   lteHelper->Attach (ueLteDevs.Get (0), enbLteDevs.Get (0));
 
   NS_LOG_LOGIC("setting up applications");
-  
+
   for (uint32_t i = 0; i < enbNodes.GetN(); ++i){
     	Ptr<MobilityModel> mobilityModel = enbNodes.Get(i)->GetObject<MobilityModel>();
     	cout << "eNB Position: " << mobilityModel->GetPosition() << endl;
   }
   cout << enbNodes.GetN() << endl;
-  
+
   for (uint32_t i = 0; i < ueNodes.GetN(); ++i)
 {
     Ptr<MobilityModel> mobilityModel = ueNodes.Get(i)->GetObject<MobilityModel>();
@@ -986,11 +828,11 @@ int main(int argc, char *argv[])
   cout << ueNodes.GetN() << endl;
   /*
   TrafficControlHelper traffic;
-  traffic.SetRootQueueDisc("ns3::RedQueueDisc", 
+  traffic.SetRootQueueDisc("ns3::RedQueueDisc",
                          "MinTh", DoubleValue(0.1),  // 10% 队列容量
                          "MaxTh", DoubleValue(0.3),
                          "MaxSize", QueueSizeValue(QueueSize("1KB")),
-                         "LinkBandwidth", DataRateValue(DataRate("10Mbps"))); 
+                         "LinkBandwidth", DataRateValue(DataRate("10Mbps")));
   traffic.Install(ueLteDevs.Get(0)); // 将流量控制应用到接收端设备
   */
 
@@ -1008,7 +850,7 @@ int main(int argc, char *argv[])
   startTimeSeconds->SetAttribute("Max", DoubleValue(0.110));
 
   lteHelper->AddX2Interface(enbNodes);
-  
+
 
   for (uint32_t u = 0; u < numberOfUes; ++u)
   {
@@ -1045,17 +887,17 @@ int main(int argc, char *argv[])
       //dlClientHelper.SetAttribute ("PacketSize", UintegerValue (1024));//in bytes
 
       sourceApps.Add(dlClientHelper.Install(remoteHost));
-      
+
       Ptr<PacketSink> source = DynamicCast<PacketSink>(sourceApps.Get(0));
       //source->SetAttribute ("EnableSeqTsSizeHeader",BooleanValue(true));
-      
+
       PacketSinkHelper dlPacketSinkHelper("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
-      
+
       sinkApps.Add(dlPacketSinkHelper.Install(ue));
-      
+
       Ptr<PacketSink> packetSink = DynamicCast<PacketSink>(sinkApps.Get(0));
       //packetSink->SetAttribute ("EnableSeqTsSizeHeader",BooleanValue(true));
-      
+
       Ptr<EpcTft> tft = Create<EpcTft>();
       EpcTft::PacketFilter dlpf;
       dlpf.localPortStart = dlPort;
@@ -1064,13 +906,13 @@ int main(int argc, char *argv[])
 
       EpsBearer bearer(EpsBearer::NGBR_VIDEO_TCP_DEFAULT);
       lteHelper->ActivateDedicatedEpsBearer(ueLteDevs.Get(u), bearer, tft);
-      
+
       cout << "start time:" << Seconds(startTimeSeconds->GetValue()) << endl;
 
       Time startTime = Seconds(startTimeSeconds->GetValue());
       sinkApps.Start(startTime);
       sourceApps.Start(startTime);
-      
+
       Simulator::Schedule(Seconds(startTimeSeconds->GetValue() + 0.01), &MyCheckSocketFunction, packetSink);
       //if (source) {
       //  cout << "source success" << endl;
@@ -1085,13 +927,13 @@ int main(int argc, char *argv[])
       //packetSink->TraceConnectWithoutContext("Rx", MakeCallback(&RxCallback));
       //packetSink->TraceConnectWithoutContext("RxWithAddresses", MakeCallback(&RxWithAddressesCallback));
       //packetSink->TraceConnectWithoutContext("RxWithSeqTsSize", MakeCallback(&RxWithSeqTsSizeCallback));
-      
+
       Ptr<TcpL4Protocol> tcp = ue->GetObject<TcpL4Protocol>();
       if (tcp) {
          cout << "TCP protocol is initialized." << endl;
       }
-      
-      
+
+
     }
   }
 
@@ -1111,7 +953,7 @@ int main(int argc, char *argv[])
   rlcStats->SetAttribute("EpochDuration", TimeValue(Seconds(0.001)));
   Ptr<RadioBearerStatsCalculator> pdcpStats = lteHelper->GetPdcpStats();
   pdcpStats->SetAttribute("EpochDuration", TimeValue(Seconds(0.001)));
- 
+
 
   /******************************************
    *Setting up Flow Monitor
@@ -1122,7 +964,7 @@ int main(int argc, char *argv[])
   flowEnd2End.Add(remoteHost);
   monitor = flowHelper.Install(flowEnd2End);
   Simulator::Schedule(Seconds(0.1), &UpdateStats, monitor); // 调度每秒更新吞吐量
-  
+
   std::cout << "Total nodes in flow monitor: " << flowEnd2End.GetN() << std::endl;
   std::cout << "Number of UE nodes: " << ueNodes.GetN() << std::endl;
   std::cout << "Number of eNB nodes: " << enbNodes.GetN() << std::endl;
@@ -1130,11 +972,11 @@ int main(int argc, char *argv[])
 
   lastReportTime = new Time(MicroSeconds(0));
   EnsureDirectoryExists(trFileDir);
-  
+
   //for (uint32_t i = 0; i < NodeList::GetNNodes(); ++i) {
   //  Ptr<Node> node = NodeList::GetNode(i);
   //  cout << "Node ID: " << i << endl;
-    
+
     // 打印节点的IP地址
   //  Ptr<Ipv4> ipv4 = node->GetObject<Ipv4>();
   //  if (ipv4) {
@@ -1153,7 +995,7 @@ int main(int argc, char *argv[])
   //Config::Set("/NodeList/0/$ns3::TcpL4Protocol/SocketList/*", BooleanValue(true));
   // Get the TcpL4Protocol object from the node
 
-  
+
   Simulator::Schedule(Seconds(0.11001), &TraceCwnd, cwnd_tr_file_name);
   Simulator::Schedule(Seconds(0.11001), &TraceSsThresh, ssthresh_tr_file_name);
   Simulator::Schedule(Seconds(0.11001), &TraceRtt, rtt_tr_file_name);
@@ -1162,7 +1004,7 @@ int main(int argc, char *argv[])
   Simulator::Schedule(Seconds(0.11001), &TraceAdvWND, advWND_tr_file_name);
   Simulator::Schedule(Seconds(0.11001), &TraceHighestRxAck, hrack_tr_file_name);
   //Simulator::Schedule(Seconds(3), PrintProgress, thrputStream);
-  
+
   // connect custom trace sinks for RRC connection establishment and handover notification
   Config::Connect ("/NodeList/*/DeviceList/*/LteEnbRrc/ConnectionEstablished",
                   MakeCallback (&NotifyConnectionEstablishedEnb));
@@ -1178,15 +1020,15 @@ int main(int argc, char *argv[])
                   MakeCallback (&NotifyHandoverEndOkUe));
   Config::Connect ("/NodeList/*/DeviceList/*/LteUeRrc/ReportUeMeasurement",
                   MakeCallback (&NotifyUeMeasurement));
-                 
+
   //Config::ListPaths();
   //logFile.close();
 
 
-  
-  
-  Simulator::Stop(Seconds(simTime));
-  
+
+
+  Simulator::Stop(Seconds(60.0));
+
   AnimationInterface anim("lte-ananew.xml");
   anim.SetMaxPktsPerTraceFile(300000);
   anim.EnablePacketMetadata();
@@ -1223,87 +1065,27 @@ for (uint32_t i = 0; i < enbNodes.GetN(); ++i) {
     // std::cout << " Packet sink " << appIdx << " Rx " << sink1->GetTotalRx () << " bytes" << std::endl;
     // std::cout << std::endl;
   }
-  
+
   OutputStats();
   monitor->TraceConnectWithoutContext("RxPacket", MakeCallback(&UpdateRTT));
 
   monitor->CheckForLostPackets();
   double throughput = 0.0;
 
-  // 获取分类器，用于从 FlowId 反查 IP 地址
-Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowHelper.GetClassifier());
-std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats();
+  //Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowHelper.GetClassifier());
+  std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats();
+  for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin(); i != stats.end(); ++i)
+  {
+    std::cout << "FlowId:" << i->first << "\n";
+    std::cout << "TxBytes:" << i->second.txBytes << "\t\t";
+    std::cout << "RxBytes:" << i->second.rxBytes << "\t\t";
+    std::cout << "lostPackets:" << i->second.lostPackets << "\t\t";
+    //			std::cout << " bytesDropped " << i->second.bytesDropped	 << "\t";
 
-for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin(); i != stats.end(); ++i)
-{
-    // 1. 获取流的五元组信息 (源IP, 目的IP, 端口等)
-    // 这一步非常重要，否则你只知道 FlowId: 1，不知道是谁发给谁的
-    Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(i->first);
+    throughput = i->second.rxBytes * 8.0 / (i->second.timeLastRxPacket.GetSeconds() - i->second.timeFirstTxPacket.GetSeconds()) / 1024 / 1024;
+    std::cout << "throughput:" << throughput << " \n\n";
 
-    std::cout << "FlowId: " << i->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << ")\n";
-    
-    // 2. 基础统计
-    std::cout << "  Tx Packets: " << i->second.txPackets << "\n";
-    std::cout << "  Rx Packets: " << i->second.rxPackets << "\n";
-    std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
-    std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
-
-    // 3. 计算丢包率 (Packet Loss Ratio)
-    // lostPackets 是监控器认为丢失的，也可以用 (Tx - Rx) / Tx 来粗略估算
-    double packetLossRate = 0.0;
-    if (i->second.txPackets > 0) {
-        packetLossRate = (double)i->second.lostPackets / (double)i->second.txPackets * 100.0;
-    }
-    std::cout << "  Lost Packets: " << i->second.lostPackets << " (" << packetLossRate << "%)\n";
-
-    // 4. 计算吞吐量 (Throughput) - Mbps
-    // 只有接收到了包，计算吞吐量才有意义
-    double throughput = 0.0;
-    if (i->second.rxPackets > 0) {
-        // 计算持续时间：最后接收时间 - 第一包发送时间 (也可以用 LastRx - FirstRx)
-        Time duration = i->second.timeLastRxPacket - i->second.timeFirstTxPacket;
-        if (duration.GetSeconds() > 0) {
-            throughput = i->second.rxBytes * 8.0 / duration.GetSeconds() / 1024 / 1024;
-        }
-    }
-    std::cout << "  Throughput: " << throughput << " Mbps\n";
-
-    // 5. 计算平均时延 (Average Delay) - ms
-    double avgDelay = 0.0;
-    if (i->second.rxPackets > 0) {
-        // delaySum 是 Time 对象，需要转换
-        avgDelay = i->second.delaySum.GetSeconds() * 1000 / i->second.rxPackets;
-    }
-    std::cout << "  Avg Delay:  " << avgDelay << " ms\n";
-
-    // 6. 计算平均抖动 (Average Jitter) - ms
-    double avgJitter = 0.0;
-    if (i->second.rxPackets > 1) { // 至少收到两个包才能算抖动
-        avgJitter = i->second.jitterSum.GetSeconds() * 1000 / (i->second.rxPackets - 1);
-    }
-    std::cout << "  Avg Jitter: " << avgJitter << " ms\n";
-
-    // 7. [进阶] 查看具体的丢包原因
-    // 这能帮你定位是队列溢出(Congestion)还是链路错误(PHY error)
-    if (i->second.packetsDropped.size() > 0) {
-        std::cout << "  Drop Reasons:\n";
-        for (uint32_t reasonCode = 0; reasonCode < i->second.packetsDropped.size(); reasonCode++) {
-            if (i->second.packetsDropped[reasonCode] > 0) {
-                // 将 reasonCode 转换为可读字符串 (NS-3 提供了工具函数，或者手动对应)
-                // 这里简单打印 Code 和 数量
-                std::cout << "    Code " << reasonCode << ": " << i->second.packetsDropped[reasonCode] << " pkts\n";
-                
-                // 常见的 Code (仅供参考，具体取决于安装的 FlowProbe):
-                // Ipv4FlowProbe::DROP_NO_ROUTE = 0
-                // Ipv4FlowProbe::DROP_TTL_EXPIRE = 1
-                // Ipv4FlowProbe::DROP_BAD_CHECKSUM = 2
-                // Ipv4FlowProbe::DROP_QUEUE = 3 (最常见，代表拥塞丢包)
-            }
-        }
-    }
-
-    std::cout << "\n";
-}
+  }
   std::cout << "\n";
 
   monitor->SerializeToXmlFile("lte-grid.xml", true, true);
@@ -1312,3 +1094,4 @@ for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin();
   Simulator::Destroy();
   return 0;
 }
+
