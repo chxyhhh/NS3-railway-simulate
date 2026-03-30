@@ -98,8 +98,12 @@ double g_rsrpSlope = 0.0;      // RSRP 变化率 (dB/s)
 double g_lastRsrpTime = 0.0;   // 上次测量时间
 double g_rsrpDbm = -80.0;      // 当前 RSRP (dBm, 高精度，供外部读取)
 
-// ── PHY 层 RSRP/SINR 高频回调（每个子帧 1ms 调用一次）──
-// 比 UeMeasurement 回调（480ms）精度高得多，且 RSRP 为连续 double 值
+// 用于 100ms 间隔斜率计算的快照
+double g_rsrpSnapshot = -80.0;  // 上一个 100ms 快照的 RSRP
+double g_snapshotTime = 0.0;    // 上一个快照时间
+
+// ── PHY 层 RSRP/SINR 高频回调（每子帧 1ms）──
+// 仅更新 g_rsrpDbm 的瞬时值，斜率由 100ms 定时器计算
 void
 PhyRsrpSinrCallback(std::string context,
                      uint16_t cellId,
@@ -108,22 +112,24 @@ PhyRsrpSinrCallback(std::string context,
                      double sinr,     // 线性 SINR
                      uint8_t ccId)
 {
-    // 转换为 dBm（高精度，不取整）
-    double rsrpDbm = 10.0 * std::log10(rsrp * 1000.0);  // W → mW → dBm
-    double now = Simulator::Now().GetSeconds();
-
-    // 更新斜率（用指数滑动平均平滑，避免单子帧噪声）
-    double dt = now - g_lastRsrpTime;
-    if (g_lastRsrpTime > 0 && dt > 0.001)  // 至少间隔 1ms
-    {
-        double instantSlope = (rsrpDbm - g_lastRsrp) / dt;
-        // 指数滑动平均，α=0.1 → 约 10 个样本的平滑窗口
-        g_rsrpSlope = 0.9 * g_rsrpSlope + 0.1 * instantSlope;
+    if (rsrp > 0) {
+        g_rsrpDbm = 10.0 * std::log10(rsrp * 1000.0);  // W → mW → dBm
     }
+}
 
-    g_lastRsrp     = rsrpDbm;
-    g_rsrpDbm      = rsrpDbm;
-    g_lastRsrpTime = now;
+// ── 每 100ms 计算一次 RSRP 斜率（稳定、精确）──
+void
+UpdateRsrpSlope()
+{
+    double now = Simulator::Now().GetSeconds();
+    double dt = now - g_snapshotTime;
+    if (dt > 0.01)  // 防除零
+    {
+        g_rsrpSlope = (g_rsrpDbm - g_rsrpSnapshot) / dt;
+    }
+    g_rsrpSnapshot = g_rsrpDbm;
+    g_snapshotTime = now;
+    Simulator::Schedule(MilliSeconds(100), &UpdateRsrpSlope);
 }
 
 // ── 优化机制追踪：每 0.1s 记录 alpha / ACK 计数 / 有效窗口 ──
@@ -1325,6 +1331,7 @@ main(int argc, char* argv[])
     Simulator::Schedule(Seconds(0.11001), &TraceAdvWND, advWND_tr_file_name);
     Simulator::Schedule(Seconds(0.11001), &TraceHighestRxAck, hrack_tr_file_name);
     Simulator::Schedule(Seconds(0.2), &LogOptimTrace); // 优化机制追踪
+    Simulator::Schedule(Seconds(0.1), &UpdateRsrpSlope); // 100ms 粒度 RSRP 斜率计算
     // Simulator::Schedule(Seconds(3), PrintProgress, thrputStream);
 
     // connect custom trace sinks for RRC connection establishment and handover notification
@@ -1344,7 +1351,7 @@ main(int argc, char* argv[])
                     MakeCallback(&NotifyUeMeasurement));
 
     // ── PHY 层高频 RSRP 采样（每子帧 1ms），用于精确斜率计算 ──
-    Config::Connect("/NodeList/*/DeviceList/*/LteUePhy/ReportCurrentCellRsrpSinr",
+    Config::Connect("/NodeList/*/DeviceList/*/ComponentCarrierMapUe/*/LteUePhy/ReportCurrentCellRsrpSinr",
                     MakeCallback(&PhyRsrpSinrCallback));
 
     // ── 设置 UE 节点 ID 并初始化触发 ──
