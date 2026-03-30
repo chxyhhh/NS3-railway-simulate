@@ -845,7 +845,7 @@ main(int argc, char* argv[])
     // double simTime = (double)(numberOfEnbs + 1) * distance / speed; // 1500 m / 20 m/s = 75 secs
     double simTime = (double)60;
     double enbTxPowerDbm = 46.0;
-    double pktLossRate = 0.01;  // 随机丢包率（模拟无线信道不确定性）
+    double pktLossRate = 0.0;  // 随机丢包率，默认关闭，仅对比实验时手动开启
 
     // Command line arguments
     unsigned int dlinterval = 300, dlpacketsize = 1024, ulinterval = 300, ulpacketsize = 1024;
@@ -875,8 +875,8 @@ main(int argc, char* argv[])
     cmd.AddValue("rwndGamma", "rwnd恢复速率γ", g_rwndGamma);
     cmd.Parse(argc, argv);
 
-    // ── 随机种子设置（仅 enableRandom=true 且 rngRun>1 时生效）──
-    if (g_enableRandom && rngRun > 1) {
+    // ── 随机种子：rngRun>1 时生效，不依赖 enableRandom ──
+    if (rngRun > 1) {
         RngSeedManager::SetRun(rngRun);
         std::cout << "[RNG] Run=" << rngRun << std::endl;
     }
@@ -998,8 +998,8 @@ main(int argc, char* argv[])
     Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign(internetDevices);
     Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress(1);
 
-    // ── 随机丢包模型（仅 enableRandom=true 时启用）──
-    if (g_enableRandom && pktLossRate > 0)
+    // ── 随机丢包模型（pktLossRate>0 时启用，独立于 rngRun）──
+    if (pktLossRate > 0)
     {
         Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
         em->SetAttribute("ErrorRate", DoubleValue(pktLossRate));
