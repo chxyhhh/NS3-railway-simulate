@@ -84,6 +84,7 @@ double g_restoreDurationMs = 200;
 double g_rwndAlphaFloor = 0.3;
 double g_rwndBeta = 2.0;
 double g_rwndGamma = 2.0;
+bool g_enableRandom = false;    // 随机性开关：采集训练集时打开
 
 bool g_enableRwnd = true;
 bool g_enableAckSplit = true;
@@ -747,6 +748,9 @@ PrintProgress(Ptr<OutputStreamWrapper> stream_throughput)
 int
 main(int argc, char* argv[])
 {
+    // ── 随机种子：不同 RngRun 产生不同的仿真轨迹 ──
+    uint32_t rngRun = 1;
+
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     Config::SetDefault("ns3::LteHelper::UseIdealRrc", BooleanValue(false));
     Config::SetDefault("ns3::LteEnbPhy::NoiseFigure", DoubleValue(9.0)); // 增加噪声
@@ -810,12 +814,16 @@ main(int argc, char* argv[])
     // double simTime = (double)(numberOfEnbs + 1) * distance / speed; // 1500 m / 20 m/s = 75 secs
     double simTime = (double)60;
     double enbTxPowerDbm = 46.0;
+    double pktLossRate = 0.01;  // 随机丢包率（模拟无线信道不确定性）
 
     // Command line arguments
     unsigned int dlinterval = 300, dlpacketsize = 1024, ulinterval = 300, ulpacketsize = 1024;
     CommandLine cmd;
     cmd.AddValue("simTime", "Total duration of the simulation (in seconds)", simTime);
     cmd.AddValue("enbTxPowerDbm", "TX power [dBm] used by HeNBs (default = 46.0)", enbTxPowerDbm);
+    cmd.AddValue("rngRun", "Random seed run number", rngRun);
+    cmd.AddValue("pktLossRate", "Random packet loss rate on P2P link (0~1)", pktLossRate);
+    cmd.AddValue("enableRandom", "Enable randomness for training data collection", g_enableRandom);
     cmd.AddValue("dlpacketSize", "DL packet size (bytes)", dlpacketsize);
     cmd.AddValue("dlpacketsInterval", "DL packet interval (ms)", dlinterval);
     cmd.AddValue("ulpacketSize", "UL packet size (bytes)", ulpacketsize);
@@ -835,6 +843,12 @@ main(int argc, char* argv[])
     cmd.AddValue("rwndBeta", "rwnd衰减速率β", g_rwndBeta);
     cmd.AddValue("rwndGamma", "rwnd恢复速率γ", g_rwndGamma);
     cmd.Parse(argc, argv);
+
+    // ── 随机种子设置（仅 enableRandom=true 且 rngRun>1 时生效）──
+    if (g_enableRandom && rngRun > 1) {
+        RngSeedManager::SetRun(rngRun);
+        std::cout << "[RNG] Run=" << rngRun << std::endl;
+    }
 
     // ── 根据 expCase 设置 rwnd/ackSplit 开关 ──
     if (g_expCase == "baseline")
@@ -953,15 +967,15 @@ main(int argc, char* argv[])
     Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign(internetDevices);
     Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress(1);
 
-    // drop packets rate
-    //  获取设备对象并设置错误模型
-
-    // Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
-    // em->SetAttribute("ErrorRate", DoubleValue(0.01));
-    // em->SetAttribute("ErrorUnit", StringValue("ERROR_UNIT_PACKET"));
-
-    // internetDevices.Get(0)->SetAttribute("ReceiveErrorModel", PointerValue (em));
-    // internetDevices.Get(0)->TraceConnectWithoutContext ("PhyRxDrop", MakeCallback (&RxDrop));
+    // ── 随机丢包模型（仅 enableRandom=true 时启用）──
+    if (g_enableRandom && pktLossRate > 0)
+    {
+        Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
+        em->SetAttribute("ErrorRate", DoubleValue(pktLossRate));
+        em->SetAttribute("ErrorUnit", StringValue("ERROR_UNIT_PACKET"));
+        internetDevices.Get(0)->SetAttribute("ReceiveErrorModel", PointerValue(em));
+        std::cout << "[RANDOM] P2P error model ON, pktLossRate=" << pktLossRate << std::endl;
+    }
 
     // Routing of the Internet Host (towards the LTE network)
     Ipv4StaticRoutingHelper ipv4RoutingHelper;
