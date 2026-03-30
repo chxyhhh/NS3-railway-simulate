@@ -1121,8 +1121,8 @@ main(int argc, char* argv[])
     {
         std::cerr << "Failed to install LTE devices!" << std::endl;
     }
-    p2ph.EnablePcap("high-speed", ueNodes.Get(0)->GetId(), 0, true); // 接收端
-    p2ph.EnablePcapAll("tcp-high-speed");
+    // ── 仅抓发送端（remoteHost）的 P2P 接口 pcap，包含完整 TCP 流 ──
+    p2ph.EnablePcap(trFileDir + "tcp-sender", internetDevices.Get(1), true);
 
     // Install the IP stack on the UEs
     internet.Install(ueNodes);
