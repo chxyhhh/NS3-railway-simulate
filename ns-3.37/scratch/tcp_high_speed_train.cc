@@ -93,9 +93,38 @@ std::vector<double> g_triggerPosList;
 std::vector<bool> g_triggeredFlags;
 
 // ── 自适应参数计算所需的 RSRP 状态跟踪 ──
-double g_lastRsrp = -80.0;     // 上次 RSRP 测量值
+double g_lastRsrp = -80.0;     // 上次 RSRP (dBm, 高精度)
 double g_rsrpSlope = 0.0;      // RSRP 变化率 (dB/s)
 double g_lastRsrpTime = 0.0;   // 上次测量时间
+double g_rsrpDbm = -80.0;      // 当前 RSRP (dBm, 高精度，供外部读取)
+
+// ── PHY 层 RSRP/SINR 高频回调（每个子帧 1ms 调用一次）──
+// 比 UeMeasurement 回调（480ms）精度高得多，且 RSRP 为连续 double 值
+void
+PhyRsrpSinrCallback(std::string context,
+                     uint16_t cellId,
+                     uint16_t rnti,
+                     double rsrp,     // 线性功率 (W)
+                     double sinr,     // 线性 SINR
+                     uint8_t ccId)
+{
+    // 转换为 dBm（高精度，不取整）
+    double rsrpDbm = 10.0 * std::log10(rsrp * 1000.0);  // W → mW → dBm
+    double now = Simulator::Now().GetSeconds();
+
+    // 更新斜率（用指数滑动平均平滑，避免单子帧噪声）
+    double dt = now - g_lastRsrpTime;
+    if (g_lastRsrpTime > 0 && dt > 0.001)  // 至少间隔 1ms
+    {
+        double instantSlope = (rsrpDbm - g_lastRsrp) / dt;
+        // 指数滑动平均，α=0.1 → 约 10 个样本的平滑窗口
+        g_rsrpSlope = 0.9 * g_rsrpSlope + 0.1 * instantSlope;
+    }
+
+    g_lastRsrp     = rsrpDbm;
+    g_rsrpDbm      = rsrpDbm;
+    g_lastRsrpTime = now;
+}
 
 // ── 优化机制追踪：每 0.1s 记录 alpha / ACK 计数 / 有效窗口 ──
 struct OptimRecord
@@ -426,17 +455,13 @@ NotifyUeMeasurement(std::string context,
         report.measResults.measResultPCell.rsrpResult);
     double now = Simulator::Now().GetSeconds();
 
-    // 更新 RSRP 斜率（供自适应参数计算用）
-    if (g_lastRsrpTime > 0 && now > g_lastRsrpTime)
-    {
-        g_rsrpSlope = (rsrpResults - g_lastRsrp) / (now - g_lastRsrpTime);
-    }
-    g_lastRsrp     = rsrpResults;
-    g_lastRsrpTime = now;
+    // 注意：RSRP 斜率已由 PhyRsrpSinrCallback 高频更新（1ms 粒度），这里不再计算
+    // 此回调仅用于打印和 RSRP 触发模式
 
     std::cout << now << "s " << " UE IMSI=" << imsi
               << " RSRP: " << rsrpResults << " dBm"
-              << " slope: " << g_rsrpSlope << " dB/s" << std::endl;
+              << " (PHY: " << std::fixed << std::setprecision(2) << g_rsrpDbm << " dBm)"
+              << " slope: " << std::setprecision(3) << g_rsrpSlope << " dB/s" << std::endl;
     // RSRP 触发模式：仅当 triggerSource == "rsrp" 时生效
     if (g_triggerSource == "rsrp" && rsrpResults < -90)
     {
@@ -1317,6 +1342,10 @@ main(int argc, char* argv[])
                     MakeCallback(&NotifyHandoverEndOkUe));
     Config::Connect("/NodeList/*/DeviceList/*/LteUeRrc/ReportUeMeasurement",
                     MakeCallback(&NotifyUeMeasurement));
+
+    // ── PHY 层高频 RSRP 采样（每子帧 1ms），用于精确斜率计算 ──
+    Config::Connect("/NodeList/*/DeviceList/*/LteUePhy/ReportCurrentCellRsrpSinr",
+                    MakeCallback(&PhyRsrpSinrCallback));
 
     // ── 设置 UE 节点 ID 并初始化触发 ──
     TcpSocketBase::s_ueNodeId = ueNodes.Get(0)->GetId();
