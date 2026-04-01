@@ -25,6 +25,7 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
@@ -91,6 +92,215 @@ bool g_enableAckSplit = true;
 
 std::vector<double> g_triggerPosList;
 std::vector<bool> g_triggeredFlags;
+
+// ── DDQN 策略查表模式 ──
+std::string g_policyTablePath = "";  // JSON 策略表路径
+
+struct DdqnAction
+{
+    int actionId;
+    std::string name;
+    double alpha;
+    double beta;
+    double gamma;
+    int ack_m;
+};
+
+std::map<std::string, DdqnAction> g_policyTable;
+int g_ddqnLastActionId = 0;  // 上一次执行的动作ID（用于检测动作切换）
+
+// 简易 JSON 策略表解析器（不依赖第三方库）
+void
+LoadPolicyTable(const std::string& path)
+{
+    std::ifstream f(path);
+    if (!f.is_open())
+    {
+        std::cerr << "[DDQN] ERROR: cannot open policy table: " << path << std::endl;
+        return;
+    }
+
+    std::string content((std::istreambuf_iterator<char>(f)),
+                         std::istreambuf_iterator<char>());
+    f.close();
+
+    // 逐条解析 "RSRP,slope": { "action": N, ... "params": { "alpha": ..., "beta": ..., "gamma": ..., "ack_m": ... } }
+    // 使用简单的字符串搜索，不引入外部 JSON 库
+    size_t pos = 0;
+    int count = 0;
+    while (true)
+    {
+        // 找到下一个顶层 key: "RSRP,slope"
+        size_t keyStart = content.find("\"", pos);
+        if (keyStart == std::string::npos) break;
+        size_t keyEnd = content.find("\"", keyStart + 1);
+        if (keyEnd == std::string::npos) break;
+        std::string key = content.substr(keyStart + 1, keyEnd - keyStart - 1);
+
+        // 检查这是否是一个 "RSRP,slope" 格式的 key（包含逗号且不是字段名）
+        if (key.find(",") == std::string::npos)
+        {
+            pos = keyEnd + 1;
+            continue;
+        }
+
+        // 找到对应的 action 值
+        size_t actionPos = content.find("\"action\"", keyEnd);
+        if (actionPos == std::string::npos) break;
+        size_t colonPos = content.find(":", actionPos);
+        size_t numStart = content.find_first_of("-0123456789", colonPos);
+        size_t numEnd = content.find_first_not_of("0123456789", numStart + 1);
+        int actionId = std::stoi(content.substr(numStart, numEnd - numStart));
+
+        // 找到 "name" 值
+        size_t namePos = content.find("\"name\"", numEnd);
+        std::string actionName = "Unknown";
+        if (namePos != std::string::npos && namePos < content.find("\"action\"", numEnd + 10))
+        {
+            size_t nq1 = content.find("\"", namePos + 6);
+            size_t nq2 = content.find("\"", nq1 + 1);
+            if (nq1 != std::string::npos && nq2 != std::string::npos)
+                actionName = content.substr(nq1 + 1, nq2 - nq1 - 1);
+        }
+
+        // 找到 "params" 块中的 alpha, beta, gamma, ack_m
+        size_t paramsPos = content.find("\"params\"", numEnd);
+        double alpha = 1.0, beta = 0.0, gamma = 0.0;
+        int ack_m = 1;
+
+        if (paramsPos != std::string::npos)
+        {
+            size_t blockEnd = content.find("}", paramsPos);
+            blockEnd = content.find("}", blockEnd + 1); // 外层 }
+            std::string block = content.substr(paramsPos, blockEnd - paramsPos);
+
+            auto extractDouble = [&](const std::string& blk, const std::string& field) -> double {
+                size_t fp = blk.find("\"" + field + "\"");
+                if (fp == std::string::npos) return 0.0;
+                size_t cp = blk.find(":", fp);
+                size_t ns = blk.find_first_of("-0123456789.", cp);
+                size_t ne = blk.find_first_not_of("-0123456789.", ns);
+                return std::stod(blk.substr(ns, ne - ns));
+            };
+
+            auto extractInt = [&](const std::string& blk, const std::string& field) -> int {
+                size_t fp = blk.find("\"" + field + "\"");
+                if (fp == std::string::npos) return 1;
+                size_t cp = blk.find(":", fp);
+                size_t ns = blk.find_first_of("0123456789", cp);
+                size_t ne = blk.find_first_not_of("0123456789", ns);
+                return std::stoi(blk.substr(ns, ne - ns));
+            };
+
+            alpha = extractDouble(block, "alpha");
+            beta  = extractDouble(block, "beta");
+            gamma = extractDouble(block, "gamma");
+            ack_m = extractInt(block, "ack_m");
+            pos = blockEnd + 1;
+        }
+        else
+        {
+            pos = numEnd + 1;
+        }
+
+        DdqnAction act;
+        act.actionId = actionId;
+        act.name = actionName;
+        act.alpha = alpha;
+        act.beta = beta;
+        act.gamma = gamma;
+        act.ack_m = ack_m;
+        g_policyTable[key] = act;
+        count++;
+    }
+    std::cout << "[DDQN] Loaded policy table: " << count << " entries from " << path << std::endl;
+}
+
+// 根据当前 RSRP 和 slope 查表获取动作
+DdqnAction
+LookupDdqnAction(double rsrp, double slope)
+{
+    // 将 RSRP 四舍五入到整数, slope 四舍五入到 0.5 步长
+    int rsrpInt = (int)std::round(rsrp);
+    double slopeRounded = std::round(slope * 2.0) / 2.0;
+
+    // 限幅到策略表覆盖范围
+    rsrpInt = std::max(-95, std::min(-71, rsrpInt));
+    slopeRounded = std::max(-4.0, std::min(2.5, slopeRounded));
+
+    std::ostringstream oss;
+    oss << rsrpInt << "," << std::fixed << std::setprecision(1) << slopeRounded;
+    std::string key = oss.str();
+
+    auto it = g_policyTable.find(key);
+    if (it != g_policyTable.end())
+    {
+        return it->second;
+    }
+
+    // 默认动作：Normal
+    DdqnAction def;
+    def.actionId = 0;
+    def.name = "Normal";
+    def.alpha = 1.0;
+    def.beta = 0.0;
+    def.gamma = 0.0;
+    def.ack_m = 1;
+    return def;
+}
+
+// ── DDQN 周期性决策（每 100ms 执行一次）──
+void
+DdqnPeriodicAction()
+{
+    DdqnAction act = LookupDdqnAction(g_rsrpDbm, g_rsrpSlope);
+
+    bool needRwnd = (act.alpha < 1.0);
+    bool needAckSplit = (act.ack_m > 1);
+
+    // 只在动作发生变化时才执行触发，避免反复重置
+    if (act.actionId != g_ddqnLastActionId)
+    {
+        std::cout << std::fixed << std::setprecision(3)
+                  << Simulator::Now().GetSeconds()
+                  << "s [DDQN] RSRP=" << std::setprecision(1) << g_rsrpDbm
+                  << " slope=" << std::setprecision(2) << g_rsrpSlope
+                  << " → action=" << act.actionId << " (" << act.name << ")"
+                  << " α=" << act.alpha << " β=" << act.beta
+                  << " γ=" << act.gamma << " m=" << act.ack_m
+                  << std::endl;
+
+        TcpSocketBase::s_rwndAlphaFloor = act.alpha;
+        TcpSocketBase::s_rwndBeta       = act.beta;
+        TcpSocketBase::s_rwndGamma      = act.gamma;
+
+        // 对于保护/联合动作（alpha<1 或 ack_m>1），触发优化机制
+        // 对于 Normal（action=0），关闭优化让 TCP 自然运行
+        if (needRwnd || needAckSplit)
+        {
+            // advance=0 表示立即生效, hold=100ms（到下次决策时刻）, restore=100ms
+            TcpSocketBase::TriggerHandoverOptim(
+                MilliSeconds(0),    // advance: 立即
+                MilliSeconds(150),  // hold: 持续到下次+余量
+                MilliSeconds(100),  // restore: 平滑恢复
+                needRwnd,
+                needAckSplit,
+                (uint32_t)act.ack_m,
+                g_ackSplitK);
+        }
+        else
+        {
+            // Normal 模式：重置参数，让 TCP 自然运行
+            TcpSocketBase::s_rwndAlphaFloor = 1.0;
+            TcpSocketBase::s_rwndActive = false;
+            TcpSocketBase::s_ackSplitActive = false;
+        }
+
+        g_ddqnLastActionId = act.actionId;
+    }
+
+    Simulator::Schedule(MilliSeconds(100), &DdqnPeriodicAction);
+}
 
 // ── 自适应参数计算所需的 RSRP 状态跟踪 ──
 double g_lastRsrp = -80.0;     // 上次 RSRP (dBm, 高精度)
@@ -860,7 +1070,7 @@ main(int argc, char* argv[])
     cmd.AddValue("ulpacketSize", "UL packet size (bytes)", ulpacketsize);
     cmd.AddValue("ulpacketsInterval", "UL packet interval (ms)", ulinterval);
     // ── 切换感知 TCP 优化参数 ──
-    cmd.AddValue("expCase", "baseline / rwnd-only / ack-only / joint", g_expCase);
+    cmd.AddValue("expCase", "baseline / rwnd-only / ack-only / joint / ddqn", g_expCase);
     cmd.AddValue("triggerSource", "position / time / rsrp", g_triggerSource);
     cmd.AddValue("paramMode", "fixed / adaptive", g_paramMode);
     cmd.AddValue("triggerTimesSec", "逗号分隔绝对触发时刻(s)", g_triggerTimesSec);
@@ -873,6 +1083,7 @@ main(int argc, char* argv[])
     cmd.AddValue("rwndAlphaFloor", "rwnd最小缩放因子", g_rwndAlphaFloor);
     cmd.AddValue("rwndBeta", "rwnd衰减速率β", g_rwndBeta);
     cmd.AddValue("rwndGamma", "rwnd恢复速率γ", g_rwndGamma);
+    cmd.AddValue("policyTablePath", "DDQN策略表JSON路径", g_policyTablePath);
     cmd.Parse(argc, argv);
 
     // ── 随机种子：rngRun>1 时生效，不依赖 enableRandom ──
@@ -899,6 +1110,25 @@ main(int argc, char* argv[])
     }
     else /* joint */
     {
+        g_enableRwnd = true;
+        g_enableAckSplit = true;
+    }
+
+    // ── DDQN 模式：加载策略表 ──
+    if (g_expCase == "ddqn")
+    {
+        if (g_policyTablePath.empty())
+        {
+            std::cerr << "[DDQN] ERROR: --expCase=ddqn requires --policyTablePath" << std::endl;
+            return -1;
+        }
+        LoadPolicyTable(g_policyTablePath);
+        if (g_policyTable.empty())
+        {
+            std::cerr << "[DDQN] ERROR: policy table is empty or failed to parse" << std::endl;
+            return -1;
+        }
+        // DDQN 模式下 rwnd 和 ackSplit 由策略表动态控制
         g_enableRwnd = true;
         g_enableAckSplit = true;
     }
@@ -1360,7 +1590,13 @@ main(int argc, char* argv[])
 
     if (g_expCase != "baseline")
     {
-        if (g_triggerSource == "position")
+        if (g_expCase == "ddqn")
+        {
+            // DDQN 模式：每 100ms 周期性查表决策，不使用传统触发机制
+            Simulator::Schedule(Seconds(0.5), &DdqnPeriodicAction);
+            std::cout << "[TRIGGER] ddqn mode, periodic lookup every 100ms" << std::endl;
+        }
+        else if (g_triggerSource == "position")
         {
             g_triggerPosList = ParseDoubleList(g_triggerPositionsM);
             g_triggeredFlags.assign(g_triggerPosList.size(), false);

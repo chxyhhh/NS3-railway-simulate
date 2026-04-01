@@ -2807,7 +2807,8 @@ namespace ns3
     // ── 动态 ACK 拆分：在切换恢复期将单个 ACK 拆分为多个递进式 ACK ──
     if ((flags & TcpHeader::ACK) && !(flags & (TcpHeader::SYN | TcpHeader::FIN))
         && s_ackSplitActive && s_ackSplitCount > 0
-        && m_node && m_node->GetId() == s_ueNodeId)
+        && m_node && m_node->GetId() == s_ueNodeId
+        && m_endPoint != nullptr && m_tcp != nullptr)
     {
         SequenceNumber32 M = m_tcb->m_rxBuffer->NextRxSequence();
         SequenceNumber32 N = m_highTxAck;
@@ -3595,9 +3596,7 @@ namespace ns3
         uint32_t w = std::min(m_rWnd.Get(), m_tcb->m_cWnd.Get());
 
         // ── rwnd 收缩：在发送端侧直接约束有效发送窗口 ──────────────
-        // AdvertisedWindowSize 受 uint16_t 截断，对大 RcvBufSize 无效
-        // 此处直接缩放 min(rWnd,cwnd)，确保飞行数据量真正被限制
-        if (s_rwndActive) {
+        if (s_rwndActive && m_tcb && m_tcb->m_segmentSize > 0) {
             double alpha = 1.0;
             Time now = Simulator::Now();
 
