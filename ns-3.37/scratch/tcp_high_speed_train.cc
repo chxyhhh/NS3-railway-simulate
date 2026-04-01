@@ -93,6 +93,20 @@ bool g_enableAckSplit = true;
 std::vector<double> g_triggerPosList;
 std::vector<bool> g_triggeredFlags;
 
+// ── 自适应参数计算所需的 RSRP 状态跟踪（前置声明，供 DDQN 查表使用）──
+double g_lastRsrp = -80.0;     // 上次 RSRP (dBm, 高精度)
+double g_rsrpSlope = 0.0;      // RSRP 变化率 (dB/s)
+double g_lastRsrpTime = 0.0;   // 上次测量时间
+double g_rsrpDbm = -80.0;      // 当前 RSRP (dBm, 高精度，供外部读取)
+
+// 用于 100ms 间隔斜率计算的快照
+double g_rsrpSnapshot = -80.0;  // 上一个 100ms 快照的 RSRP
+double g_snapshotTime = 0.0;    // 上一个快照时间
+
+// ── 切换状态标志（前置声明，供 DDQN 决策使用）──
+bool g_handoverInProgress = false;   // 切换进行中标志
+double g_handoverEndTime = 0.0;      // 切换完成时刻，用于冷却期
+
 // ── DDQN 策略查表模式 ──
 std::string g_policyTablePath = "";  // JSON 策略表路径
 
@@ -253,7 +267,21 @@ LookupDdqnAction(double rsrp, double slope)
 void
 DdqnPeriodicAction()
 {
-    DdqnAction act = LookupDdqnAction(g_rsrpDbm, g_rsrpSlope);
+    double now = Simulator::Now().GetSeconds();
+
+    // 切换进行中 或 切换刚完成的冷却期（0.5s）内：冻结当前动作，不做任何变更
+    // 原因：切换瞬间 RSRP 跳变导致 slope 异常（可达 50+ dB/s），
+    //       此时变更 ACK 拆分参数会触发 tcp-tx-buffer 断言失败
+    if (g_handoverInProgress || (now - g_handoverEndTime < 0.5))
+    {
+        Simulator::Schedule(MilliSeconds(100), &DdqnPeriodicAction);
+        return;
+    }
+
+    // 将 slope 限幅到合理范围（防止切换后残留的异常值）
+    double clampedSlope = std::max(-4.0, std::min(2.5, g_rsrpSlope));
+
+    DdqnAction act = LookupDdqnAction(g_rsrpDbm, clampedSlope);
 
     bool needRwnd = (act.alpha < 1.0);
     bool needAckSplit = (act.ack_m > 1);
@@ -262,9 +290,10 @@ DdqnPeriodicAction()
     if (act.actionId != g_ddqnLastActionId)
     {
         std::cout << std::fixed << std::setprecision(3)
-                  << Simulator::Now().GetSeconds()
+                  << now
                   << "s [DDQN] RSRP=" << std::setprecision(1) << g_rsrpDbm
-                  << " slope=" << std::setprecision(2) << g_rsrpSlope
+                  << " slope=" << std::setprecision(2) << clampedSlope
+                  << " (raw=" << g_rsrpSlope << ")"
                   << " → action=" << act.actionId << " (" << act.name << ")"
                   << " α=" << act.alpha << " β=" << act.beta
                   << " γ=" << act.gamma << " m=" << act.ack_m
@@ -278,10 +307,10 @@ DdqnPeriodicAction()
         // 对于 Normal（action=0），关闭优化让 TCP 自然运行
         if (needRwnd || needAckSplit)
         {
-            // advance=0 表示立即生效, hold=100ms（到下次决策时刻）, restore=100ms
+            // advance=0 表示立即生效, hold=150ms（到下次决策+余量）, restore=100ms
             TcpSocketBase::TriggerHandoverOptim(
                 MilliSeconds(0),    // advance: 立即
-                MilliSeconds(150),  // hold: 持续到下次+余量
+                MilliSeconds(150),  // hold
                 MilliSeconds(100),  // restore: 平滑恢复
                 needRwnd,
                 needAckSplit,
@@ -301,16 +330,6 @@ DdqnPeriodicAction()
 
     Simulator::Schedule(MilliSeconds(100), &DdqnPeriodicAction);
 }
-
-// ── 自适应参数计算所需的 RSRP 状态跟踪 ──
-double g_lastRsrp = -80.0;     // 上次 RSRP (dBm, 高精度)
-double g_rsrpSlope = 0.0;      // RSRP 变化率 (dB/s)
-double g_lastRsrpTime = 0.0;   // 上次测量时间
-double g_rsrpDbm = -80.0;      // 当前 RSRP (dBm, 高精度，供外部读取)
-
-// 用于 100ms 间隔斜率计算的快照
-double g_rsrpSnapshot = -80.0;  // 上一个 100ms 快照的 RSRP
-double g_snapshotTime = 0.0;    // 上一个快照时间
 
 // ── PHY 层 RSRP/SINR 高频回调（每子帧 1ms）──
 // 仅更新 g_rsrpDbm 的瞬时值，斜率由 100ms 定时器计算
@@ -612,6 +631,7 @@ NotifyHandoverStartUe(std::string context,
     std::cout << t << "s UE IMSI " << imsi << ": HO_START CellId " << cellid << " → "
               << targetCellId << std::endl;
     g_hoEvents.push_back({t, "HO_START", cellid, targetCellId});
+    g_handoverInProgress = true;
 }
 
 void
@@ -620,6 +640,8 @@ NotifyHandoverEndOkUe(std::string context, uint64_t imsi, uint16_t cellid, uint1
     double t = Simulator::Now().GetSeconds();
     std::cout << t << "s UE IMSI " << imsi << ": HO_END   CellId " << cellid << std::endl;
     g_hoEvents.push_back({t, "HO_END", cellid, cellid});
+    g_handoverInProgress = false;
+    g_handoverEndTime = t;
 }
 
 void
